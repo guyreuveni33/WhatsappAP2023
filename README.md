@@ -12,7 +12,7 @@ chat.css: contains the styles for the chat application.
 
 Usage:
 
-- Clone the repository: git clone https://github.com/your-username/whatsapp-chat.git
+- Clone the repository: git clone https://github.com/guyreuveni33/WhatsappAP2023.git
 - Open the login.html file in a web browser to access the login page.
 - If you don't have an account, click on "Not registered? Click here" to access the registration page (register.html).
 - If you're in the register.html and you already have an account, click on "Already registered? Click here" to access the login page (login.html).
