@@ -1,0 +1,153 @@
+
+.mainBG {
+    background-attachment: local;
+    background-repeat: no-repeat;
+    background-image: url("https://i.postimg.cc/L6GbwjYs/31977-Apple-Inc-i-Mac-24-2021-Stock-wallpaper-Silver.jpg");
+    background-size: cover;
+    background-position: center;
+/**/
+}
+/*#005086, #318fb5*/
+::-webkit-input-placeholder {
+    color: white;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+
+}
+
+.chat-container {
+    background-color: rgba(1, 12, 12, 0.95);
+    width: 100%;
+    max-width: 1000px;
+    display: flex;
+    height: 95vh;
+    border-radius: 7px;
+
+}
+
+.sidebar {
+    background-color: #f6f5f5;
+    width: 30%;
+    border-right: 1px solid rgb(43, 43, 43);
+    border-top-left-radius: 7px;
+    border-bottom-left-radius: 7px;
+}
+.main-chat {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    background-image: url("https://i.postimg.cc/50FH7cZy/img2-wallspic-com-dark-silver-2021-imac-color-matching-wallpaper-for-ipad-or-desktop-6016x6016.jpg");
+   background-attachment: local;
+    border-radius: 7px;
+
+}
+
+.chat-header {
+    border-bottom: 1px solid rgb(54, 53, 53);
+    padding: 1rem;
+    font-size: 18px;
+    border-top-right-radius: 7px;
+    background-color: rgb(54, 53, 53);
+    height: 10%;
+    display: flex;
+    align-items: center;
+}
+
+.chat-messages {
+    overflow-y: scroll;
+    display: flex;
+    flex-grow: 1;
+    padding: 1rem;
+    flex-direction: column-reverse;
+}
+
+.chat-input {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem;
+    background-color: rgb(54, 53, 53);
+    border-top: 1px solid rgb(54, 53, 53);
+    border-bottom-right-radius: 7px;
+
+}
+
+.chat-input input {
+    flex-grow: 1;
+    border: none;
+    border-radius: 10px;
+    padding: 0.5rem 1rem;
+    font-size: 16px;
+    background-color: rgb(80, 80, 80);
+    outline: none;
+    margin-right: 0.5rem;
+}
+
+.chat-input button {
+    color: #fff;
+    font-size: 16px;
+    border: none;
+    border-radius: 10px;
+    width: 70px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.clearfix::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
+.message {
+    background: #1E1E1E;
+    color: white;
+    border: solid gray 1px;
+    margin-bottom: 5px;
+    width: fit-content;
+    border-radius: 6px;
+    padding: 0 5px 0 5px;
+    border-color: #1E1E1E;
+}
+
+.userTextMessage {
+    float: right;
+    background-color: #075E54;
+    border-color: #075E54;
+}
+
+.profileCurrentChatPic {
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+}
+
+.profilePic {
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+}
+
+.chat-borders {
+    border-bottom: 1px solid rgb(54, 53, 53);
+    margin-right: 10px;
+    margin-left: 10px;
+}
+
+.userSpace {
+    border-bottom: 1px solid rgb(54, 53, 53);
+    padding: 0.5rem;
+    font-size: 18px;
+    background-color: rgb(54, 53, 53);
+    border-top: 1px solid rgb(54, 53, 53);
+    height: 10%;
+    display: flex;
+    align-items: center;
+}
