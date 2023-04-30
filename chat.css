@@ -59,7 +59,7 @@ body {
 }
 
 .chat-messages {
-    overflow-y: scroll;
+    /*overflow-y: scroll;*/
     display: flex;
     flex-grow: 1;
     padding: 1rem;
