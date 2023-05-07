@@ -12,7 +12,6 @@ function Login() {
             <br></br>
             <br></br>
             <br></br>
-            <p className="register">Not registered? <a href="register.html">Click here</a></p>
         </PageStruct>
     );
 }
