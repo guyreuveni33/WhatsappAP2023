@@ -1,34 +1,42 @@
 import './LoginRegister.css';
 import UserInput from "./login/userInput/UserInput";
 import PageStruct from "./login/pageStruct/PageStruct";
+import ImageUpload from "./login/imageUpload/ImageUpload";
 
 function Register() {
     return (
-        <PageStruct cardSetting="card-body text-center" margins="mb-md-5 mt-md-4" title="REGISTER">
-                            <div className="card-body">
-                                <h1 className="card-title">REGISTER</h1>
-                                <br></br>
-                                <br></br>
-                                <UserInput holderText=" Username"/>
-                                <UserInput typeText="password" holderText=" Password"/>
-                                <UserInput typeText="password" holderText=" Re-Enter Password"/>
-                                <UserInput holderText=" Display Name"/>
-                            <div className="mb-4">
-                                <input className="form-control bg-dark text-white border-white rounded " type="file"
-                                       id="formFile"></input>
-                            </div>
-                            <img
-                                src="https://images.maariv.co.il/image/upload/f_auto,fl_lossy/c_fill,g_faces:center,h_533,w_758/569046"
-                                alt="Image Description" width="175" height="150"></img>
-                            <br></br>
-                            <br></br>
-                            <button className="btn btn-outline-light btn-lg px-4" type="submit">Register</button>
-                        </div>
-            <p>Already registered? <a href="login.html">Click here</a></p>
-
+        <PageStruct
+            cardSetting="card-body text-center"
+            margins="mb-md-5 mt-md-4"
+            title="REGISTER"
+            registerStatus="Already registered?"
+            currentStatusLink="login.html"
+        >
+            <UserInput
+                holderText=" Username"
+                pattern={/^[a-zA-Z0-9]+$/}
+            />
+            <UserInput
+                typeText="password"
+                holderText=" Password"
+                pattern={/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/}
+            />
+            <UserInput
+                typeText="password"
+                holderText=" Re-Enter Password"
+                pattern={/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/}
+            />
+            <UserInput
+                holderText=" Display Name"
+                pattern={/^[a-zA-Z\s]+$/}
+            />
+            <ImageUpload />
+            <button className="btn btn-outline-light btn-lg px-4" type="submit">
+                Register
+            </button>
         </PageStruct>
-)
-    ;
+    );
 }
+
 
 export default Register;
