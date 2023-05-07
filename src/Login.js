@@ -1,38 +1,19 @@
 import './LoginRegister.css';
+import UserInput from "./login/userInput/UserInput";
+import PageStruct from "./login/pageStruct/PageStruct";
 
 function Login() {
     return (
-        <section className="mainBG">
-            <div className="d-flex justify-content-center align-items-center">
-                <div className="card bg-dark text-white" style={{borderRadius: '1rem'}}>
-                    <div className="card-body p-5 text-center">
-                        <div className="mb-md-5 mt-md-4 pb-5">
-
-                            <div className="card-body">
-                                <h1 className="card-title">LOGIN</h1>
-                                <br></br>
-                                <br></br>
-
-                                <div className="mb-4"><input className="bg-dark text-white border-white rounded"
-                                                             placeholder=" Username"></input>
-                                </div>
-                                <div className="mb-4"><input type="password" className="bg-dark text-white border-white rounded"
-                                                             placeholder=" Password"></input>
-                                </div>
-                                <br></br>
-
-                                <button className="btn btn-outline-light btn-lg px-4" type="submit">Login</button>
-                                <br></br>
-
-                                <br></br>
-                                <br></br>
-                                <p className="register">Not registered? <a href="register.html">Click here</a></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+        <PageStruct margins="mb-md-5 mt-md-4 pb-5" title="LOGIN" cardSetting="card-body p-5 text-center" classSetting="register" registerStatus="Not registered?" currentStatusLink="register.html">
+            <UserInput holderText=" Username"/>
+            <UserInput typeText="password" holderText=" Password"/>
+            <br></br>
+            <button className="btn btn-outline-light btn-lg px-4" type="submit">Login</button>
+            <br></br>
+            <br></br>
+            <br></br>
+            <p className="register">Not registered? <a href="register.html">Click here</a></p>
+        </PageStruct>
     );
 }
 
