@@ -6,9 +6,10 @@
     background-size: cover;
     background-position: center;
     width: 100%;
-/**/
+    position: fixed;
+    top: 0;
+    left: 0;
 }
-/*#005086, #318fb5*/
 ::-webkit-input-placeholder {
     color: white;
 }
@@ -43,8 +44,10 @@ body {
     display: flex;
     flex-direction: column;
     background-image: url("https://i.postimg.cc/50FH7cZy/img2-wallspic-com-dark-silver-2021-imac-color-matching-wallpaper-for-ipad-or-desktop-6016x6016.jpg");
-   background-attachment: local;
-    border-radius: 7px;
+    background-attachment: local;
+    border-top-right-radius: 7px;
+    border-bottom-right-radius: 7px;
+
 
 }
 
