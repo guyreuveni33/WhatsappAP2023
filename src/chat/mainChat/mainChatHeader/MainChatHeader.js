@@ -1,4 +1,7 @@
 import HeaderProfiles from "../../headerProfiles/HeaderProfiles";
+import plaster from "./plaster.png"
+import {Link} from "react-router-dom";
+import MessageDB from "../../dataBase/MessagesDB";
 
 function MainChatHeader(props) {
     function contactIden() {
@@ -8,20 +11,31 @@ function MainChatHeader(props) {
                 return i;
             }
         }
-        return 1;
+        return -1;
     }
-   // profilePicture="https://i.postimg.cc/BvrXRGr5/IMG-3411dvdv.jpg"
+    // profilePicture="https://i.postimg.cc/BvrXRGr5/IMG-3411dvdv.jpg"
 
     const index = contactIden();
+
+    function handleLogout() {
+        // Clear the MessageDB
+        //MessageDB.clear();
+    }
+
     return (
         <div className="chat-header overflow-hidden">
             {/* <!-- Contact name or chat title will be displayed here -->*/}
             <HeaderProfiles pictureSetting="profileCurrentChatPic d-flex align-self-center me-3"
-                            profilePicture={props.contacts[index].profilePicture ==null ? "https://i.postimg.cc/BvrXRGr5/IMG-3411dvdv.jpg":props.contacts[index].profilePicture}
+                            profilePicture={index ===-1 ? plaster :props.contacts[index].profilePicture}
                             textPosition="col text-white align-self-center"
-                            textSetting="fw-bold mb-0 ms-1 " name={props.selectedContact}></HeaderProfiles>
+                            textSetting="fw-bold mb-0 ms-1 " name={index===-1 ? " " :props.selectedContact}></HeaderProfiles>
             <div className="chat-input">
-                <button className="bg-dark">Log Out</button>
+                <Link
+                    to="/"
+                    className="bg-dark text-white btn link-underline-opacity-0 link-underline"
+                    onClick={handleLogout}
+                >Logout
+                </Link>
             </div>
         </div>
     );
