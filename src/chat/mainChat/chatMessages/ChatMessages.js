@@ -1,24 +1,28 @@
 import ReceivedMessage from "../../receivedMessage/ReceivedMessage";
 import UserMessage from "../../userMessage/UserMessage";
+import './ChatMessages.css';
+import MessageDB from "../../dataBase/MessagesDB";
 
-function ChatMessages(){
-    return(
-        <div className="chat-messages">
+function ChatMessages({messages}) {
+    // Define messages state and setMessages state updater function
+
+    return (
+        <div className="chat-messages overflow-scroll hover">
             <div>
-                <ReceivedMessage text="Hello, how are u?">
-                </ReceivedMessage>
-                <UserMessage text="I'm doing good, and you?">
-                </UserMessage>
-                <ReceivedMessage text="Great, just about to finish my AP 2 program">
-                </ReceivedMessage>
-                <UserMessage text="That sounds phenomenal as Noa Kirel would say ;)">
-                </UserMessage>
-                <ReceivedMessage text="See you next month in Italy?">
-                </ReceivedMessage>
-                <UserMessage text="Sure!">
-                </UserMessage>
+
+                {/* Map over messages state and render the appropriate component */}
+                {messages.map((message, index) => {
+                     if (message.type === "received") {
+                        return <ReceivedMessage key={index} text={message.text} />;
+                    } else if (message.type === "user") {
+                        return <UserMessage key={index} text={message.text} />;
+                    } else {
+                        return null;
+                    }
+                })}
             </div>
         </div>
     );
 }
+
 export default ChatMessages;

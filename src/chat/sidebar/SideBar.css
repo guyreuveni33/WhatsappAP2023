@@ -1,0 +1,25 @@
+.list-unstyled {
+    /* set the height of the ul element to 70% of the sidebar height */
+    height: 90%;
+    overflow-y: scroll;
+    overflow-x: hidden !important;
+    /* customize the scrollbar */
+    scrollbar-width: thin;
+    scrollbar-color: #777 #eee;
+}
+.list-unstyled li:hover {
+    background-color: #646262;
+    cursor: pointer;
+    border-radius: 7px;
+    padding-left: 5px;
+}
+
+/* hide the hover state when the content overflows */
+.list-unstyled:hover li:hover {
+    overflow: hidden;
+}
+
+.list-unstyled::-webkit-scrollbar {
+    width: 5px !important;
+}
+
