@@ -1,12 +1,17 @@
-// ImageUpload.js
 import { useState } from "react";
 
-function ImageUpload() {
+function ImageUpload(props) {
     const [image, setImage] = useState("");
 
     const handleImageChange = (event) => {
         const file = event.target.files[0];
+        const validImageTypes = ["image/gif", "image/jpeg", "image/png", "image/jpg"]; // Define valid image types
+        if (!validImageTypes.includes(file.type)) {
+            console.log("Invalid image type");
+            return;
+        }
         setImage(file);
+        props.onInput(file);
     };
 
     return (

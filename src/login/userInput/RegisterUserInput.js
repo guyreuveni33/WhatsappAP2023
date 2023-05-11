@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-function UserInput({ typeText, holderText, pattern, onInput, id, passwordsMatch }) {
+function RegisterUserInput({ typeText, holderText, pattern, onInput, id, passwordsMatch , reference}) {
     const [value, setValue] = useState("");
     const [isBlurred, setIsBlurred] = useState(false);
 
@@ -44,6 +44,7 @@ function UserInput({ typeText, holderText, pattern, onInput, id, passwordsMatch 
                 onChange={handleChange}
                 onBlur={handleBlur}
                 onInput={onInput}
+                ref={reference}
                 id={id}
             />
             {feedback}
@@ -51,4 +52,4 @@ function UserInput({ typeText, holderText, pattern, onInput, id, passwordsMatch 
     );
 }
 
-export default UserInput;
+export default RegisterUserInput;

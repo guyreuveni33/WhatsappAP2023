@@ -1,4 +1,5 @@
-import UserInput from "../userInput/UserInput";
+import RegisterUserInput from "../userInput/RegisterUserInput";
+import {Link} from "react-router-dom";
 
 function PageStruct({children,title,margins,cardSetting,classSetting,registerStatus,currentStatusLink}){
     return(
@@ -12,7 +13,7 @@ function PageStruct({children,title,margins,cardSetting,classSetting,registerSta
                                 <br></br>
                                 <br></br>
                                 {children}
-                                <p className={classSetting}>{registerStatus} <a href={currentStatusLink}>Click here</a></p>
+                                <p className={classSetting}>{registerStatus} <Link to={currentStatusLink}>Click here</Link></p>
                             </div>
 
                         </div>
