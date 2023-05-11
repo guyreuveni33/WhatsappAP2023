@@ -44,6 +44,7 @@ function UserInput({ typeText, holderText, pattern, onInput, id, passwordsMatch 
                 onChange={handleChange}
                 onBlur={handleBlur}
                 onInput={onInput}
+                ref={reference}
                 id={id}
             />
             {feedback}
