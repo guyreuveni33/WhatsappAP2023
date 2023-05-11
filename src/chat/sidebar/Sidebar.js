@@ -3,18 +3,25 @@ import './SideBar.css';
 import HeaderProfiles from '../headerProfiles/HeaderProfiles';
 import ModalScreen from '../modalScreen/ModalScreen';
 import ContactProfile from '../contactProfile/ContactProfile';
+import users from "../../UsersDatabase";
+import Login from "../../Login";
 
-function Sidebar({ contacts, handleAddContact, handleContactClick }) {
+function Sidebar({ contacts, handleAddContact, handleContactClick, currentUser }) {
+    //username.current.value
+    const userDisplayName = users[currentUser].displayName;
+    const userImage = users[currentUser].image;
+    //console.log(userDisplayName);
+    //console.log(userImage);
     return (
         <div className="sidebar overflow-hidden bg-dark">
             <div className="userSpace overflow-hidden">
                 <HeaderProfiles
                     margins="ms-1"
                     pictureSetting="profileCurrentChatPic"
-                    profilePicture="https://i.postimg.cc/kGZZvf65/52-SNp-DJJCg-BVf-Ztib-Lu-XN1-Zrli-Cdvv.jpg"
+                    profilePicture={userImage}
                     textPosition="text-white ms-2"
                     textSetting="fw-bold mb-0"
-                    name="Elon Musk"
+                    name={userDisplayName}
                 />
                 <div className="ms-auto">
                     <button

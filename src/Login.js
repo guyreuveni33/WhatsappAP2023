@@ -6,12 +6,13 @@ import {useState} from "react";
 import users from "./UsersDatabase";
 
 
-function Login() {
+function Login({setUsernameNew}) {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [navigate, setNavigate] = useState("");
     const [match, setMatch] = useState(false);
     const storedUsers = users;
+
     const handleUsernameChange = (value) => {
         setUsername(value);
     };
@@ -23,6 +24,7 @@ function Login() {
     const handleNavigatePath = () => {
         for (const key of Object.keys(storedUsers)) {
             if (username === key && password === storedUsers[key].password) {
+                setUsernameNew(username);
                 setNavigate("/Chat");
                 setMatch(true);
                 return;
@@ -34,6 +36,7 @@ function Login() {
     };
 
     const handleLoginClick = () => {
+
         if (!match) {
             alert("Incorrect username or password.");
         }

@@ -14,7 +14,7 @@ function MainChat(props) {
         <div className="main-chat overflow-hidden">
             <MainChatHeader selectedContact={props.selectedContact} contacts={props.contacts}/>
             <ChatMessages messages={messages}/>
-            <SendMessageBar messages={messages} setMessages={setMessages} selectedContact={props.selectedContact}/>
+            <SendMessageBar messages={messages} setMessages={setMessages} selectedContact={props.selectedContact} contacts={props.contacts} />
         </div>
     );
 }
