@@ -1,3 +1,4 @@
+import "./ContactProfile.css";
 function ContactProfile({name,lastMessage,date,profilePicture}){
     return(
         <li className=" p-0.5 mt-2 chat-borders">
@@ -10,10 +11,10 @@ function ContactProfile({name,lastMessage,date,profilePicture}){
                     </div>
                     <div>
                         <p className="fw-bold mb-0 ms-1 me-1">{name}</p>
-                        <p className="small ms-1">{lastMessage}</p>
+                        <p className="small lastMessage ms-1">{lastMessage}</p>
                     </div>
                 </div>
-                <p className="small mb-1  px-1" >{date}</p>
+                <p className=" date mb-1  px-1" >{date}</p>
             </div>
         </li>
     );

@@ -9,13 +9,19 @@ function ChatMessages({messages}) {
     return (
         <div className="chat-messages overflow-scroll hover">
             <div>
-
-                {/* Map over messages state and render the appropriate component */}
                 {messages.map((message, index) => {
-                     if (message.type === "received") {
-                        return <ReceivedMessage key={index} text={message.text} />;
+                    if (message.type === "received") {
+                        return (
+                            <div key={index} className="message-container">
+                                <ReceivedMessage text={message.text} />
+                            </div>
+                        );
                     } else if (message.type === "user") {
-                        return <UserMessage key={index} text={message.text} />;
+                        return (
+                            <div key={index} className="message-container">
+                                <UserMessage text={message.text} time={message.time} />
+                            </div>
+                        );
                     } else {
                         return null;
                     }

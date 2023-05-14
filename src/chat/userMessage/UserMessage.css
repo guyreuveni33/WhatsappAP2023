@@ -1,0 +1,16 @@
+.message-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.message-time {
+    font-size: 11px;
+    color: #a9a9a9;
+    margin-bottom: 0;
+    align-self: flex-end;
+}
+
+.message-text {
+    margin-bottom: 0;
+}

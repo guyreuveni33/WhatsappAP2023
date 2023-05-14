@@ -58,7 +58,7 @@ function ModalScreen({ handleAddContact }) {
                     </div>
                     <div className="modal-body">
                         <div className="form-group">
-                            <input type="text" className="form-control" placeholder="Contact's identifier" value={name} onChange={handleNameChange} />
+                            <input type="text" className="form-control" placeholder="Contact's name" value={name} onChange={handleNameChange} />
                         </div>
                     </div>
                     <div className="modal-footer">

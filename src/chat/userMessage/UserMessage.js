@@ -1,12 +1,14 @@
-
-function UserMessage({text}){
+import "./UserMessage.css"
+function UserMessage({text, time}){
     return(
         <div className="clearfix">
             <div className="message userTextMessage">
-                <p>{text}</p>
+                <div className="message-content">
+                    <p className="message-text">{text}</p>
+                    <p className="message-time">{time}</p>
+                </div>
             </div>
         </div>
-
     );
 }
 export default UserMessage;
