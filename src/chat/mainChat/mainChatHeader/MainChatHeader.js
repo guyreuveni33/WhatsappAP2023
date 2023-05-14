@@ -4,34 +4,35 @@ import {Link} from "react-router-dom";
 import MessageDB from "../../dataBase/MessagesDB";
 
 function MainChatHeader(props) {
+    // This extracts the number of the contact in the array of contacts in order to display it at the chat header
     function contactIden() {
         for (let i = 0; i < props.contacts.length; i++) {
             if (props.contacts[i].name === props.selectedContact) {
-                console.log(i);
                 return i;
             }
         }
         return -1;
     }
-    // profilePicture="https://i.postimg.cc/BvrXRGr5/IMG-3411dvdv.jpg"
 
+    // Save the current contact index
     const index = contactIden();
 
+    // When the logout button is pressed the message database will clear all the messages
     function handleLogout() {
         for (let contact in MessageDB) {
             if (MessageDB.hasOwnProperty(contact)) {
-                MessageDB[contact] = []; // set the array for the contact to an empty array
+                MessageDB[contact] = [];
             }
         }
     }
 
     return (
         <div className="chat-header ">
-            {/* <!-- Contact name or chat title will be displayed here -->*/}
             <HeaderProfiles pictureSetting="profileCurrentChatPic d-flex align-self-center me-3"
-                            profilePicture={index ===-1 ? plaster :props.contacts[index].profilePicture}
+                            profilePicture={index === -1 ? plaster : props.contacts[index].profilePicture}
                             textPosition="col text-white align-self-center"
-                            textSetting="fw-bold mb-0 ms-1 " name={index===-1 ? " " :props.selectedContact}></HeaderProfiles>
+                            textSetting="fw-bold mb-0 ms-1 "
+                            name={index === -1 ? " " : props.selectedContact}></HeaderProfiles>
             <div className="chat-input">
                 <Link
                     to="/"

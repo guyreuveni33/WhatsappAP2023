@@ -1,6 +1,4 @@
-import image from "./myImage.jpg"
-const users = {
-    ' ' : {password: ' ', displayName : '', image: image}
-}
+//creating a database for users
+const users = {}
 
 export default users;

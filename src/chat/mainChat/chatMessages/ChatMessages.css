@@ -1,9 +1,7 @@
 .overflow-scroll {
-    /* set the height of the ul element to 70% of the sidebar height */
     height: 90%;
     overflow-y: scroll;
     overflow-x: hidden !important;
-    /* customize the scrollbar */
     scrollbar-width: thin;
     scrollbar-color: #777 #eee;
 }
@@ -13,7 +11,7 @@
 }
 
 .overflow-scroll::-webkit-scrollbar-track {
-    background:  #333;
+    background: #333;
 }
 
 .overflow-scroll::-webkit-scrollbar-thumb {
