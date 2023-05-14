@@ -73,6 +73,7 @@ function SendMessageBar({setMessages, selectedContact, contacts, setLastMessage}
                    placeholder="Type your message here..."
                    value={message}
                    onChange={handleMessageChange}
+                   onKeyDown={handleKeyDown}
                    disabled={selectedContact === "0"}
             ></input>
             <button className="bg-dark"
