@@ -1,13 +1,14 @@
-import { useState } from "react";
+import {useState} from "react";
 
-function RegisterUserInput({ typeText, holderText, pattern, onInput, id, passwordsMatch , reference}) {
+function RegisterUserInput({typeText, holderText, pattern, onInput, id, passwordsMatch, reference}) {
+    // Define state variables for the input value
     const [value, setValue] = useState("");
     const [isBlurred, setIsBlurred] = useState(false);
-
+    // Handle changes to the input value
     const handleChange = (event) => {
         setValue(event.target.value);
     };
-
+    // Handle when the input loses focus
     const handleBlur = () => {
         setIsBlurred(true);
     };
@@ -26,7 +27,8 @@ function RegisterUserInput({ typeText, holderText, pattern, onInput, id, passwor
                 Please enter a valid {typeText === "password" ? "password" : "value"}.
             </div>
         );
-    } if (isBlurred && passwordsMatch === false) {
+    }
+    if (isBlurred && passwordsMatch === false) {
         className += " is-invalid";
         feedback = (
             <div className="invalid-feedback">

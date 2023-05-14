@@ -9,18 +9,21 @@ import users from "./UsersDatabase";
 function Login({setUsernameNew}) {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    // This check for which page the user will navigate
     const [navigate, setNavigate] = useState("");
+    // This check for a match between the userName and the password
     const [match, setMatch] = useState(false);
+    // This is the Database of the users
     const storedUsers = users;
-
+    // Event handlers for username and password changes
     const handleUsernameChange = (value) => {
         setUsername(value);
     };
-
+    // Event handlers for password changes
     const handlePasswordChange = (value) => {
         setPassword(value);
     };
-
+    // Event handler for setting the navigate path based on the user input
     const handleNavigatePath = () => {
         for (const key of Object.keys(storedUsers)) {
             if (username === key && password === storedUsers[key].password) {
@@ -28,15 +31,13 @@ function Login({setUsernameNew}) {
                 setNavigate("/Chat");
                 setMatch(true);
                 return;
-            }
-            else {
+            } else {
                 setNavigate("/");
             }
         }
     };
-
+    //This pop alert in case there is no match between the password and the userName
     const handleLoginClick = () => {
-
         if (!match) {
             alert("Incorrect username or password.");
         }
@@ -64,7 +65,7 @@ function Login({setUsernameNew}) {
                     className="btn btn-outline-light btn-lg px-4"
                     type="submit"
                     onClick={handleLoginClick}
-                    >Login
+                >Login
                 </button>
             </Link>
             <br></br>
