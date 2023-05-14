@@ -1,4 +1,3 @@
-import RegisterUserInput from "../userInput/RegisterUserInput";
 import {Link} from "react-router-dom";
 
 function PageStruct({children,title,margins,cardSetting,classSetting,registerStatus,currentStatusLink}){

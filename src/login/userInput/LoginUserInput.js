@@ -1,10 +1,9 @@
-
-function LoginUserInput({ typeText, holderText, onInput, id, onChange, onBlur }) {
-
+function LoginUserInput({typeText, holderText, onInput, id, onChange, onBlur}) {
+    // This function handles the change event and calls the onChange
     const handleChange = (event) => {
         onChange(event.target.value);
     };
-
+    //This call the handleNavigatePath
     const handleBlur = () => {
         onBlur();
     };

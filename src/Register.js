@@ -8,30 +8,34 @@ import users from "./UsersDatabase";
 import myImage from "./myImage.jpg"
 
 function Register() {
+    // State variables to store the user's name, password, display name, and image
     const username = useRef("");
     const [password, setPassword] = useState('');
     const [displayName, setDisplayName] = useState('');
     const [image, setImage] = useState(myImage);
+    // State variable to indicate whether the two password inputs match
     const [passwordsMatch, setPasswordsMatch] = useState(false);
 
+    // Event handler for the first password input field
     const handleFirstPassword = (event) => {
         const firstPassword = event.target.value;
         const secondPassword = document.getElementById("secondPassword").value;
         setPasswordsMatch(firstPassword === secondPassword);
         setPassword(firstPassword);
     };
-
+    // Event handler for the second password input field
     const handleSecondPassword = (event) => {
         const secondPassword = event.target.value;
         const firstPassword = document.getElementById("firstPassword").value;
         setPasswordsMatch(firstPassword === secondPassword);
         setPassword(firstPassword);
     };
-
+    // Event handler for the display name input field
     const handleDisplayName = () => {
         const registerDisplayName = document.getElementById("displayName").value;
         setDisplayName(registerDisplayName);
     }
+    // Event handler for the image upload input field
     const handleImage = (image) => {
         const reader = new FileReader();
         reader.onload = () => {
@@ -40,22 +44,23 @@ function Register() {
         };
         reader.readAsDataURL(image);
     };
-
+    // Function to validate user inputs
     const validateInputs = () => {
         const isValidUsername = username.current.value.match(/^[a-zA-Z\s]+$/);
         const isValidPassword = password.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/);
         const isValidDisplayName = displayName.match(/^[a-zA-Z\s]+$/);
+        //this show message in case of invalid input on one or more of the fields
         if (!isValidUsername || !isValidPassword || !isValidDisplayName || !passwordsMatch) {
             alert('One or more fields are missing or incorrect.');
             return false;
         }
-        if ( username.current.value in users ){
+        if (username.current.value in users) {
             alert('Username is already taken.');
             return false;
         }
         return true;
     }
-
+    //This insert the values of the user in case of valid inputs to the Database
     const handleRegister = (e) => {
         if (validateInputs()) {
             users[username.current.value] = {
