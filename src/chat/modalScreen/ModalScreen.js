@@ -13,7 +13,7 @@ function ModalScreen({handleAddContact}) {
     // Setting up state for the name input field
     const [name, setName] = useState('');
 
-    //Handling changes to the name input field
+    // Handling changes to the name input field
     const handleNameChange = (event) => {
         setName(event.target.value);
     };
