@@ -1,16 +1,16 @@
-import { useState } from 'react';
 import './SideBar.css';
 import HeaderProfiles from '../headerProfiles/HeaderProfiles';
 import ModalScreen from '../modalScreen/ModalScreen';
 import ContactProfile from '../contactProfile/ContactProfile';
 import users from "../../UsersDatabase";
 
-function Sidebar({ contacts, handleAddContact, handleContactClick, currentUser,lastMessage }) {
-    //username.current.value
+function Sidebar({contacts, handleAddContact, handleContactClick, currentUser}) {
+
+    // Extract the display name of the current user that logged in
     const userDisplayName = users[currentUser].displayName;
+    // Extract the image of the current user that logged in
     const userImage = users[currentUser].image;
-    //console.log(userDisplayName);
-    //console.log(userImage);
+
     return (
         <div className="sidebar overflow-hidden bg-dark">
             <div className="userSpace overflow-hidden">
@@ -63,7 +63,7 @@ function Sidebar({ contacts, handleAddContact, handleContactClick, currentUser,l
                     </button>
                 ))}
             </ul>
-            <ModalScreen handleAddContact={handleAddContact} />
+            <ModalScreen handleAddContact={handleAddContact}/>
         </div>
     );
 }

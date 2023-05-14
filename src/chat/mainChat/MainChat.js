@@ -7,6 +7,7 @@ import SendMessageBar from "./sendMessageBar/SendMessageBar";
 function MainChat(props) {
     const [messages, setMessages] = useState([]);
 
+    // This checks if a new message has been added and if it has, displays the message on the screen
     useEffect(() => {
         setMessages(props.initialMessages || []);
     }, [props.initialMessages]);
@@ -15,7 +16,8 @@ function MainChat(props) {
         <div className="main-chat overflow-hidden container-width">
             <MainChatHeader selectedContact={props.selectedContact} contacts={props.contacts}/>
             <ChatMessages messages={messages}/>
-            <SendMessageBar messages={messages} setMessages={setMessages} selectedContact={props.selectedContact} contacts={props.contacts} setLastMessage={props.setLastMessage}/>
+            <SendMessageBar messages={messages} setMessages={setMessages} selectedContact={props.selectedContact}
+                            contacts={props.contacts} setLastMessage={props.setLastMessage}/>
         </div>
     );
 }

@@ -1,6 +1,7 @@
 import "./UserMessage.css"
-function UserMessage({text, time}){
-    return(
+
+function UserMessage({text, time}) {
+    return (
         <div className="clearfix">
             <div className="message userTextMessage">
                 <div className="message-content">
@@ -11,4 +12,5 @@ function UserMessage({text, time}){
         </div>
     );
 }
+
 export default UserMessage;

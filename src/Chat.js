@@ -1,20 +1,18 @@
-import { useState } from "react";
+import {useState} from "react";
 import "./Chat.css";
 import Sidebar from "./chat/sidebar/Sidebar";
 import MainChat from "./chat/mainChat/MainChat";
 import ModalScreen from "./chat/modalScreen/ModalScreen";
 import MessageDB from "./chat/dataBase/MessagesDB";
 
-function Chat({ username }) {
+function Chat({username}) {
     const currentUser = username;
     // Define the contacts state and handleAddContact function in the Chat component
-    const [contacts, setContacts] = useState([
-    ]);
+    const [contacts, setContacts] = useState([]);
 
+    // Add contact to the contact list
     const handleAddContact = (newContact) => {
-        setContacts([...contacts, { ...newContact, lastMessage: "" }]);
-        console.log(newContact);
-        console.log(MessageDB);
+        setContacts([...contacts, {...newContact, lastMessage: ""}]);
     };
 
     // Define the selected contact state and handleContactClick function in the Chat component
@@ -23,8 +21,6 @@ function Chat({ username }) {
 
     const handleContactClick = (contactName) => {
         setSelectedContact(contactName);
-        console.log(contactName);
-        console.log(MessageDB[contactName]);
     };
 
     return (

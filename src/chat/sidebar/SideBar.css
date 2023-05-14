@@ -1,12 +1,9 @@
 .list-unstyled {
-    /* set the height of the ul element to 70% of the sidebar height */
     height: 110%;
     overflow-y: scroll;
     overflow-x: hidden !important;
-    /* customize the scrollbar */
     scrollbar-width: thin;
     scrollbar-color: #777 #eee;
-
 }
 
 .contactHover:hover {
@@ -14,14 +11,12 @@
     cursor: pointer;
     border-radius: 7px;
     padding-left: 5px;
-    border-color: transparent!important;
-
-
+    border-color: transparent !important;
 }
 
-.t{
+.t {
 }
-/* hide the hover state when the content overflows */
+
 .list-unstyled:hover li:hover {
     overflow: hidden;
 }
@@ -31,5 +26,5 @@
 }
 
 .btn-fixed-width {
-    width: 100%; /* set your desired width */
+    width: 100%;
 }
