@@ -78,7 +78,7 @@ function Register() {
         >
             <RegisterUserInput
                 holderText=" Username"
-                pattern={/^[a-zA-Z\s]+$/}
+                pattern={/^\S+$/}
                 reference={username}
                 id="username"
             />
@@ -99,7 +99,7 @@ function Register() {
             />
             <RegisterUserInput
                 holderText=" Display Name"
-                pattern={/^[a-zA-Z\s]+$/}
+                pattern={/^[\w\s-]+$/}
                 onInput={handleDisplayName}
                 id="displayName"
             />

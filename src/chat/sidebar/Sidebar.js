@@ -4,9 +4,8 @@ import HeaderProfiles from '../headerProfiles/HeaderProfiles';
 import ModalScreen from '../modalScreen/ModalScreen';
 import ContactProfile from '../contactProfile/ContactProfile';
 import users from "../../UsersDatabase";
-import Login from "../../Login";
 
-function Sidebar({ contacts, handleAddContact, handleContactClick, currentUser }) {
+function Sidebar({ contacts, handleAddContact, handleContactClick, currentUser,lastMessage }) {
     //username.current.value
     const userDisplayName = users[currentUser].displayName;
     const userImage = users[currentUser].image;
@@ -52,7 +51,7 @@ function Sidebar({ contacts, handleAddContact, handleContactClick, currentUser }
                     <button
                         key={contact.name}
                         type="button"
-                        className="btn text-start p-0 text-white"
+                        className="btn t btn-fixed-width contactHover text-start p-0 text-white"
                         onClick={() => handleContactClick(contact.name)}
                     >
                         <ContactProfile

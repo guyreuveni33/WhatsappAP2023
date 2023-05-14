@@ -18,12 +18,15 @@ function MainChatHeader(props) {
     const index = contactIden();
 
     function handleLogout() {
-        // Clear the MessageDB
-        //MessageDB.clear();
+        for (let contact in MessageDB) {
+            if (MessageDB.hasOwnProperty(contact)) {
+                MessageDB[contact] = []; // set the array for the contact to an empty array
+            }
+        }
     }
 
     return (
-        <div className="chat-header overflow-hidden">
+        <div className="chat-header ">
             {/* <!-- Contact name or chat title will be displayed here -->*/}
             <HeaderProfiles pictureSetting="profileCurrentChatPic d-flex align-self-center me-3"
                             profilePicture={index ===-1 ? plaster :props.contacts[index].profilePicture}

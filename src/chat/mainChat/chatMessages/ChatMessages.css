@@ -26,4 +26,10 @@
     background-color: #555;
 }
 
+.message-container {
+    word-break: break-word;
+}
 
+.container-width {
+    width: 70%;
+}

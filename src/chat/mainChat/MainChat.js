@@ -1,3 +1,4 @@
+import './chatMessages/ChatMessages.css';
 import {useState, useEffect} from "react";
 import MainChatHeader from "./mainChatHeader/MainChatHeader";
 import ChatMessages from "./chatMessages/ChatMessages";
@@ -11,10 +12,10 @@ function MainChat(props) {
     }, [props.initialMessages]);
 
     return (
-        <div className="main-chat overflow-hidden">
+        <div className="main-chat overflow-hidden container-width">
             <MainChatHeader selectedContact={props.selectedContact} contacts={props.contacts}/>
             <ChatMessages messages={messages}/>
-            <SendMessageBar messages={messages} setMessages={setMessages} selectedContact={props.selectedContact} contacts={props.contacts} />
+            <SendMessageBar messages={messages} setMessages={setMessages} selectedContact={props.selectedContact} contacts={props.contacts} setLastMessage={props.setLastMessage}/>
         </div>
     );
 }
