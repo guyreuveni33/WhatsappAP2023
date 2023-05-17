@@ -11,10 +11,13 @@ The user can send a message in two ways, first is by clicking the "send" button 
 
 Once the user logs out, all the chats will be erased, but the user's registry details will be saved in the database in case he wants to log in again. At this point, only the user can send messages, and there will be no reply from the other contact they are talking to.
 
-To use the chat application:
+To use the chat application, open a terminal and type the following commands:
 
-- Clone the repository: git clone https://github.com/guyreuveni33/WhatsappAP2023.git
-- Run the code with 'npm start' in the terminal.
+- git clone https://github.com/guyreuveni33/WhatsappAP2023.git
+- cd WhatsappAP2023
+- npm i
+- npm start
+- open your browser, then open address: http://localhost:3000/
 - Access the login page and either login with registered details or register for a new account.
 - Add contacts to the chat screen.
 - Start chatting by clicking on a contact's name in the side bar.
