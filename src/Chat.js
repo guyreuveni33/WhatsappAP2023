@@ -7,6 +7,7 @@ import MessageDB from "./chat/dataBase/MessagesDB";
 
 function Chat({username}) {
     const currentUser = username;
+    //const userToken = token;
     // Define the contacts state and handleAddContact function in the Chat component
     const [contacts, setContacts] = useState([]);
 
