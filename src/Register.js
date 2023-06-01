@@ -133,12 +133,12 @@ function Register() {
                 onInput={handleImage}
                 id="image"
             />
-            <Link to="/"
+            <button
                   className="btn btn-outline-light btn-lg px-4"
                   type="submit"
                   onClick={handleRegister}>
                 Register
-            </Link>
+            </button>
         </PageStruct>
     );
 }
