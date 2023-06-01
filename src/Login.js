@@ -6,7 +6,8 @@ import {useState} from "react";
 import users from "./UsersDatabase";
 
 
-function Login({setUsernameNew}) {
+function Login({setUsernameNew,setToken,token}) {
+
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     // This check for which page the user will navigate
@@ -23,19 +24,42 @@ function Login({setUsernameNew}) {
     const handlePasswordChange = (value) => {
         setPassword(value);
     };
+    
     // Event handler for setting the navigate path based on the user input
-    const handleNavigatePath = () => {
-        for (const key of Object.keys(storedUsers)) {
-            if (username === key && password === storedUsers[key].password) {
+    // Event handler for setting the navigate path based on the user input
+    // Event handler for setting the navigate path based on the user input
+    const handleNavigatePath = async () => {
+        try {
+            const response = await fetch('http://localhost:5000/api/Tokens', {
+                method: 'post',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    username: username,
+                    password: password,
+                }),
+            });
+
+            if (response.ok) {
+                const tokenValue = await response.text();
+                const token = "Bearer " + tokenValue;
+                setToken(token);
+                console.log('Token created successfully');
+                console.log(token);
                 setUsernameNew(username);
-                setNavigate("/Chat");
+                setNavigate('/Chat');
                 setMatch(true);
-                return;
             } else {
-                setNavigate("/");
+                throw new Error('Token creation failed');
             }
+        } catch (error) {
+            console.error(error);
+            setNavigate('/');
         }
     };
+
+
     //This pop alert in case there is no match between the password and the userName
     const handleLoginClick = () => {
         if (!match) {

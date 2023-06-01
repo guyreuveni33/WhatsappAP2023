@@ -1,3 +1,4 @@
+
 import {useRef, useState} from "react";
 import './LoginRegister.css';
 import RegisterUserInput from "./login/userInput/RegisterUserInput";
@@ -6,6 +7,7 @@ import ImageUpload from "./login/imageUpload/ImageUpload";
 import {Link} from "react-router-dom";
 import users from "./UsersDatabase";
 import myImage from "./myImage.jpg"
+import {useNavigate} from "react-router-dom";
 
 function Register() {
     // State variables to store the user's name, password, display name, and image
@@ -15,6 +17,7 @@ function Register() {
     const [image, setImage] = useState(myImage);
     // State variable to indicate whether the two password inputs match
     const [passwordsMatch, setPasswordsMatch] = useState(false);
+    const navigate = useNavigate();
 
     // Event handler for the first password input field
     const handleFirstPassword = (event) => {
@@ -61,17 +64,35 @@ function Register() {
         return true;
     }
     //This insert the values of the user in case of valid inputs to the Database
-    const handleRegister = (e) => {
+    const handleRegister = async (e) => {
+        e.preventDefault();
         if (validateInputs()) {
-            users[username.current.value] = {
+            const user = {
+                username: username.current.value,
                 password: password,
                 displayName: displayName,
-                image: image
+                profilePic: image,
             };
-        } else {
-            e.preventDefault();
+            await console.log(user)
+            const response = await fetch('http://localhost:5000/api/Users', {
+                'method': 'post',
+                'headers': {
+                    'Content-Type': 'application/json',
+                },
+                'body': JSON.stringify(user),
+            });
+            await console.log(await response)
+            if (response.ok) {
+                navigate("/")
+                // User registration successful, handle the response or perform any additional actions
+                console.log('User registered successfully');
+            } else {
+                // Error occurred during user registration, handle the error
+                console.log('User registration failed');
+            }
         }
     };
+
 
     return (
         <PageStruct
@@ -123,4 +144,3 @@ function Register() {
 }
 
 export default Register;
-
