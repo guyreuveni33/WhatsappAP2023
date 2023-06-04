@@ -12,7 +12,7 @@ function ChatMessages({messages}) {
                     if (message.type === "received") {
                         return (
                             <div key={index} className="message-container">
-                                <ReceivedMessage text={message.text}/>
+                                <ReceivedMessage text={message.text} time={message.time}/>
                             </div>
                         );
                     } else if (message.type === "user") {

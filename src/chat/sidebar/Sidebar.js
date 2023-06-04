@@ -1,15 +1,88 @@
+import { useState, useEffect } from "react";
 import './SideBar.css';
 import HeaderProfiles from '../headerProfiles/HeaderProfiles';
 import ModalScreen from '../modalScreen/ModalScreen';
 import ContactProfile from '../contactProfile/ContactProfile';
-import users from "../../UsersDatabase";
 
-function Sidebar({contacts, handleAddContact, handleContactClick, currentUser}) {
+function Sidebar({ handleAddContact, handleContactClick, currentUser, displayName,
+                     profilePic, userToken, selectedDisplayName, lastMessage }) {
+    const [contacts, setContacts] = useState([]);
 
-    // Extract the display name of the current user that logged in
-    const userDisplayName = users[currentUser].displayName;
-    // Extract the image of the current user that logged in
-    const userImage = users[currentUser].image;
+
+        const fetchChats = async () => {
+            try {
+                const response = await fetch("http://localhost:5000/api/Chats", {
+                    method: "get",
+                    headers: {
+                        "Content-Type": "application/json",
+                        authorization: userToken,
+                    },
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    //setContacts(data);
+                    setContacts(ADAPTER_contactList(data));
+                    console.log("hey");
+                    //const adaptedContacts = adaptContactsData(data);
+                    //setContacts(adaptedContacts);
+                } else {
+                    console.error("Error fetching chats:", response.status);
+                }
+            } catch (error) {
+                console.error("Error fetching chats:", error);
+            }
+        };
+
+    useEffect(() => {
+            fetchChats();
+    }, [userToken]);
+
+    useEffect(() => {
+        fetchChats(); // Call fetchChats when lastMessage updates
+        console.log("adfadfadf");
+        //setContacts();
+    }, [lastMessage]);
+
+    const modalScreenProps = {
+        handleAddContact,
+        token: userToken,
+        fetchChats: fetchChats,
+        contacts: contacts
+    };
+
+function ADAPTER_contactList (data) {
+    var newData = [];
+    for (let contact of data) {
+        const newContact = {
+            id: contact["id"],
+            username: contact["user"]["Username"],
+            name: contact["user"]["displayName"],
+            profilePicture: contact["user"]["profilePic"],
+            lastMessage: contact[ "lastMessage"] === null ? "" : contact["lastMessage"]["content"],
+            //TODO IN MONGO WE WILL SAVE THE LAST MESSAGE DATE!
+            date: formatDate(contact["lastMessage"] === null ? "" : contact["lastMessage"]["created"]),
+        };
+        newData = [...newData, newContact]
+    }
+    return newData;
+}
+
+    function formatDate(dateString) {
+        const date = new Date(dateString);
+        const formattedDate = date.toLocaleDateString("en-GB", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+        });
+        const formattedTime = date.toLocaleTimeString("en-US", {
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: false,
+        });
+        return `${formattedDate}`;
+    }
+
 
     return (
         <div className="sidebar overflow-hidden bg-dark">
@@ -17,10 +90,10 @@ function Sidebar({contacts, handleAddContact, handleContactClick, currentUser}) 
                 <HeaderProfiles
                     margins="ms-1"
                     pictureSetting="profileCurrentChatPic"
-                    profilePicture={userImage}
+                    profilePicture={profilePic}
                     textPosition="text-white ms-2"
                     textSetting="fw-bold mb-0"
-                    name={userDisplayName}
+                    name={displayName}
                 />
                 <div className="ms-auto">
                     <button
@@ -52,7 +125,7 @@ function Sidebar({contacts, handleAddContact, handleContactClick, currentUser}) 
                         key={contact.name}
                         type="button"
                         className="btn t btn-fixed-width contactHover text-start p-0 text-white"
-                        onClick={() => handleContactClick(contact.name)}
+                        onClick={() => handleContactClick(contact.id, contact.name)}
                     >
                         <ContactProfile
                             name={contact.name}
@@ -63,7 +136,7 @@ function Sidebar({contacts, handleAddContact, handleContactClick, currentUser}) 
                     </button>
                 ))}
             </ul>
-            <ModalScreen handleAddContact={handleAddContact}/>
+            <ModalScreen {...modalScreenProps}  />
         </div>
     );
 }

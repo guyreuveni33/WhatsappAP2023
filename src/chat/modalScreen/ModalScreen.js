@@ -9,7 +9,7 @@ import avatar9 from "../avatars/9.png";
 import './ModalScreen.css';
 import {useState} from "react";
 
-function ModalScreen({handleAddContact}) {
+function ModalScreen({handleAddContact, token, fetchChats, contacts}) {
     // Setting up state for the name input field
     const [name, setName] = useState('');
 
@@ -18,31 +18,63 @@ function ModalScreen({handleAddContact}) {
         setName(event.target.value);
     };
 
-    // Handling clicks on the Add button
-    const handleAddClick = () => {
-        if (name) {
-            // Creating an array of avatars and selecting a random one
-            const avatars = [avatar1, avatar2, avatar3, avatar4, avatar5, avatar6, avatar8, avatar9];
-            const randomAvatar = avatars[Math.floor(Math.random() * avatars.length)];
+    const handleAddClick = async () => {
+        setName('');
+        const existingContact = contacts.find(contact => contact.name === name);
+        if (existingContact) {
+            alert(`User '${name}' is already in the chat list.`);
+            return;
+        }
+        const user = {
+            "username" : `${name}`,
+        };
+        try {
+            const response = await fetch("http://localhost:5000/api/Chats", {
+                method: "post",
+                headers: {
+                    "Content-Type": "application/json",
+                    authorization: token,
+                },
+                'body': JSON.stringify(user),
+            });
 
-            // Formatting the current date
-            const dateOptions = {month: '2-digit', day: '2-digit', year: 'numeric'};
-            const formattedDate = new Date().toLocaleDateString('en-US', dateOptions);
-
-            // Creating a new contact object with the provided name
-            const newContact = {
-                name,
-                lastMessage: '',
-                date: formattedDate,
-                profilePicture: randomAvatar,
-            };
-
-            /* Calling the parent component's handleAddContact function with the new contact object and resetting
-            the name input field */
-            handleAddContact(newContact);
-            setName('');
+            if (response.ok) {
+                fetchChats();
+                console.log("contact added in post");
+                //const adaptedContacts = adaptContactsData(data);
+                //setContacts(adaptedContacts);
+            } else {
+                console.error("Error adding contact:", response.status);
+            }
+        } catch (error) {
+            console.error("Error fetching post request:", error);
         }
     };
+    // Handling clicks on the Add button
+    // const handleAddClick = () => {
+    //     if (name) {
+    //         // Creating an array of avatars and selecting a random one
+    //         const avatars = [avatar1, avatar2, avatar3, avatar4, avatar5, avatar6, avatar8, avatar9];
+    //         const randomAvatar = avatars[Math.floor(Math.random() * avatars.length)];
+    //
+    //         // Formatting the current date
+    //         const dateOptions = {month: '2-digit', day: '2-digit', year: 'numeric'};
+    //         const formattedDate = new Date().toLocaleDateString('en-US', dateOptions);
+    //
+    //         // Creating a new contact object with the provided name
+    //         const newContact = {
+    //             name,
+    //             lastMessage: '',
+    //             date: formattedDate,
+    //             profilePicture: randomAvatar,
+    //         };
+    //
+    //         /* Calling the parent component's handleAddContact function with the new contact object and resetting
+    //         the name input field */
+    //         handleAddContact(newContact);
+    //         setName('');
+    //     }
+    // };
 
     return (
         <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel"

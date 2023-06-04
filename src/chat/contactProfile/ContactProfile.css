@@ -1,9 +1,40 @@
-.date {
-    color: #a9a9a9;
-    font-size: 12px;
+.contactProfile {
+    display: flex;
+    align-items: center;
+}
+
+.profilePic {
+    flex-shrink: 0;
+    margin-right: 10px;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    max-width: 50%;
+}
+
+.name {
+    font-weight: bold;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .lastMessage {
     color: #a9a9a9;
     font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: 0;
+}
+
+.date {
+    color: #a9a9a9;
+    font-size: 12px;
+    margin-left: auto;
+    margin-top: 5px;
 }

@@ -15,7 +15,7 @@ function App() {
             <Routes>
                 <Route path="/" element={<Login setUsernameNew={setUsername} setToken={setToken} token={token}/>} />
                 <Route path="/Register" element={<Register />} />
-                <Route path="/Chat" element={<Chat username={username} />} />
+                <Route path="/Chat" element={<Chat username={username} token={token}/>} />
             </Routes>
         </BrowserRouter>
     );
