@@ -1,7 +1,7 @@
 import {useState} from "react";
 import MessageDB from "../../dataBase/MessagesDB";
 
-function SendMessageBar({setMessages, selectedContact, contacts, setLastMessage}) {
+function SendMessageBar({messages,setLastMessage,lastMessage,selectedContact, token, fetchSelectedUserMessages,}) {
 
     // Define a state for the message input field
     const [message, setMessage] = useState("");
@@ -10,51 +10,80 @@ function SendMessageBar({setMessages, selectedContact, contacts, setLastMessage}
     function handleMessageChange(event) {
         setMessage(event.target.value);
     }
+    const handleSendMessage = async (e) => {
+        //console.log(messages);
+        setMessage("");
+        const trimmedMessage = message.trim();
+       // console.log(message);
+            if (!trimmedMessage) {
+                return;
+            }
+
+        const sentMessage = {msg: message};
+        const response = await fetch(`http://localhost:5000/api/Chats/${selectedContact}/Messages`, {
+            'method': 'post',
+            'headers': {
+                'Content-Type': 'application/json',
+                authorization: token,
+            },
+            'body': JSON.stringify(sentMessage),
+        });
+
+            if (response.ok) {
+                fetchSelectedUserMessages();
+                setLastMessage(!lastMessage);
+                // User registration successful, handle the response or perform any additional actions
+                console.log('message sent successfully');
+            } else {
+                // Error occurred during user registration, handle the error
+                console.log('sending of message failed');
+            }
+    };
 
     // Event handler for when the user clicks the send button
-    function handleSendMessage() {
-        setLastMessage(message);
-        const trimmedMessage = message.trim();
-
-        if (!trimmedMessage) {
-            return;
-        }
-
-        // Get the current time
-        const now = new Date();
-        const hours = now.getHours().toString().padStart(2, '0');
-        const minutes = now.getMinutes().toString().padStart(2, '0');
-        const time = `${hours}:${minutes}`;
-
-        // Add the user's message to the messages array
-        setMessages(prevMessages => [
-            ...prevMessages,
-            {
-                type: "user",
-                text: trimmedMessage,
-                time: time
-            }
-        ]);
-
-        MessageDB[selectedContact] = Array.isArray(MessageDB[selectedContact]) ? [...MessageDB[selectedContact], {
-            type: "user",
-            text: trimmedMessage,
-            time: time
-        }] : [{
-            type: "user",
-            text: trimmedMessage,
-            time: time
-        }];
-
-        // Clear the message input field
-        setMessage("");
-
-        for (let i = 0; i < contacts.length; i++) {
-            if (contacts[i].name === selectedContact) {
-                contacts[i].lastMessage = trimmedMessage;
-            }
-        }
-    }
+    // function handleSendMessage() {
+    //     setLastMessage(message);
+    //     const trimmedMessage = message.trim();
+    //
+    //     if (!trimmedMessage) {
+    //         return;
+    //     }
+    //
+    //     // Get the current time
+    //     const now = new Date();
+    //     const hours = now.getHours().toString().padStart(2, '0');
+    //     const minutes = now.getMinutes().toString().padStart(2, '0');
+    //     const time = `${hours}:${minutes}`;
+    //
+    //     // Add the user's message to the messages array
+    //     setMessages(prevMessages => [
+    //         ...prevMessages,
+    //         {
+    //             type: "user",
+    //             text: trimmedMessage,
+    //             time: time
+    //         }
+    //     ]);
+    //
+    //     MessageDB[selectedContact] = Array.isArray(MessageDB[selectedContact]) ? [...MessageDB[selectedContact], {
+    //         type: "user",
+    //         text: trimmedMessage,
+    //         time: time
+    //     }] : [{
+    //         type: "user",
+    //         text: trimmedMessage,
+    //         time: time
+    //     }];
+    //
+    //     // Clear the message input field
+    //     setMessage("");
+    //
+    //     for (let i = 0; i < contacts.length; i++) {
+    //         if (contacts[i].name === selectedContact) {
+    //             contacts[i].lastMessage = trimmedMessage;
+    //         }
+    //     }
+    // }
 
     // When the user hits the enter key the message wil be sent
     function handleKeyDown(event) {
