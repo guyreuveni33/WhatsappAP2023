@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="f7076195-c77b-4a11-881c-ed49c155ea18" name="Changes" comment="In this commit we edited the project to contain server and react project. we have done the follow request on the server side to work:&#10;Register,Login,Get user, post chats, get chats, get chat by id and delete chat by id" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JavaScript File" />
+        <option value="CSS File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="main" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">
+    <option name="recentNewPullRequestHead">
+      <RepoCoordinatesHolder>
+        <option name="owner" value="guyreuveni33" />
+        <option name="repository" value="WhatsappAP2023" />
+      </RepoCoordinatesHolder>
+    </option>
+    <option name="selectedUrlAndAccountId">
+      <UrlAndAccount>
+        <option name="accountId" value="49bf84a7-90d0-418a-b0ae-9dfc70be7882" />
+        <option name="url" value="https://github.com/guyreuveni33/WhatsappAP2023.git" />
+      </UrlAndAccount>
+    </option>
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
+  <component name="ProjectId" id="2PQs5ErPULHQSBkanv4beE1C5iQ" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;part2Server&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/guyha/WebstormProjects/WhatsappAP2023/server&quot;,
+    &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;C:\\Program Files\\JetBrains\\WebStorm 2023.1\\plugins\\javascript-impl\\jsLanguageServicesImpl\\external&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\guyha\WebstormProjects\WhatsappAP2023\server" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\guyha\WebstormProjects\WhatsappAP2023\server" />
+      <recent name="C:\Users\guyha\WebstormProjects\WhatsappAP2023" />
+      <recent name="C:\Users\guyha\WebstormProjects\WhatsappAP2023\server\public" />
+      <recent name="C:\Users\guyha\WebstormProjects\WhatsappAP2023\server\controllers" />
+      <recent name="C:\Users\guyha\WebstormProjects\WhatsappAP2023\src\chat\mainChat\mainChatHeader" />
+    </key>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="f7076195-c77b-4a11-881c-ed49c155ea18" name="Changes" comment="" />
+      <created>1683400454497</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1683400454497</updated>
+      <workItem from="1683400457629" duration="119000" />
+      <workItem from="1683400596809" duration="11638000" />
+      <workItem from="1683444844954" duration="29651000" />
+      <workItem from="1683539812495" duration="1776000" />
+      <workItem from="1683632244350" duration="24981000" />
+      <workItem from="1683701594995" duration="17445000" />
+      <workItem from="1683796014544" duration="42067000" />
+      <workItem from="1684053512655" duration="23767000" />
+      <workItem from="1684087053699" duration="636000" />
+      <workItem from="1684141495811" duration="38000" />
+      <workItem from="1684158550643" duration="210000" />
+      <workItem from="1684355357796" duration="605000" />
+      <workItem from="1685525013125" duration="13447000" />
+      <workItem from="1685611270364" duration="11619000" />
+      <workItem from="1685865276377" duration="9992000" />
+      <workItem from="1685955428078" duration="183000" />
+      <workItem from="1685959653963" duration="46880000" />
+      <workItem from="1686123213258" duration="15578000" />
+      <workItem from="1686139119062" duration="22801000" />
+    </task>
+    <task id="LOCAL‎-00001" summary="editing files and adding Src and public folder">
+      <created>1683463106804</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL‎-00001" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1683463106804</updated>
+    </task>
+    <task id="LOCAL‎-00002" summary="editing files and adding Src and public folder">
+      <created>1683464143944</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL‎-00002" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1683464143944</updated>
+    </task>
+    <task id="LOCAL‎-00003" summary="dividing to components">
+      <created>1683485018641</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL‎-00003" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1683485018641</updated>
+    </task>
+    <task id="LOCAL‎-00004" summary="dividing to components">
+      <created>1683485064884</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL‎-00004" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1683485064884</updated>
+    </task>
+    <task id="LOCAL‎-00005" summary="in this commit I fix the modal, so it will work on the jsx format.">
+      <created>1683651784083</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL‎-00005" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1683651784083</updated>
+    </task>
+    <task id="LOCAL‎-00006" summary="in this commit I add the option to add contact and message, as well as the option to choose whice contact I would like to see his chat">
+      <created>1683833759524</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL‎-00006" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1683833759524</updated>
+    </task>
+    <task id="LOCAL‎-00007" summary="In this commit last message is updating according to the last message sent by the user.">
+      <created>1684071480201</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL‎-00007" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1684071480202</updated>
+    </task>
+    <task id="LOCAL‎-00008" summary="disable messages before choosing contact">
+      <created>1684072186461</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL‎-00008" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1684072186461</updated>
+    </task>
+    <task id="LOCAL‎-00009" summary="disable messages before choosing contact">
+      <created>1684083021907</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL‎-00009" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1684083021908</updated>
+    </task>
+    <task id="LOCAL‎-00010" summary="coding style guy">
+      <created>1684086392833</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL‎-00010" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1684086392834</updated>
+    </task>
+    <task id="LOCAL‎-00011" summary="coding style guy">
+      <created>1684086635915</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL‎-00011" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1684086635915</updated>
+    </task>
+    <task id="LOCAL‎-00012" summary="coding style guy">
+      <created>1684086809150</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL‎-00012" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1684086809150</updated>
+    </task>
+    <task id="LOCAL‎-00013" summary="coding style guy">
+      <created>1684086915085</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL‎-00013" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1684086915085</updated>
+    </task>
+    <task id="LOCAL‎-00014" summary="we edited the login.js and register.js files to work with the database.">
+      <created>1685615449356</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL‎-00014" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1685615449356</updated>
+    </task>
+    <task id="LOCAL‎-00015" summary="we edited the login.js and register.js files to work with the database.">
+      <created>1685615721459</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL‎-00015" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1685615721459</updated>
+    </task>
+    <task id="LOCAL‎-00016" summary="In this commit we edited the project to contain server and react project. we have done the follow request on the server side to work:&#10;Register,Login,Get user, post chats, get chats, get chat by id and delete chat by id">
+      <created>1686123722634</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL‎-00016" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1686123722634</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="HEAD" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="editing files and adding Src and public folder" />
+    <MESSAGE value="dividing to components" />
+    <MESSAGE value="in this commit I fix the modal, so it will work on the jsx format." />
+    <MESSAGE value="in this commit I add the option to add contact and message, as well as the option to choose whice contact I would like to see his chat" />
+    <MESSAGE value="In this commit last message is updating according to the last message sent by the user." />
+    <MESSAGE value="disable messages before choosing contact" />
+    <MESSAGE value="coding style guy" />
+    <MESSAGE value="we edited the login.js and register.js files to work with the database." />
+    <MESSAGE value="In this commit we edited the project to contain server and react project. we have done the follow request on the server side to work:&#10;Register,Login,Get user, post chats, get chats, get chat by id and delete chat by id" />
+    <option name="LAST_COMMIT_MESSAGE" value="In this commit we edited the project to contain server and react project. we have done the follow request on the server side to work:&#10;Register,Login,Get user, post chats, get chats, get chat by id and delete chat by id" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/server/routes/chatRoute.js</url>
+          <line>12</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>

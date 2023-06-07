@@ -1,0 +1,30 @@
+.list-unstyled {
+    height: 110%;
+    overflow-y: scroll;
+    overflow-x: hidden !important;
+    scrollbar-width: thin;
+    scrollbar-color: #777 #eee;
+}
+
+.contactHover:hover {
+    background-color: #646262;
+    cursor: pointer;
+    border-radius: 7px;
+    padding-left: 5px;
+    border-color: transparent !important;
+}
+
+.t {
+}
+
+.list-unstyled:hover li:hover {
+    overflow: hidden;
+}
+
+.list-unstyled::-webkit-scrollbar {
+    width: 5px !important;
+}
+
+.btn-fixed-width {
+    width: 100%;
+}
