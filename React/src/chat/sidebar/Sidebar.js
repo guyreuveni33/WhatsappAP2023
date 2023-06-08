@@ -3,15 +3,18 @@ import './SideBar.css';
 import HeaderProfiles from '../headerProfiles/HeaderProfiles';
 import ModalScreen from '../modalScreen/ModalScreen';
 import ContactProfile from '../contactProfile/ContactProfile';
+import {io} from "socket.io-client";
 
 function Sidebar({ handleAddContact, handleContactClick, currentUser, displayName,
-                     profilePic, userToken, selectedDisplayName, lastMessage }) {
-    const [contacts, setContacts] = useState([]);
+                     profilePic, userToken, selectedDisplayName, lastMessage, socket, contacts, setContacts,
+                 setSelectedUsername}) {
+
+
 
 
         const fetchChats = async () => {
             try {
-                const response = await fetch("http://localhost:5000/api/Chats", {
+                const response = await fetch("http://localhost:5001/api/Chats", {
                     method: "get",
                     headers: {
                         "Content-Type": "application/json",
@@ -48,7 +51,9 @@ function Sidebar({ handleAddContact, handleContactClick, currentUser, displayNam
         handleAddContact,
         token: userToken,
         fetchChats: fetchChats,
-        contacts: contacts
+        contacts: contacts,
+        socket: socket,
+        currentUser: currentUser
     };
 
 function ADAPTER_contactList (data) {
@@ -56,13 +61,13 @@ function ADAPTER_contactList (data) {
     for (let contact of data) {
         const newContact = {
             id: contact["id"],
-            username: contact["user"]["Username"],
+            username: contact["user"]["username"],
             name: contact["user"]["displayName"],
             profilePicture: contact["user"]["profilePic"],
             lastMessage: contact[ "lastMessage"] === null ? "" : contact["lastMessage"]["content"],
-            //TODO IN MONGO WE WILL SAVE THE LAST MESSAGE DATE!
             date: formatDate(contact["lastMessage"] === null ? "" : contact["lastMessage"]["created"]),
         };
+        console.log(newContact)
         newData = [...newData, newContact]
     }
     return newData;
@@ -125,7 +130,11 @@ function ADAPTER_contactList (data) {
                         key={contact.name}
                         type="button"
                         className="btn t btn-fixed-width contactHover text-start p-0 text-white"
-                        onClick={() => handleContactClick(contact.id, contact.name)}
+                        onClick={() => {
+                            handleContactClick(contact.id, contact.name)
+                            setSelectedUsername({name :contact.username, id:contact.id});
+                        }
+                    }
                     >
                         <ContactProfile
                             name={contact.name}
