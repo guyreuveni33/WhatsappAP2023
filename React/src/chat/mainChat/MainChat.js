@@ -16,11 +16,11 @@ function MainChat(props) {
             <MainChatHeader selectedContact={props.selectedContact} profilePic={props.profilePic}
                             displayName={props.displayName}/>
             <ChatMessages messages={messages}/>
-            <SendMessageBar  messages={messages} setMessages={setMessages} selectedContact={props.selectedContact}
+            <SendMessageBar  messages={messages} username={props.username} setMessages={setMessages} selectedContact={props.selectedContact}
                              selectedUsername={props.selectedUsername} socket={props.socket}
                             contacts={props.contacts} setLastMessage={props.setLastMessage} token={props.token}
                             fetchSelectedUserMessages={props.fetchSelectedUserMessages} lastMessage={props.lastMessage}
-                             setMessages
+
 
             />
         </div>

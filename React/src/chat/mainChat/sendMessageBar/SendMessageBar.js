@@ -2,7 +2,7 @@ import {useState} from "react";
 import MessageDB from "../../dataBase/MessagesDB";
 
 function SendMessageBar({messages, setLastMessage, lastMessage, selectedContact, socket,
-                            token, fetchSelectedUserMessages,selectedUsername}) {
+                            token, fetchSelectedUserMessages,selectedUsername, username}) {
 
     // Define a state for the message input field
     const [message, setMessage] = useState("");
@@ -41,11 +41,14 @@ function SendMessageBar({messages, setLastMessage, lastMessage, selectedContact,
                 text: trimmedMessage,
                 time: formattedDate
             }
+            await console.log("SELECTED USERNAME: " + JSON.stringify(await selectedUsername))
             const fullMsg = {
-                receiver: selectedUsername,
+                receiver: await selectedUsername,
+                sender: username,
                 msg: msg,
                 id: selectedContact
             }
+            console.log(JSON.stringify(fullMsg))
             socket.current.emit('receiveMessage', fullMsg);
             await fetchSelectedUserMessages();
             setLastMessage(!lastMessage);

@@ -26,7 +26,7 @@ const createChat = async (req, res) => {
             return res.status(400).json("added user isn't a real user");
         } else if (result === -1)
             return res.status(404).json("error");
-        if (result)
+        else if (result)
             return res.json(result);
     } else
         res.status(400).json({error: 'Failed to create chat'});

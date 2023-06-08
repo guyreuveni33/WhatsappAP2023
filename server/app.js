@@ -18,7 +18,7 @@ mongoose.connect(process.env.CONNECTION_STRING, {useNewUrlParser: true, useUnifi
 
 // app.use(express.static('/public'));
 ///TODO CHANGE IT TO PUBLIC AT THE END OF THE ASSIGNMENT
-const site = (express.static('../React/build'));
+const site = (express.static('public'));
 app.use('/', site);
 app.use('/Chat', site);
 app.use('/Register', site);
@@ -44,7 +44,7 @@ io.on('connection', (socket) => {
 
     // Send message
     socket.on('receiveMessage', (msg) => {
-        console.log(msg.receiver.name)
+        console.log(JSON.stringify(msg))
         // Process the message and send it to the recipient
         // Example: Emit an event to the client to notify success or failure
          socket.in(msg.receiver.name).emit('receiveMessage', msg);

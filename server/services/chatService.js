@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/Users");
 
 // Service function to create a new chat
-const createChat = async (user, addedUser) => {
+const createChat = async (addedUser, user) => {
     try {
 
         if (user === addedUser)
