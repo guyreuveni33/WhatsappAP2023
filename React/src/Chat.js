@@ -6,6 +6,7 @@ import ModalScreen from "./chat/modalScreen/ModalScreen";
 import plaster from "./chat/mainChat/mainChatHeader/plaster.png"
 import MessageDB from "./chat/dataBase/MessagesDB";
 import {io} from "socket.io-client";
+import Login from "./Login";
 
 function Chat({ username, token }) {
     const currentUser = username;
@@ -50,6 +51,24 @@ function Chat({ username, token }) {
     };
 
     useEffect(()=> {
+        if(newMessage === null || newMessage === undefined){
+            return;
+        }
+        console.log("CONTACTS SIDEBAR " + JSON.stringify(contactsSidebar))
+        const index = contactsSidebar.findIndex(c => c.username === newMessage.sender)
+        console.log("INDEX " + index)
+        setContactsSidebar((prev) => {
+            var savedContact;
+            if(index > -1){
+                savedContact = prev.at(index)
+                console.log("SAVED CONTACT " + savedContact)
+                prev.splice(index, 1);
+            }
+            return [savedContact, ...prev];
+        })
+        console.log(JSON.stringify(newMessage))
+
+        console.log("SELECTED USERNAME IN EFFECT " + JSON.stringify(selectedUsername))
         if(Object.keys(selectedUsername).length === 0)
             return;
         if(selectedUsername.id === newMessage.id) {
@@ -65,8 +84,12 @@ function Chat({ username, token }) {
             fetchChats();
         });
         socket.current.on('receiveMessage',(msg)=>{
-            fetchChats();
-            triggerNewMessage(msg);
+            fetchChats().then(() => {
+                triggerNewMessage(msg);
+            });
+
+
+
         })
     },[username]);
 
@@ -75,7 +98,7 @@ function Chat({ username, token }) {
         for (let contact of data) {
             const newContact = {
                 id: contact["id"],
-                username: contact["user"]["Username"],
+                username: contact["user"]["username"],
                 name: contact["user"]["displayName"],
                 profilePicture: contact["user"]["profilePic"],
                 lastMessage: contact[ "lastMessage"] === null ? "" : contact["lastMessage"]["content"],
@@ -111,8 +134,8 @@ function Chat({ username, token }) {
             if (response.ok) {
                 const data = await response.json();
                 //setContacts(data);
-                setContactsSidebar(ADAPTER_contactList(data));
-                console.log("hey");
+                await setContactsSidebar(ADAPTER_contactList(await data));
+                await console.log("CON SIDE BAR " + contactsSidebar)
                 //const adaptedContacts = adaptContactsData(data);
                 //setContacts(adaptedContacts);
             } else {
@@ -185,6 +208,7 @@ function Chat({ username, token }) {
         fetchUserData();
     }, [currentUser, userToken]);
     const handleAddContact = (newContact) => {
+        console.log("ADDED HANDLE ADD CXONTACTS " + newContact)
         setContacts([...contacts, { ...newContact, lastMessage: "" }]);
     };
 
@@ -209,8 +233,8 @@ function Chat({ username, token }) {
                     username={username}
                     profilePic={profilePic}
                     setSelectedUsername={setSelectedUsername}
-                    contacts={contactsSidebar}
-                    setContacts={setContactsSidebar}
+                    contactsSidebar={contactsSidebar}
+                    setContactsSidebar={setContactsSidebar}
                     userToken={userToken}
                     selectedDisplayName = {selectedDisplayName}
                     socket={socket}
@@ -219,6 +243,7 @@ function Chat({ username, token }) {
                     initialMessages={
                         contactId === null ? "" : messages
                     }
+                    username={username}
                     socket={socket}
                     selectedContact={contactId}
                     selectedUsername={selectedUsername}

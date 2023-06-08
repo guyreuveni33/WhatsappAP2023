@@ -1,48 +1,106 @@
-import { useState, useEffect } from "react";
+import {useState, useEffect} from "react";
 import './SideBar.css';
 import HeaderProfiles from '../headerProfiles/HeaderProfiles';
 import ModalScreen from '../modalScreen/ModalScreen';
 import ContactProfile from '../contactProfile/ContactProfile';
 import {io} from "socket.io-client";
 
-function Sidebar({ handleAddContact, handleContactClick, currentUser, displayName,
-                     profilePic, userToken, selectedDisplayName, lastMessage, socket, contacts, setContacts,
-                 setSelectedUsername}) {
+function Sidebar({
+                     handleAddContact,
+                     handleContactClick,
+                     currentUser,
+                     displayName,
+                     profilePic,
+                     userToken,
+                     selectedDisplayName,
+                     lastMessage,
+                     socket,
+                     contactsSidebar,
+                     setContactsSidebar,
+                     setSelectedUsername
+                 }) {
 
 
+    const fetchChats = async () => {
+        try {
+            const response = await fetch("http://localhost:5001/api/Chats", {
+                method: "get",
+                headers: {
+                    "Content-Type": "application/json",
+                    authorization: userToken,
+                },
+            });
 
-
-        const fetchChats = async () => {
-            try {
-                const response = await fetch("http://localhost:5001/api/Chats", {
-                    method: "get",
-                    headers: {
-                        "Content-Type": "application/json",
-                        authorization: userToken,
-                    },
-                });
-
-                if (response.ok) {
-                    const data = await response.json();
-                    //setContacts(data);
-                    setContacts(ADAPTER_contactList(data));
-                    console.log("hey");
-                    //const adaptedContacts = adaptContactsData(data);
-                    //setContacts(adaptedContacts);
-                } else {
-                    console.error("Error fetching chats:", response.status);
-                }
-            } catch (error) {
-                console.error("Error fetching chats:", error);
+            if (response.ok) {
+                const data = await response.json();
+                //setContacts(data);
+                const Data = ADAPTER_contactList(await data)
+                await console.log(Data)
+                await setContactsSidebar(Data);
+                //const adaptedContacts = adaptContactsData(data);
+                //setContacts(adaptedContacts);
+            } else {
+                console.error("Error fetching chats:", response.status);
             }
-        };
+        } catch (error) {
+            console.error("Error fetching chats:", error);
+        }
+    };
+
+    const fetchChatsLM = async () => {
+        try {
+            const response = await fetch("http://localhost:5001/api/Chats", {
+                method: "get",
+                headers: {
+                    "Content-Type": "application/json",
+                    authorization: userToken,
+                },
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                //setContacts(data);
+                const Data = ADAPTER_contactList(await data)
+                await console.log(Data)
+                return Data;
+                //const adaptedContacts = adaptContactsData(data);
+                //setContacts(adaptedContacts);
+            } else {
+                console.error("Error fetching chats:", response.status);
+            }
+        } catch (error) {
+            console.error("Error fetching chats:", error);
+        }
+    };
+
 
     useEffect(() => {
-            fetchChats();
+        fetchChats();
     }, [userToken]);
 
     useEffect(() => {
-        fetchChats(); // Call fetchChats when lastMessage updates
+        fetchChatsLM().then((data) => {
+                setContactsSidebar(prev => {
+                    var newData = [];
+                    for (let c1 of prev) {
+                        for (let c2 of data) {
+                            if (c1.username === c2.username) {
+                                const newContact = {
+                                    id: c2.id,
+                                    username: c2.username,
+                                    name: c2.name,
+                                    profilePicture: c2.profilePicture,
+                                    lastMessage: c2.lastMessage,
+                                    date: c2.date
+                                };
+                                newData = [...newData, newContact];
+                            }
+                        }
+                    }
+                    return newData;
+                })
+            }
+        ); // Call fetchChats when lastMessage updates
         console.log("adfadfadf");
         //setContacts();
     }, [lastMessage]);
@@ -51,27 +109,27 @@ function Sidebar({ handleAddContact, handleContactClick, currentUser, displayNam
         handleAddContact,
         token: userToken,
         fetchChats: fetchChats,
-        contacts: contacts,
+        contacts: contactsSidebar,
         socket: socket,
         currentUser: currentUser
     };
 
-function ADAPTER_contactList (data) {
-    var newData = [];
-    for (let contact of data) {
-        const newContact = {
-            id: contact["id"],
-            username: contact["user"]["username"],
-            name: contact["user"]["displayName"],
-            profilePicture: contact["user"]["profilePic"],
-            lastMessage: contact[ "lastMessage"] === null ? "" : contact["lastMessage"]["content"],
-            date: formatDate(contact["lastMessage"] === null ? "" : contact["lastMessage"]["created"]),
-        };
-        console.log(newContact)
-        newData = [...newData, newContact]
+    function ADAPTER_contactList(data) {
+        var newData = [];
+        for (let contact of data) {
+            const newContact = {
+                id: contact["id"],
+                username: contact["user"]["username"],
+                name: contact["user"]["displayName"],
+                profilePicture: contact["user"]["profilePic"],
+                lastMessage: contact["lastMessage"] === null ? "" : contact["lastMessage"]["content"],
+                date: formatDate(contact["lastMessage"] === null ? "" : contact["lastMessage"]["created"]),
+            };
+            console.log(newContact)
+            newData = [...newData, newContact]
+        }
+        return newData;
     }
-    return newData;
-}
 
     function formatDate(dateString) {
         const date = new Date(dateString);
@@ -125,16 +183,17 @@ function ADAPTER_contactList (data) {
                 </div>
             </div>
             <ul className="list-unstyled text-white overflow-scroll">
-                {contacts.map((contact) => (
+                {contactsSidebar.map((contact) => (
                     <button
                         key={contact.name}
                         type="button"
                         className="btn t btn-fixed-width contactHover text-start p-0 text-white"
                         onClick={() => {
+                            console.log("TRIGGERED CONTACT CLICK")
                             handleContactClick(contact.id, contact.name)
-                            setSelectedUsername({name :contact.username, id:contact.id});
+                            setSelectedUsername({name: contact.username, id: contact.id});
                         }
-                    }
+                        }
                     >
                         <ContactProfile
                             name={contact.name}
