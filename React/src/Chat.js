@@ -1,10 +1,11 @@
-import { useState, useEffect } from "react";
+import {useState, useEffect, useRef} from "react";
 import "./Chat.css";
 import Sidebar from "./chat/sidebar/Sidebar";
 import MainChat from "./chat/mainChat/MainChat";
 import ModalScreen from "./chat/modalScreen/ModalScreen";
 import plaster from "./chat/mainChat/mainChatHeader/plaster.png"
 import MessageDB from "./chat/dataBase/MessagesDB";
+import {io} from "socket.io-client";
 
 function Chat({ username, token }) {
     const currentUser = username;
@@ -17,11 +18,13 @@ function Chat({ username, token }) {
     const [selectedProfilePic, setSelectedProfilePic] = useState(plaster);
     const [profilePic, setProfilePic] = useState("");
     const [messages, setMessages] = useState([]);
-
-
+    const socket = useRef(null);
+    const [contactsSidebar, setContactsSidebar] = useState([]);
+    const [newMessage, triggerNewMessage] = useState(null);
+    const [selectedUsername, setSelectedUsername] = useState({});
     const fetchSelectedUserMessages = async () => {
         try {
-            const response = await fetch(`http://localhost:5000/api/Chats/${contactId}`, {
+            const response = await fetch(`http://localhost:5001/api/Chats/${contactId}`, {
                 method: "get",
                 headers: {
                     "Content-Type": "application/json",
@@ -45,6 +48,82 @@ function Chat({ username, token }) {
             console.error("Error fetching user messages:", error);
         }
     };
+
+    useEffect(()=> {
+        if(Object.keys(selectedUsername).length === 0)
+            return;
+        if(selectedUsername.id === newMessage.id) {
+            setMessages([...messages, newMessage.msg]);
+        }
+    },[newMessage]);
+
+    useEffect(()=> {
+        socket.current = io('http://localhost:5001');
+        console.log(socket.current)
+        socket.current.emit("connecting", username);
+        socket.current.on('addContact', ()=> {
+            fetchChats();
+        });
+        socket.current.on('receiveMessage',(msg)=>{
+            fetchChats();
+            triggerNewMessage(msg);
+        })
+    },[username]);
+
+    function ADAPTER_contactList (data) {
+        var newData = [];
+        for (let contact of data) {
+            const newContact = {
+                id: contact["id"],
+                username: contact["user"]["Username"],
+                name: contact["user"]["displayName"],
+                profilePicture: contact["user"]["profilePic"],
+                lastMessage: contact[ "lastMessage"] === null ? "" : contact["lastMessage"]["content"],
+                //TODO IN MONGO WE WILL SAVE THE LAST MESSAGE DATE!
+                date: formatDate(contact["lastMessage"] === null ? "" : contact["lastMessage"]["created"]),
+            };
+            newData = [...newData, newContact]
+        }
+        return newData;
+    }
+
+    function formatDate(dateString) {
+        const date = new Date(dateString);
+        const formattedDate = date.toLocaleDateString("en-GB", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+        });
+        return `${formattedDate}`;
+    }
+
+
+    const fetchChats = async () => {
+        try {
+            const response = await fetch("http://localhost:5001/api/Chats", {
+                method: "get",
+                headers: {
+                    "Content-Type": "application/json",
+                    authorization: userToken,
+                },
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                //setContacts(data);
+                setContactsSidebar(ADAPTER_contactList(data));
+                console.log("hey");
+                //const adaptedContacts = adaptContactsData(data);
+                //setContacts(adaptedContacts);
+            } else {
+                console.error("Error fetching chats:", response.status);
+            }
+        } catch (error) {
+            console.error("Error fetching chats:", error);
+        }
+    };
+
+
 
     useEffect(() => {
         if (contactId !== "0") {
@@ -78,7 +157,7 @@ function Chat({ username, token }) {
     useEffect(() => {
         const fetchUserData = async () => {
             try {
-                const response = await fetch(`http://localhost:5000/api/Users/${currentUser}`, {
+                const response = await fetch(`http://localhost:5001/api/Users/${currentUser}`, {
                     method: 'get',
                     headers: {
                         "Content-Type": "application/json",
@@ -92,6 +171,7 @@ function Chat({ username, token }) {
                     const data = await response.json();
                     setDisplayName(data.displayName);
                     setProfilePic(data.profilePic);
+
                 } else {
                     console.log(userToken);
                     console.log(currentUser);
@@ -120,25 +200,32 @@ function Chat({ username, token }) {
         <div className="mainBG d-flex justify-content-center p-4">
             <div className="chat-container">
                 <Sidebar
-                    contacts={contacts}
                     handleAddContact={handleAddContact}
                     handleContactClick={handleContactClick}
                     selectedContact={contactId}
                     currentUser={currentUser}
                     lastMessage={lastMessage}
                     displayName={displayName}
+                    username={username}
                     profilePic={profilePic}
+                    setSelectedUsername={setSelectedUsername}
+                    contacts={contactsSidebar}
+                    setContacts={setContactsSidebar}
                     userToken={userToken}
                     selectedDisplayName = {selectedDisplayName}
+                    socket={socket}
                 />
                 <MainChat
                     initialMessages={
                         contactId === null ? "" : messages
                     }
+                    socket={socket}
                     selectedContact={contactId}
+                    selectedUsername={selectedUsername}
                     //contacts={contacts}
                     displayName = {selectedDisplayName}
                     profilePic = {selectedProfilePic}
+                    setMessage={setMessages}
                     token = {userToken}
                     fetchSelectedUserMessages={fetchSelectedUserMessages}
                     setLastMessage={setLastMessage}

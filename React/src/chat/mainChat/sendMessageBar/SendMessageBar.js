@@ -1,7 +1,8 @@
 import {useState} from "react";
 import MessageDB from "../../dataBase/MessagesDB";
 
-function SendMessageBar({messages,setLastMessage,lastMessage,selectedContact, token, fetchSelectedUserMessages,}) {
+function SendMessageBar({messages, setLastMessage, lastMessage, selectedContact, socket,
+                            token, fetchSelectedUserMessages,selectedUsername}) {
 
     // Define a state for the message input field
     const [message, setMessage] = useState("");
@@ -10,17 +11,18 @@ function SendMessageBar({messages,setLastMessage,lastMessage,selectedContact, to
     function handleMessageChange(event) {
         setMessage(event.target.value);
     }
+
     const handleSendMessage = async (e) => {
         //console.log(messages);
         setMessage("");
         const trimmedMessage = message.trim();
-       // console.log(message);
-            if (!trimmedMessage) {
-                return;
-            }
+        // console.log(message);
+        if (!trimmedMessage) {
+            return;
+        }
 
         const sentMessage = {msg: message};
-        const response = await fetch(`http://localhost:5000/api/Chats/${selectedContact}/Messages`, {
+        const response = await fetch(`http://localhost:5001/api/Chats/${selectedContact}/Messages`, {
             'method': 'post',
             'headers': {
                 'Content-Type': 'application/json',
@@ -29,15 +31,30 @@ function SendMessageBar({messages,setLastMessage,lastMessage,selectedContact, to
             'body': JSON.stringify(sentMessage),
         });
 
-            if (response.ok) {
-                fetchSelectedUserMessages();
-                setLastMessage(!lastMessage);
-                // User registration successful, handle the response or perform any additional actions
-                console.log('message sent successfully');
-            } else {
-                // Error occurred during user registration, handle the error
-                console.log('sending of message failed');
+
+
+        if (response.ok) {
+            const currentDate = new Date();
+            const formattedDate = currentDate.toISOString();
+            const msg = {
+                type: "received",
+                text: trimmedMessage,
+                time: formattedDate
             }
+            const fullMsg = {
+                receiver: selectedUsername,
+                msg: msg,
+                id: selectedContact
+            }
+            socket.current.emit('receiveMessage', fullMsg);
+            await fetchSelectedUserMessages();
+            setLastMessage(!lastMessage);
+            // User registration successful, handle the response or perform any additional actions
+            console.log('message sent successfully');
+        } else {
+            // Error occurred during user registration, handle the error
+            console.log('sending of message failed');
+        }
     };
 
     // Event handler for when the user clicks the send button
