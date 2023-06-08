@@ -74,7 +74,7 @@ function Register() {
                 profilePic: image,
             };
             await console.log(user)
-            const response = await fetch('http://localhost:5001/api/Users', {
+            const response = await fetch('http://localhost:5000/api/Users', {
                 'method': 'post',
                 'headers': {
                     'Content-Type': 'application/json',

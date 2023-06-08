@@ -140,7 +140,6 @@ const getMessages = async (req, res) => {
             return res.status(401).json("Unauthorized");
         }
         const result = await chatService.getMessages(chatId);
-        console.log(result);
         if (result === -1)
             return res.status(404).json("error");
         else if (!result)

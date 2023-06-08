@@ -25,7 +25,7 @@ function Chat({ username, token }) {
     const [selectedUsername, setSelectedUsername] = useState({});
     const fetchSelectedUserMessages = async () => {
         try {
-            const response = await fetch(`http://localhost:5001/api/Chats/${contactId}`, {
+            const response = await fetch(`http://localhost:5000/api/Chats/${contactId}`, {
                 method: "get",
                 headers: {
                     "Content-Type": "application/json",
@@ -35,13 +35,8 @@ function Chat({ username, token }) {
 
             if (response.ok) {
                 const data = await response.json();
-                //setMessages(data);
                 setMessages(ADAPTER_messageList(data));
-                //console.log(messages)
-                //console.log(messages.profilePic);
-                // console.log("response working");
-                //const adaptedContacts = adaptContactsData(data);
-                //setContacts(adaptedContacts);
+
             } else {
                 console.error("Error fetching selected user messages:", response.status);
             }
@@ -77,7 +72,7 @@ function Chat({ username, token }) {
     },[newMessage]);
 
     useEffect(()=> {
-        socket.current = io('http://localhost:5001');
+        socket.current = io('http://localhost:5000');
         console.log(socket.current)
         socket.current.emit("connecting", username);
         socket.current.on('addContact', ()=> {
@@ -123,7 +118,7 @@ function Chat({ username, token }) {
 
     const fetchChats = async () => {
         try {
-            const response = await fetch("http://localhost:5001/api/Chats", {
+            const response = await fetch("http://localhost:5000/api/Chats", {
                 method: "get",
                 headers: {
                     "Content-Type": "application/json",
@@ -135,7 +130,6 @@ function Chat({ username, token }) {
                 const data = await response.json();
                 //setContacts(data);
                 await setContactsSidebar(ADAPTER_contactList(await data));
-                await console.log("CON SIDE BAR " + contactsSidebar)
                 //const adaptedContacts = adaptContactsData(data);
                 //setContacts(adaptedContacts);
             } else {
@@ -180,7 +174,7 @@ function Chat({ username, token }) {
     useEffect(() => {
         const fetchUserData = async () => {
             try {
-                const response = await fetch(`http://localhost:5001/api/Users/${currentUser}`, {
+                const response = await fetch(`http://localhost:5000/api/Users/${currentUser}`, {
                     method: 'get',
                     headers: {
                         "Content-Type": "application/json",
@@ -189,19 +183,16 @@ function Chat({ username, token }) {
                 });
 
                 if (response.ok) {
-                    console.log("check");
-                    console.log(userToken);
+
                     const data = await response.json();
                     setDisplayName(data.displayName);
                     setProfilePic(data.profilePic);
 
                 } else {
-                    console.log(userToken);
-                    console.log(currentUser);
+
                     console.error("Error fetching user data:", response.status);
                 }
             } catch (error) {
-                console.log(userToken);
                 console.error("Error fetching user data:", error);
             }
         };

@@ -30,7 +30,7 @@ function Login({setUsernameNew,setToken,token}) {
     // Event handler for setting the navigate path based on the user input
     const handleNavigatePath = async () => {
         try {
-            const response = await fetch('http://localhost:5001/api/Tokens', {
+            const response = await fetch('http://localhost:5000/api/Tokens', {
                 method: 'post',
                 headers: {
                     'Content-Type': 'application/json',

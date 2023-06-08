@@ -6,16 +6,13 @@ const loginUser = async (req, res) => {
     if (!req.body.username || !req.body.password)
         return res.status(400).json("Bad Request");
     // Extract data from the request body
-    //const { username, password } = req.body;
     const data = {username: req.body.username};
-    //console.log(token);
     // Call the login service to perform user login
     const user = await loginService.validateUser(req.body.username, req.body.password);
     if (user) {
         const token = jwt.sign(data, "guyandnivkey");
         res.send(token);
     }
-    //res.status(200).json({user});
     else
         res.status(404).json({error: 'Invalid username or password'});
 };
