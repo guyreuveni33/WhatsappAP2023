@@ -1,11 +1,4 @@
-import avatar1 from "../avatars/1.png";
-import avatar2 from "../avatars/2.png";
-import avatar3 from "../avatars/3.png";
-import avatar4 from "../avatars/4.png";
-import avatar5 from "../avatars/5.png";
-import avatar6 from "../avatars/6.png";
-import avatar8 from "../avatars/8.png";
-import avatar9 from "../avatars/9.png";
+
 import './ModalScreen.css';
 import {useState} from "react";
 
@@ -29,7 +22,7 @@ function ModalScreen({handleAddContact, token, fetchChats, contacts, socket, cur
             "username" : `${name}`,
         };
         try {
-            const response = await fetch("http://localhost:5001/api/Chats", {
+            const response = await fetch("http://localhost:5000/api/Chats", {
                 method: "post",
                 headers: {
                     "Content-Type": "application/json",
@@ -41,7 +34,6 @@ function ModalScreen({handleAddContact, token, fetchChats, contacts, socket, cur
             if (response.ok) {
                 socket.current.emit('addContact', name);
                 fetchChats();
-                console.log("contact added in post");
 
             } else {
                 console.error("Error adding contact:", response.status);

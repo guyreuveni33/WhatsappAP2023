@@ -23,7 +23,7 @@ function Sidebar({
 
     const fetchChats = async () => {
         try {
-            const response = await fetch("http://localhost:5001/api/Chats", {
+            const response = await fetch("http://localhost:5000/api/Chats", {
                 method: "get",
                 headers: {
                     "Content-Type": "application/json",
@@ -33,12 +33,8 @@ function Sidebar({
 
             if (response.ok) {
                 const data = await response.json();
-                //setContacts(data);
                 const Data = ADAPTER_contactList(await data)
-                await console.log(Data)
                 await setContactsSidebar(Data);
-                //const adaptedContacts = adaptContactsData(data);
-                //setContacts(adaptedContacts);
             } else {
                 console.error("Error fetching chats:", response.status);
             }
@@ -49,7 +45,7 @@ function Sidebar({
 
     const fetchChatsLM = async () => {
         try {
-            const response = await fetch("http://localhost:5001/api/Chats", {
+            const response = await fetch("http://localhost:5000/api/Chats", {
                 method: "get",
                 headers: {
                     "Content-Type": "application/json",
@@ -61,7 +57,6 @@ function Sidebar({
                 const data = await response.json();
                 //setContacts(data);
                 const Data = ADAPTER_contactList(await data)
-                await console.log(Data)
                 return Data;
                 //const adaptedContacts = adaptContactsData(data);
                 //setContacts(adaptedContacts);
@@ -101,7 +96,6 @@ function Sidebar({
                 })
             }
         ); // Call fetchChats when lastMessage updates
-        console.log("adfadfadf");
         //setContacts();
     }, [lastMessage]);
 
@@ -125,7 +119,6 @@ function Sidebar({
                 lastMessage: contact["lastMessage"] === null ? "" : contact["lastMessage"]["content"],
                 date: formatDate(contact["lastMessage"] === null ? "" : contact["lastMessage"]["created"]),
             };
-            console.log(newContact)
             newData = [...newData, newContact]
         }
         return newData;
@@ -189,7 +182,6 @@ function Sidebar({
                         type="button"
                         className="btn t btn-fixed-width contactHover text-start p-0 text-white"
                         onClick={() => {
-                            console.log("TRIGGERED CONTACT CLICK")
                             handleContactClick(contact.id, contact.name)
                             setSelectedUsername({name: contact.username, id: contact.id});
                         }
