@@ -34,6 +34,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        loginButton.setOnClickListener(view -> {
+            // Start Register activity when "Click here" is clicked
+            Intent intent = new Intent(MainActivity.this, ContactListActivity.class);
+            startActivity(intent);
+        });
+
         signupText.setOnClickListener(view -> {
             // Start Register activity when "Click here" is clicked
             Intent intent = new Intent(MainActivity.this, RegisterActivity.class);
