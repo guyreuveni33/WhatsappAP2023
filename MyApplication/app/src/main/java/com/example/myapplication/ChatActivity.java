@@ -1,5 +1,6 @@
 package com.example.myapplication;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +23,7 @@ public class ChatActivity extends AppCompatActivity {
     private ListView listViewMessages;
     private EditText etMessageInput;
     private ImageButton btnSend;
+    private ImageButton btnGoBack;
     private MessageAdapter messageAdapter;
 
     @Override
@@ -32,6 +34,7 @@ public class ChatActivity extends AppCompatActivity {
         listViewMessages = findViewById(R.id.listMessages);
         etMessageInput = findViewById(R.id.etMessageInput);
         btnSend = findViewById(R.id.btnSend);
+        btnGoBack = findViewById(R.id.btnGoBack);
 
         messageList = new ArrayList<>();
         messageAdapter = new MessageAdapter(messageList);
@@ -51,6 +54,11 @@ public class ChatActivity extends AppCompatActivity {
                 messageAdapter.notifyDataSetChanged();
                 listViewMessages.smoothScrollToPosition(messageAdapter.getCount() - 1); // Scroll to the bottom
             }
+        });
+        btnGoBack.setOnClickListener(view -> {
+            // Start Register activity when "Click here" is clicked
+            Intent intent = new Intent(ChatActivity.this, ContactListActivity.class);
+            startActivity(intent);
         });
     }
 }

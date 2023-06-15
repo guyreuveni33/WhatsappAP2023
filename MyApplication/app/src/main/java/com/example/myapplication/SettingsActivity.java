@@ -1,10 +1,12 @@
 package com.example.myapplication;
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Switch;
 import android.widget.Toast;
 
@@ -19,6 +21,8 @@ public class SettingsActivity extends AppCompatActivity {
     private SwitchCompat toggleButton;
     private EditText serverAddressEditText;
     private Button updateButton;
+    private ImageButton btnGoBack;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +32,7 @@ public class SettingsActivity extends AppCompatActivity {
         toggleButton = findViewById(R.id.toggleButton);
         serverAddressEditText = findViewById(R.id.serverAddressEditText);
         updateButton = findViewById(R.id.updateButton);
+        btnGoBack = findViewById(R.id.btnGoBack);
 
         toggleButton.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
@@ -49,6 +54,11 @@ public class SettingsActivity extends AppCompatActivity {
             } else {
                 Toast.makeText(SettingsActivity.this, "Please enter a server address", Toast.LENGTH_SHORT).show();
             }
+        });
+        btnGoBack.setOnClickListener(view -> {
+            // Start Register activity when "Click here" is clicked
+            Intent intent = new Intent(SettingsActivity.this, ContactListActivity.class);
+            startActivity(intent);
         });
     }
 
