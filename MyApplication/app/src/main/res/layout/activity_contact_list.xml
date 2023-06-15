@@ -20,7 +20,8 @@
                 android:id="@+id/userInfoLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="16dp">
+                android:padding="10dp"
+                android:background="@color/teal">
 
                 <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/userAvatar"
@@ -43,11 +44,31 @@
                     android:layout_toEndOf="@id/userAvatar"
                     android:layout_marginStart="8dp"
                     android:text="John Doe"
+                    android:textColor="@color/white"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     android:layout_centerVertical="true" />
 
+                <ImageButton
+                    android:id="@+id/btnSettings"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_toStartOf="@id/btnLogout"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/ic_settings"
+                    android:contentDescription="Settings" />
+
+                <ImageButton
+                    android:id="@+id/btnLogout"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_alignParentEnd="true"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/ic_logout"
+                    android:contentDescription="Logout" />
+
             </RelativeLayout>
+
 
             <!-- Divider Line -->
             <View
@@ -72,12 +93,15 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
-                android:layout_margin="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                android:contentDescription="Add new item"
                 android:src="@drawable/ic_btnadd"
                 app:backgroundTint="#128C7E"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:contentDescription="Add new item"/>
+                app:layout_constraintEnd_toEndOf="@id/lvConversationList" />
 
         </RelativeLayout>
 
