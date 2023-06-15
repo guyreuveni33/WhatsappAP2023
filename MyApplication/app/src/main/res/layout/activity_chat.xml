@@ -10,9 +10,19 @@
         android:id="@+id/nameBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp"
+        android:padding="10dp"
         android:background="@color/teal"
         app:layout_constraintTop_toTopOf="parent">
+
+        <ImageButton
+            android:id="@+id/btnGoBack"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/ic_goback"
+            android:background="@android:color/transparent"
+            android:contentDescription="Go Back"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true" />
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/userAvatar"
@@ -25,7 +35,7 @@
             app:strokeColor="#000000"
             android:padding="2dp"
             app:strokeWidth="1dp"
-            android:layout_alignParentStart="true"
+            android:layout_toEndOf="@id/btnGoBack"
             android:layout_centerVertical="true" />
 
         <TextView
