@@ -33,17 +33,24 @@ public class MainActivity extends AppCompatActivity {
         username = findViewById(R.id.username);
         password = findViewById(R.id.password);
         loginButton = findViewById(R.id.loginButton);
+        signupText = findViewById(R.id.signupText);
 
+        signupText.setOnClickListener(view -> {
+            // Start Register activity when "Click here" is clicked
+            Intent intent = new Intent(MainActivity.this, RegisterActivity.class);
+            startActivity(intent);
+        });
         loginApi = new LoginApi(new LoginApi.LoginCallback() {
 
             @Override
             public void onSuccess(String token) {
-                // Save the token and create an instance of ChatAPI
-                chatAPI = new ChatAPI(token);
-                Log.d("MainActivity", "Login successful. Token: " + token);
+                // Save the token
+                String authToken = token;
+                Log.d("MainActivity", "Login successful. Token: " + authToken);
 
                 // Proceed to the next activity or perform any other action
                 Intent intent = new Intent(MainActivity.this, ContactListActivity.class);
+                intent.putExtra("TOKEN_EXTRA", authToken);
                 startActivity(intent);
             }
 

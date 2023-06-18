@@ -11,6 +11,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.myapplication.R;
 import com.example.myapplication.entities.Contact;
 
+import java.util.Random;
+
 public class AddContactActivity extends AppCompatActivity {
 
     private ImageButton btnGoBack;
@@ -33,7 +35,7 @@ public class AddContactActivity extends AppCompatActivity {
         btnAddContact.setOnClickListener(view -> {
             String contactName = ((EditText) findViewById(R.id.contactInput)).getText().toString();
             if (!contactName.isEmpty()) {
-                int contactId = (int) (Math.random() * 9000 + 1000);
+                String contactId = generateRandomId();
                 String lastMessage = Integer.toString((int) (Math.random() * 100 + 1));
                 String lastDate = Integer.toString((int) (Math.random() * 9000000 + 1000000));
 
@@ -44,5 +46,19 @@ public class AddContactActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+    private String generateRandomId() {
+        String allowedChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        int idLength = 10;
+        StringBuilder randomId = new StringBuilder();
+        Random random = new Random();
+
+        for (int i = 0; i < idLength; i++) {
+            int randomIndex = random.nextInt(allowedChars.length());
+            char randomChar = allowedChars.charAt(randomIndex);
+            randomId.append(randomChar);
+        }
+
+        return randomId.toString();
     }
 }
