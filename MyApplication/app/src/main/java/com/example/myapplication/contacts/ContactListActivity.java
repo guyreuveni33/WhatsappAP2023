@@ -103,6 +103,7 @@ public class ContactListActivity extends AppCompatActivity implements ChatAPI.Ch
 
         // Make an API call to fetch contacts from the server
         chatAPI.get(this);
+        chatAPI.getUser(this);
     }
 
     @Override
