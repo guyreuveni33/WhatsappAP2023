@@ -23,7 +23,6 @@ public interface ContactDao {
 
     @Insert
     void insert(Contact... contact);
-
     @Update
     void update(Contact... contact);
 

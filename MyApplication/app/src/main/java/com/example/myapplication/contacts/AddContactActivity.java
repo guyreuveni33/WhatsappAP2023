@@ -19,10 +19,14 @@ public class AddContactActivity extends AppCompatActivity {
     private Button btnAddContact;
     private ContactDao contactDao;
     private ContactDB contactDB;
+    private String username;
+    private String authToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //username = getIntent().getStringExtra("USERNAME_EXTRA");
+        ///authToken = getIntent().getStringExtra("TOKEN_EXTRA");
         setContentView(R.layout.activity_add_contact);
         this.contactDB = ContactDB.getDatabase(getApplicationContext());
         contactDao = contactDB.contactDao();
@@ -43,6 +47,8 @@ public class AddContactActivity extends AppCompatActivity {
                 contactDao.insert(contact);
 
                 Intent intent = new Intent(AddContactActivity.this, ContactListActivity.class);
+               intent.putExtra("TOKEN_EXTRA", authToken);
+                intent.putExtra("USERNAME_EXTRA", username);
                 startActivity(intent);
             }
         });

@@ -2,6 +2,7 @@ package com.example.myapplication.contacts;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
@@ -9,6 +10,10 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -19,22 +24,29 @@ import com.example.myapplication.adapters.ContactAdapter;
 import com.example.myapplication.api.ChatAPI;
 import com.example.myapplication.entities.Contact;
 import com.example.myapplication.entities.ContactResponse;
+import com.example.myapplication.entities.UserResponse;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ContactListActivity extends AppCompatActivity implements ChatAPI.ChatCallback {
 
+    private String username;
     private ImageButton btnLogout;
     private ImageButton btnSettings;
     private ImageButton btnAdd;
     private ContactDao contactDao;
     private ContactAdapter adapter;
+    private String authToken;
+    private List<Contact> conversationList;
+    private UserResponse user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact_list);
+        user = new UserResponse("", "", "");
+        username = getIntent().getStringExtra("USERNAME_EXTRA");
 
         // Get an instance of the ContactDao for interacting with the database
         contactDao = ContactDB.getDatabase(getApplicationContext()).contactDao();
@@ -45,18 +57,18 @@ public class ContactListActivity extends AppCompatActivity implements ChatAPI.Ch
         btnAdd = findViewById(R.id.btnAdd);
 
         // Set current user name
-        TextView tvCurrentUser = findViewById(R.id.tvCurrentUser);
-        tvCurrentUser.setText("John Doe");
+        // TextView tvCurrentUser = findViewById(R.id.tvCurrentUser);
+        //tvCurrentUser.setText("John Doe");
 
         // Set user avatar image
-        ImageView userAvatar = findViewById(R.id.userAvatar);
-        userAvatar.setImageResource(R.drawable.a31975);
+        //ImageView userAvatar = findViewById(R.id.userAvatar);
+        //userAvatar.setImageResource(R.drawable.a31975);
 
         // Set up the conversation list
         ListView lvConversationList = findViewById(R.id.lvConversationList);
 
         // Fetch the conversation list from the database
-        List<Contact> conversationList = contactDao.index();
+        conversationList = contactDao.index();
 
         // Create the ContactAdapter
         adapter = new ContactAdapter(this, conversationList);
@@ -73,6 +85,7 @@ public class ContactListActivity extends AppCompatActivity implements ChatAPI.Ch
 
         // Set click listeners for the buttons
         btnLogout.setOnClickListener(view -> {
+            contactDao.nukeTable();
             // Handle logout button click
             Intent intent = new Intent(ContactListActivity.this, MainActivity.class);
             startActivity(intent);
@@ -87,11 +100,51 @@ public class ContactListActivity extends AppCompatActivity implements ChatAPI.Ch
         btnAdd.setOnClickListener(view -> {
             // Handle add button click
             Intent intent = new Intent(ContactListActivity.this, AddContactActivity.class);
+            intent.putExtra("TOKEN_EXTRA", authToken);
+            intent.putExtra("USERNAME_EXTRA", username);
             startActivity(intent);
         });
 
         // Fetch contacts from the server in the background
         fetchContactsFromServer();
+        // Fetch contacts and user details from the server in the background
+        fetchContactsAndUserDetailsFromServer();
+    }
+
+    private void fetchContactsAndUserDetailsFromServer() {
+        // Retrieve the user token and username from the Login screen
+        authToken = getIntent().getStringExtra("TOKEN_EXTRA");
+        // Create an instance of ChatAPI with the token
+        ChatAPI chatAPI = new ChatAPI(authToken);
+
+        // Make API calls to fetch contacts and user details from the server
+        chatAPI.get(this);
+        chatAPI.getUser(this, username);
+    }
+
+    @Override
+    public void onUserSuccess(UserResponse userResponse) {
+        // Update the user details in the ContactListActivity
+        TextView tvCurrentUser = findViewById(R.id.tvCurrentUser);
+        user.setDisplayName(userResponse.getDisplayName());
+        tvCurrentUser.setText(user.getDisplayName());
+
+        ImageView userAvatar = findViewById(R.id.userAvatar);
+
+        // Load and set the user's profile picture using the profilePic URL
+        String profilePicUrl = userResponse.getProfilePic();
+        if (profilePicUrl != null) {
+            RequestOptions requestOptions = new RequestOptions()
+                    .diskCacheStrategy(DiskCacheStrategy.ALL); // Caching options, if needed
+
+            Glide.with(this)
+                    .load(profilePicUrl)
+                    .apply(requestOptions)
+                    .into(userAvatar);
+        } else {
+            // Set a default avatar if the profile picture URL is null
+            userAvatar.setImageResource(R.drawable.a31975);
+        }
     }
 
     private void fetchContactsFromServer() {
@@ -103,7 +156,7 @@ public class ContactListActivity extends AppCompatActivity implements ChatAPI.Ch
 
         // Make an API call to fetch contacts from the server
         chatAPI.get(this);
-        chatAPI.getUser(this);
+        chatAPI.getUser(this, username);
     }
 
     @Override
@@ -121,7 +174,6 @@ public class ContactListActivity extends AppCompatActivity implements ChatAPI.Ch
     private void updateContactsInDatabase(List<Contact> contactList) {
         // Clear the existing contacts in the database
         contactDao.delete();
-
         // Insert the new contacts into the database
         contactDao.insert(contactList.toArray(new Contact[0]));
     }
@@ -136,21 +188,24 @@ public class ContactListActivity extends AppCompatActivity implements ChatAPI.Ch
     private List<Contact> mapContactResponses(List<ContactResponse> contactResponses) {
         List<Contact> contactList = new ArrayList<>();
         for (ContactResponse response : contactResponses) {
-
             String name = response.getUser().getDisplayName();
             String lastMessage = response.getLastMessage() != null ? response.getLastMessage().getContent() : null;
             String lastDate = response.getLastMessage() != null ? response.getLastMessage().getCreated() : null;
-            // Print the values for debugging
 
-            System.out.println("response:"+response.getId());
-            System.out.println("Name: " + name);
-            System.out.println("Last Message: " + lastMessage);
-            System.out.println("Last Date: " + lastDate);
             Contact contact = new Contact(response.getId(), name, lastMessage, lastDate);
-            System.out.println(contact);
             contactList.add(contact);
         }
         return contactList;
     }
-}
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        TextView tvCurrentUser = findViewById(R.id.tvCurrentUser);
+        tvCurrentUser.setText(getIntent().getStringExtra("USERNAME_EXTRA"));
+        conversationList.clear();
+        conversationList.addAll(contactDao.index());
+        adapter.notifyDataSetChanged();
+    }
+
+}

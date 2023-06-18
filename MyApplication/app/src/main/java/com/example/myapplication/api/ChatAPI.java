@@ -2,6 +2,7 @@
 package com.example.myapplication.api;
 
 import com.example.myapplication.entities.ContactResponse;
+import com.example.myapplication.entities.UserResponse;
 
 import java.util.List;
 
@@ -18,6 +19,7 @@ public class ChatAPI {
 
     public interface ChatCallback {
         void onSuccess(List<ContactResponse> chats);
+        void onUserSuccess(UserResponse userResponse);
 
         void onFailure(Throwable t);
     }
@@ -53,21 +55,21 @@ public class ChatAPI {
         });
     }
 
-    public void getUser(ChatCallback callback) {
-        Call<String> call = webServiceAPI.getUserDetails("Bearer " + token);
-        call.enqueue(new Callback<String>() {
+    public void getUser(ChatCallback callback,String username) {
+        Call<UserResponse> call = webServiceAPI.getUserDetails("Bearer " + token, username); // Replace "username" with the actual username value
+        call.enqueue(new Callback<UserResponse>() {
             @Override
-            public void onResponse(Call<String> call, Response<String> response) {
+            public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
                 if (response.isSuccessful()) {
-                    List<ContactResponse> contacts = response.body();
-                    callback.onSuccess(contacts);
+                    UserResponse userResponse = response.body();
+                    callback.onUserSuccess(userResponse);
                 } else {
-                    callback.onFailure(new Exception("Failed to fetch contacts"));
+                    callback.onFailure(new Exception("Failed to fetch user details"));
                 }
             }
 
             @Override
-            public void onFailure(Call<List<ContactResponse>> call, Throwable t) {
+            public void onFailure(Call<UserResponse> call, Throwable t) {
                 callback.onFailure(t);
             }
         });

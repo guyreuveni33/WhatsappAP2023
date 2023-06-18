@@ -4,6 +4,7 @@ package com.example.myapplication.api;
 import com.example.myapplication.entities.ContactResponse;
 import com.example.myapplication.entities.User;
 import com.example.myapplication.entities.UserLogin;
+import com.example.myapplication.entities.UserResponse;
 
 import java.util.List;
 
@@ -20,8 +21,8 @@ public interface WebServiceAPI {
     @GET("Chats")
     Call <List<ContactResponse>> getChats(@Header("Authorization") String token);
     @GET("Users/{username}")
-    Call <String> getUserDetails(
-            @Header("Authorization") String token
+    Call<UserResponse> getUserDetails(
+            @Header("Authorization") String token,
             @Path("username") String username);
 
     @POST("Users")
