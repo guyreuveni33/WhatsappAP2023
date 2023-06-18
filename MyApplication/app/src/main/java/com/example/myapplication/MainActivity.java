@@ -14,6 +14,8 @@ import android.widget.Toast;
 
 import com.example.myapplication.api.ChatAPI;
 import com.example.myapplication.api.LoginApi;
+import com.example.myapplication.contacts.ContactDB;
+import com.example.myapplication.contacts.ContactDao;
 import com.example.myapplication.contacts.ContactListActivity;
 import com.example.myapplication.entities.UserLogin;
 
@@ -24,12 +26,15 @@ public class MainActivity extends AppCompatActivity {
     TextView signupText; // TextView for "Click here"
     LoginApi loginApi;
     ChatAPI chatAPI;
+    ContactDao contactDao;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        contactDao = ContactDB.getDatabase(getApplicationContext()).contactDao();
         username = findViewById(R.id.username);
         password = findViewById(R.id.password);
         loginButton = findViewById(R.id.loginButton);
@@ -44,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onSuccess(String token) {
+                contactDao.nukeTable();
                 // Save the token
                 String authToken = token;
                 Log.d("MainActivity", "Login successful. Token: " + authToken);

@@ -18,6 +18,9 @@ public interface ContactDao {
     @Query("SELECT * FROM contact WHERE id = :id")
     Contact get(int id);
 
+    @Query("DELETE FROM contact")
+    public void nukeTable();
+
     @Insert
     void insert(Contact... contact);
 
