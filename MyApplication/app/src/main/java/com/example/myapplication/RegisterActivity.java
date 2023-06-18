@@ -17,6 +17,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.example.myapplication.api.RegisterApi;
+import com.example.myapplication.entities.User;
+
 import java.util.regex.Pattern;
 
 
@@ -27,6 +30,7 @@ public class RegisterActivity extends AppCompatActivity {
     EditText displayName;
     Button registerButton;
     TextView loginText;
+    RegisterApi registerApi;
     private static final int PICK_IMAGE_REQUEST = 1;
     private Uri selectedImageUri;
     private ImageView profilePicture;
@@ -67,10 +71,32 @@ public class RegisterActivity extends AppCompatActivity {
                 Toast.makeText(RegisterActivity.this, "One or more fields are invalid/incorrect", Toast.LENGTH_SHORT).show();
                 return;
             } else {
-                Toast.makeText(RegisterActivity.this, "Successful register", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
-                intent.putExtra("profileImageUri", selectedImageUri);
-                startActivity(intent);
+                //Toast.makeText(RegisterActivity.this, "Successful register", Toast.LENGTH_SHORT).show();
+
+                User user = new User(
+                        username.getText().toString().trim(),
+                        password.getText().toString().trim(),
+                        displayName.getText().toString().trim(),
+                        profilePicture.toString()
+                );
+
+                registerApi = new RegisterApi(new RegisterApi.RegisterCallback() {
+                    @Override
+                    public void onSuccess() {
+                        // Registration successful
+                        Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+                        //intent.putExtra("profileImageUri", selectedImageUri);
+                        startActivity(intent);
+                    }
+
+                    @Override
+                    public void onFailure(Throwable t) {
+                        // Registration failed
+                        Toast.makeText(RegisterActivity.this, "Registration failed: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                registerApi.post(user);
             }
         });
     }

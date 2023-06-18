@@ -2,6 +2,7 @@ package com.example.myapplication.api;
 
 
 import com.example.myapplication.entities.ContactResponse;
+import com.example.myapplication.entities.User;
 import com.example.myapplication.entities.UserLogin;
 
 import java.util.List;
@@ -17,4 +18,7 @@ public interface WebServiceAPI {
     Call<String> login(@Body UserLogin userLogin);
     @GET("Chats")
     Call <List<ContactResponse>> getChats(@Header("Authorization") String token);
+
+    @POST("Users")
+    Call<Void> register(@Body User user);
 }
