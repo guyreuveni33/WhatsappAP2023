@@ -16,11 +16,14 @@ import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
 import com.example.myapplication.SettingsActivity;
 import com.example.myapplication.adapters.ContactAdapter;
+import com.example.myapplication.api.ChatAPI;
 import com.example.myapplication.entities.Contact;
+import com.example.myapplication.entities.ContactResponse;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class ContactListActivity extends AppCompatActivity {
+public class ContactListActivity extends AppCompatActivity implements ChatAPI.ChatCallback {
 
     private ImageButton btnLogout;
     private ImageButton btnSettings;
@@ -86,5 +89,32 @@ public class ContactListActivity extends AppCompatActivity {
             Intent intent = new Intent(ContactListActivity.this, AddContactActivity.class);
             startActivity(intent);
         });
+    }
+
+    @Override
+    public void onSuccess(List<ContactResponse> contacts) {
+        // Update the conversation list with the retrieved contacts
+        List<Contact> contactList = mapContactResponses(contacts);
+        adapter.setContacts(contactList);
+    }
+
+    @Override
+    public void onFailure(Throwable t) {
+        // Handle failure case
+        Toast.makeText(ContactListActivity.this, "Failed to fetch contacts", Toast.LENGTH_SHORT).show();
+    }
+
+    // Helper method to map ContactResponse objects to Contact objects
+    private List<Contact> mapContactResponses(List<ContactResponse> contactResponses) {
+        List<Contact> contactList = new ArrayList<>();
+        for (ContactResponse response : contactResponses) {
+            String name = response.getUser().getDisplayName();
+            String lastMessage = response.getLastMessage() != null ? response.getLastMessage().getContent() : null;
+            String lastDate = response.getLastMessage() != null ? response.getLastMessage().getCreated() : null;
+
+            Contact contact = new Contact(Integer.parseInt(response.getId()), name, lastMessage, lastDate);
+            contactList.add(contact);
+        }
+        return contactList;
     }
 }
