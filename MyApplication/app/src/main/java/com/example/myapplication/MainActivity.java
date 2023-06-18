@@ -54,9 +54,13 @@ public class MainActivity extends AppCompatActivity {
                 String authToken = token;
                 Log.d("MainActivity", "Login successful. Token: " + authToken);
 
+                // Get the username entered by the user
+                String enteredUsername = username.getText().toString();
+
                 // Proceed to the next activity or perform any other action
                 Intent intent = new Intent(MainActivity.this, ContactListActivity.class);
                 intent.putExtra("TOKEN_EXTRA", authToken);
+                intent.putExtra("USERNAME_EXTRA", enteredUsername);
                 startActivity(intent);
             }
 
