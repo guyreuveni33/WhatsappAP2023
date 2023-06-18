@@ -71,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 loginApi.post(new UserLogin(username.getText().toString(), password.getText().toString()));
+
             }
         });
     }

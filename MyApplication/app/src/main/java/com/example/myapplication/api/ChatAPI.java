@@ -52,4 +52,24 @@ public class ChatAPI {
             }
         });
     }
+
+    public void getUser(ChatCallback callback) {
+        Call<String> call = webServiceAPI.getUserDetails("Bearer " + token);
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                if (response.isSuccessful()) {
+                    List<ContactResponse> contacts = response.body();
+                    callback.onSuccess(contacts);
+                } else {
+                    callback.onFailure(new Exception("Failed to fetch contacts"));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<ContactResponse>> call, Throwable t) {
+                callback.onFailure(t);
+            }
+        });
+    }
 }
