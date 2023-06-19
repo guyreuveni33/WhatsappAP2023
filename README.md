@@ -55,3 +55,4 @@ To use the chat application, open a terminal and type the following commands:
   - cd server
   - npm i
   - npm start
+
