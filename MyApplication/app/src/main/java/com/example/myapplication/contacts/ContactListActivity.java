@@ -94,6 +94,8 @@ public class ContactListActivity extends AppCompatActivity implements ChatAPI.Ch
         btnSettings.setOnClickListener(view -> {
             // Handle settings button click
             Intent intent = new Intent(ContactListActivity.this, SettingsActivity.class);
+            intent.putExtra("TOKEN_EXTRA", authToken);
+            intent.putExtra("USERNAME_EXTRA", user.getDisplayName());
             startActivity(intent);
         });
 
@@ -101,7 +103,7 @@ public class ContactListActivity extends AppCompatActivity implements ChatAPI.Ch
             // Handle add button click
             Intent intent = new Intent(ContactListActivity.this, AddContactActivity.class);
             intent.putExtra("TOKEN_EXTRA", authToken);
-            intent.putExtra("USERNAME_EXTRA", username);
+            intent.putExtra("USERNAME_EXTRA", user.getDisplayName());
             startActivity(intent);
         });
 
@@ -203,6 +205,9 @@ public class ContactListActivity extends AppCompatActivity implements ChatAPI.Ch
         super.onResume();
         TextView tvCurrentUser = findViewById(R.id.tvCurrentUser);
         tvCurrentUser.setText(getIntent().getStringExtra("USERNAME_EXTRA"));
+        conversationList.clear();
+        List<Contact> list = contactDao.index();
+        int a = 5;
         conversationList.clear();
         conversationList.addAll(contactDao.index());
         adapter.notifyDataSetChanged();

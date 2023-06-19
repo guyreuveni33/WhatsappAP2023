@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.myapplication.R;
 import com.example.myapplication.entities.Contact;
 
+import java.util.List;
 import java.util.Random;
 
 public class AddContactActivity extends AppCompatActivity {
@@ -21,12 +22,13 @@ public class AddContactActivity extends AppCompatActivity {
     private ContactDB contactDB;
     private String username;
     private String authToken;
+    private List<Contact> conversationList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //username = getIntent().getStringExtra("USERNAME_EXTRA");
-        ///authToken = getIntent().getStringExtra("TOKEN_EXTRA");
+        username = getIntent().getStringExtra("USERNAME_EXTRA");
+        authToken = getIntent().getStringExtra("TOKEN_EXTRA");
         setContentView(R.layout.activity_add_contact);
         this.contactDB = ContactDB.getDatabase(getApplicationContext());
         contactDao = contactDB.contactDao();
@@ -34,6 +36,8 @@ public class AddContactActivity extends AppCompatActivity {
         btnAddContact = findViewById(R.id.addContactButton);
         btnGoBack.setOnClickListener(view -> {
             Intent intent = new Intent(AddContactActivity.this, ContactListActivity.class);
+            // intent.putExtra("TOKEN_EXTRA", authToken);
+            intent.putExtra("USERNAME_EXTRA", username);
             startActivity(intent);
         });
         btnAddContact.setOnClickListener(view -> {
@@ -42,12 +46,15 @@ public class AddContactActivity extends AppCompatActivity {
                 String contactId = generateRandomId();
                 String lastMessage = Integer.toString((int) (Math.random() * 100 + 1));
                 String lastDate = Integer.toString((int) (Math.random() * 9000000 + 1000000));
-
                 Contact contact = new Contact(contactId, contactName, lastMessage, lastDate);
+                System.out.println("contact"+contact);
+                System.out.println("contact"+contact);
                 contactDao.insert(contact);
+                List<Contact> l = contactDao.index();
+                int a = 4;
 
                 Intent intent = new Intent(AddContactActivity.this, ContactListActivity.class);
-               intent.putExtra("TOKEN_EXTRA", authToken);
+                // intent.putExtra("TOKEN_EXTRA", authToken);
                 intent.putExtra("USERNAME_EXTRA", username);
                 startActivity(intent);
             }
