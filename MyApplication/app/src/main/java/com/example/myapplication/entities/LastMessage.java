@@ -7,6 +7,14 @@ public class LastMessage {
 
     private  String id;
     private  String created;
+    private String content;
+
+
+    public LastMessage(String id, String created, String content) {
+        this.id = id;
+        this.created = created;
+        this.content = content;
+    }
 
     public String getId() {
         return id;
@@ -20,12 +28,6 @@ public class LastMessage {
         return content;
     }
 
-    private String content;
 
 
-    public LastMessage(String id, String created, String content) {
-        this.id = id;
-        this.created = created;
-        this.content = content;
-    }
 }

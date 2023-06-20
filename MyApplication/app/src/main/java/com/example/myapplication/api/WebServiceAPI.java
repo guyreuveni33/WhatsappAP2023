@@ -1,12 +1,14 @@
 package com.example.myapplication.api;
 
 
+import com.example.myapplication.entities.ContactPostResponse;
 import com.example.myapplication.entities.ContactResponse;
 import com.example.myapplication.entities.User;
 import com.example.myapplication.entities.UserLogin;
 import com.example.myapplication.entities.UserResponse;
 
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -20,6 +22,11 @@ public interface WebServiceAPI {
     Call<String> login(@Body UserLogin userLogin);
     @GET("Chats")
     Call <List<ContactResponse>> getChats(@Header("Authorization") String token);
+    @POST("Chats")
+    Call<ContactPostResponse> postChats(
+            @Header("Authorization") String token,
+            @Body Map<String, String> requestBody);
+
     @GET("Users/{username}")
     Call<UserResponse> getUserDetails(
             @Header("Authorization") String token,
@@ -27,4 +34,5 @@ public interface WebServiceAPI {
 
     @POST("Users")
     Call<Void> register(@Body User user);
+
 }

@@ -20,14 +20,14 @@ public class SettingsActivity extends AppCompatActivity {
     private EditText serverAddressEditText;
     private Button updateButton;
     private ImageButton btnGoBack;
-    private String username;
+    private String displayName;
     private String authToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-        username = getIntent().getStringExtra("USERNAME_EXTRA");
+        displayName = getIntent().getStringExtra("DISPLAY_NAME_EXTRA");
         authToken = getIntent().getStringExtra("TOKEN_EXTRA");
         toggleButton = findViewById(R.id.toggleButton);
         serverAddressEditText = findViewById(R.id.serverAddressEditText);
@@ -59,7 +59,7 @@ public class SettingsActivity extends AppCompatActivity {
             // Start Register activity when "Click here" is clicked
             Intent intent = new Intent(SettingsActivity.this, ContactListActivity.class);
             intent.putExtra("TOKEN_EXTRA", authToken);
-            intent.putExtra("USERNAME_EXTRA", username);
+            intent.putExtra("DISPLAY_NAME_EXTRA", displayName);
             startActivity(intent);
         });
     }

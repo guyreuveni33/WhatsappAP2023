@@ -23,6 +23,7 @@ import com.example.myapplication.SettingsActivity;
 import com.example.myapplication.adapters.ContactAdapter;
 import com.example.myapplication.api.ChatAPI;
 import com.example.myapplication.entities.Contact;
+import com.example.myapplication.entities.ContactPostResponse;
 import com.example.myapplication.entities.ContactResponse;
 import com.example.myapplication.entities.UserResponse;
 
@@ -95,7 +96,8 @@ public class ContactListActivity extends AppCompatActivity implements ChatAPI.Ch
             // Handle settings button click
             Intent intent = new Intent(ContactListActivity.this, SettingsActivity.class);
             intent.putExtra("TOKEN_EXTRA", authToken);
-            intent.putExtra("USERNAME_EXTRA", user.getDisplayName());
+            intent.putExtra("DISPLAY_NAME_EXTRA", user.getDisplayName());
+            intent.putExtra("USERNAME_EXTRA", username);
             startActivity(intent);
         });
 
@@ -103,7 +105,9 @@ public class ContactListActivity extends AppCompatActivity implements ChatAPI.Ch
             // Handle add button click
             Intent intent = new Intent(ContactListActivity.this, AddContactActivity.class);
             intent.putExtra("TOKEN_EXTRA", authToken);
-            intent.putExtra("USERNAME_EXTRA", user.getDisplayName());
+            intent.putExtra("DISPLAY_NAME_EXTRA", user.getDisplayName());
+            intent.putExtra("USERNAME_EXTRA", username);
+
             startActivity(intent);
         });
 
@@ -175,7 +179,7 @@ public class ContactListActivity extends AppCompatActivity implements ChatAPI.Ch
 
     private void updateContactsInDatabase(List<Contact> contactList) {
         // Clear the existing contacts in the database
-        contactDao.delete();
+        contactDao.nukeTable();
         // Insert the new contacts into the database
         contactDao.insert(contactList.toArray(new Contact[0]));
     }
@@ -185,7 +189,10 @@ public class ContactListActivity extends AppCompatActivity implements ChatAPI.Ch
         // Handle failure case
         Toast.makeText(ContactListActivity.this, "Failed to fetch contacts", Toast.LENGTH_SHORT).show();
     }
+    @Override
+    public void onPostChatSuccess(ContactPostResponse contactPostResponse){
 
+    }
     // Helper method to map ContactResponse objects to Contact objects
     private List<Contact> mapContactResponses(List<ContactResponse> contactResponses) {
         List<Contact> contactList = new ArrayList<>();
@@ -203,14 +210,25 @@ public class ContactListActivity extends AppCompatActivity implements ChatAPI.Ch
     @Override
     protected void onResume() {
         super.onResume();
+        // Check if there are updated values for authToken and displayName
+        String updatedAuthToken = getIntent().getStringExtra("TOKEN_EXTRA");
+        String updatedDisplayName = getIntent().getStringExtra("DISPLAY_NAME_EXTRA");
+        // Update the member variables if new values are available
+        if (updatedAuthToken != null) {
+            authToken = updatedAuthToken;
+        }
+        if (updatedDisplayName != null) {
+            user.setDisplayName(updatedDisplayName);;
+        }
         TextView tvCurrentUser = findViewById(R.id.tvCurrentUser);
-        tvCurrentUser.setText(getIntent().getStringExtra("USERNAME_EXTRA"));
+        tvCurrentUser.setText(getIntent().getStringExtra("DISPLAY_NAME_EXTRA"));
         conversationList.clear();
-        List<Contact> list = contactDao.index();
-        int a = 5;
+      //  List<Contact> list = contactDao.index();
+       // int a = 5;
         conversationList.clear();
         conversationList.addAll(contactDao.index());
         adapter.notifyDataSetChanged();
+
     }
 
 }
