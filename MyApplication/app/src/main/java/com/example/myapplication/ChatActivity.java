@@ -150,7 +150,7 @@ public class ChatActivity extends AppCompatActivity implements ChatAPI.ChatCallb
         MessageDao messageDao = messageDB.messageDao();
 
         // Clear the existing messages in the database
-        //messageDao.nukeTable();
+        messageDao.nukeTable();
 
         // Insert the new messages into the database in reverse order
         messageDao.insert(messageList.toArray(new Message[0]));
