@@ -10,12 +10,14 @@ import java.util.Locale;
 public class Contact {
     @PrimaryKey @NonNull
     private String id;
+    private String username;
     private String name;
     private String lastMessage;
     private String lastDate;
 
-    public Contact(String id, String name, String lastMessage, String lastDate) {
+    public Contact(String id, String username, String name, String lastMessage, String lastDate) {
         this.id = id;
+        this.username = username;
         this.name = name;
         this.lastMessage = lastMessage;
         this.lastDate = lastDate;
@@ -27,6 +29,9 @@ public class Contact {
 
     public String getName() {
         return name;
+    }
+    public String getUsername() {
+        return username;
     }
 
     public String getLastMessage() {

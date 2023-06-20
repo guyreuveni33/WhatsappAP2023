@@ -1,6 +1,7 @@
 package com.example.myapplication.api;
 
 
+import com.example.myapplication.entities.ChatByIdResponse;
 import com.example.myapplication.entities.ContactPostResponse;
 import com.example.myapplication.entities.ContactResponse;
 import com.example.myapplication.entities.User;
@@ -26,6 +27,11 @@ public interface WebServiceAPI {
     Call<ContactPostResponse> postChats(
             @Header("Authorization") String token,
             @Body Map<String, String> requestBody);
+
+    @GET("Chats/{username}")
+    Call<ChatByIdResponse> getChat(
+            @Header("Authorization") String token,
+            @Path("username") String username);
 
     @GET("Users/{username}")
     Call<UserResponse> getUserDetails(

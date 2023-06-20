@@ -17,11 +17,13 @@ import com.bumptech.glide.request.RequestOptions;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.myapplication.ChatActivity;
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
 import com.example.myapplication.SettingsActivity;
 import com.example.myapplication.adapters.ContactAdapter;
 import com.example.myapplication.api.ChatAPI;
+import com.example.myapplication.entities.ChatByIdResponse;
 import com.example.myapplication.entities.Contact;
 import com.example.myapplication.entities.ContactPostResponse;
 import com.example.myapplication.entities.ContactResponse;
@@ -81,7 +83,13 @@ public class ContactListActivity extends AppCompatActivity implements ChatAPI.Ch
         lvConversationList.setOnItemClickListener((parent, view, position, id) -> {
             // Handle item click event
             Contact selectedContact = adapter.getItem(position);
-            Toast.makeText(ContactListActivity.this, "Clicked: " + selectedContact.getName(), Toast.LENGTH_SHORT).show();
+            String selectedUsername = selectedContact.getUsername();
+            String selectedDisplayName = selectedContact.getName();
+            Intent intent = new Intent(ContactListActivity.this, ChatActivity.class);
+            intent.putExtra("SELECTED_USERNAME", selectedUsername);
+            intent.putExtra("SELECTED_TOKEN", authToken);
+            intent.putExtra("SELECTED_DISPLAY_NAME", selectedDisplayName);
+            startActivity(intent);
         });
 
         // Set click listeners for the buttons
@@ -193,15 +201,20 @@ public class ContactListActivity extends AppCompatActivity implements ChatAPI.Ch
     public void onPostChatSuccess(ContactPostResponse contactPostResponse){
 
     }
+    @Override
+    public void onGetChatSuccess(ChatByIdResponse chatByIdResponse){
+
+    }
     // Helper method to map ContactResponse objects to Contact objects
     private List<Contact> mapContactResponses(List<ContactResponse> contactResponses) {
         List<Contact> contactList = new ArrayList<>();
         for (ContactResponse response : contactResponses) {
+            String username = response.getUser().getUsername();
             String name = response.getUser().getDisplayName();
             String lastMessage = response.getLastMessage() != null ? response.getLastMessage().getContent() : null;
             String lastDate = response.getLastMessage() != null ? response.getLastMessage().getCreated() : null;
 
-            Contact contact = new Contact(response.getId(), name, lastMessage, lastDate);
+            Contact contact = new Contact(response.getId(), username, name, lastMessage, lastDate);
             contactList.add(contact);
         }
         return contactList;
