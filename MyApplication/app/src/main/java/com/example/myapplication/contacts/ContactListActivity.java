@@ -84,11 +84,13 @@ public class ContactListActivity extends AppCompatActivity implements ChatAPI.Ch
             // Handle item click event
             Contact selectedContact = adapter.getItem(position);
             String selectedUsername = selectedContact.getUsername();
+            String selectedId = selectedContact.getId();
             String selectedDisplayName = selectedContact.getName();
             Intent intent = new Intent(ContactListActivity.this, ChatActivity.class);
             intent.putExtra("SELECTED_USERNAME", selectedUsername);
             intent.putExtra("SELECTED_TOKEN", authToken);
             intent.putExtra("SELECTED_DISPLAY_NAME", selectedDisplayName);
+            intent.putExtra("SELECTED_ID", selectedId);
             startActivity(intent);
         });
 

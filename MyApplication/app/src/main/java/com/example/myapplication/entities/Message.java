@@ -53,11 +53,6 @@ public class Message {
         this.timestamp = timestamp;
     }
 
-    public String getFormattedTimestamp() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
-        return dateFormat.format(new Date(Long.parseLong(timestamp)));
-    }
-
     private String generateTimestamp() {
         return String.valueOf(System.currentTimeMillis());
     }
