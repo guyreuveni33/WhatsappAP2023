@@ -1,10 +1,13 @@
 // ChatAPI.java
 package com.example.myapplication.api;
 
+import com.example.myapplication.entities.ContactPostResponse;
 import com.example.myapplication.entities.ContactResponse;
 import com.example.myapplication.entities.UserResponse;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -20,6 +23,7 @@ public class ChatAPI {
     public interface ChatCallback {
         void onSuccess(List<ContactResponse> chats);
         void onUserSuccess(UserResponse userResponse);
+        void onPostChatSuccess(ContactPostResponse contactPostResponse);
 
         void onFailure(Throwable t);
     }
@@ -54,6 +58,33 @@ public class ChatAPI {
             }
         });
     }
+
+
+    public void postChats(ChatCallback callback, String username) {
+
+        Call<ContactPostResponse> call = webServiceAPI.postChats("Bearer " + token,
+                Map.of("username", username));
+        call.enqueue(new Callback<ContactPostResponse>() {
+            @Override
+            public void onResponse(Call<ContactPostResponse> call, Response<ContactPostResponse> response) {
+                if (response.isSuccessful()) {
+                    // Handle success
+                    ContactPostResponse contactPostResponse = response.body();
+                    callback.onPostChatSuccess(contactPostResponse);
+                } else {
+                    // Handle failure
+                    callback.onFailure(new Exception("Failed to add contact"));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ContactPostResponse> call, Throwable t) {
+                // Handle failure
+                callback.onFailure(t);
+            }
+        });
+    }
+
 
     public void getUser(ChatCallback callback,String username) {
         Call<UserResponse> call = webServiceAPI.getUserDetails("Bearer " + token, username); // Replace "username" with the actual username value
