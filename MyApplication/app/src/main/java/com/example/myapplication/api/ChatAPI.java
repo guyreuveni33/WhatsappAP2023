@@ -1,6 +1,7 @@
 // ChatAPI.java
 package com.example.myapplication.api;
 
+import com.example.myapplication.entities.ChatByIdResponse;
 import com.example.myapplication.entities.ContactPostResponse;
 import com.example.myapplication.entities.ContactResponse;
 import com.example.myapplication.entities.UserResponse;
@@ -23,6 +24,7 @@ public class ChatAPI {
     public interface ChatCallback {
         void onSuccess(List<ContactResponse> chats);
         void onUserSuccess(UserResponse userResponse);
+        void onGetChatSuccess(ChatByIdResponse chatByIdResponse);
         void onPostChatSuccess(ContactPostResponse contactPostResponse);
 
         void onFailure(Throwable t);
@@ -101,6 +103,27 @@ public class ChatAPI {
 
             @Override
             public void onFailure(Call<UserResponse> call, Throwable t) {
+                callback.onFailure(t);
+            }
+        });
+    }
+
+    public void getChat(ChatCallback callback,String username) {
+        Call<ChatByIdResponse> call = webServiceAPI.getChat("Bearer " + token, username); // Replace "username" with the actual username value
+        call.enqueue(new Callback<ChatByIdResponse>() {
+            @Override
+            public void onResponse(Call<ChatByIdResponse> call, Response<ChatByIdResponse> response) {
+                if (response.isSuccessful()) {
+                    System.out.println("Successful fetch");
+                    ChatByIdResponse chatByIdResponse = response.body();
+                    callback.onGetChatSuccess(chatByIdResponse);
+                } else {
+                    callback.onFailure(new Exception("Failed to fetch chat"));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ChatByIdResponse> call, Throwable t) {
                 callback.onFailure(t);
             }
         });

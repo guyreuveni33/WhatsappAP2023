@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.R;
 import com.example.myapplication.api.ChatAPI;
+import com.example.myapplication.entities.ChatByIdResponse;
 import com.example.myapplication.entities.Contact;
 import com.example.myapplication.entities.ContactPostResponse;
 import com.example.myapplication.entities.ContactResponse;
@@ -73,6 +74,10 @@ public class AddContactActivity extends AppCompatActivity  {
                     }
                     @Override
                     public void onUserSuccess(UserResponse userResponse) {
+
+                    }
+                    @Override
+                    public void onGetChatSuccess(ChatByIdResponse chatByIdResponse) {
 
                     }
                     @Override
