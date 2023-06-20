@@ -28,6 +28,8 @@ import com.example.myapplication.entities.Contact;
 import com.example.myapplication.entities.ContactPostResponse;
 import com.example.myapplication.entities.ContactResponse;
 import com.example.myapplication.entities.UserResponse;
+import com.example.myapplication.messages.MessageDB;
+import com.example.myapplication.messages.MessageDao;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +45,7 @@ public class ContactListActivity extends AppCompatActivity implements ChatAPI.Ch
     private String authToken;
     private List<Contact> conversationList;
     private UserResponse user;
-
+    private MessageDao messageDao;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +55,7 @@ public class ContactListActivity extends AppCompatActivity implements ChatAPI.Ch
 
         // Get an instance of the ContactDao for interacting with the database
         contactDao = ContactDB.getDatabase(getApplicationContext()).contactDao();
+        messageDao = MessageDB.getDatabase(getApplicationContext()).messageDao();
 
         // Initialize views
         btnLogout = findViewById(R.id.btnLogout);
@@ -82,6 +85,7 @@ public class ContactListActivity extends AppCompatActivity implements ChatAPI.Ch
         // Set item click listener for the ListView
         lvConversationList.setOnItemClickListener((parent, view, position, id) -> {
             // Handle item click event
+            messageDao.nukeTable();
             Contact selectedContact = adapter.getItem(position);
             String selectedUsername = selectedContact.getUsername();
             String selectedId = selectedContact.getId();
@@ -91,12 +95,15 @@ public class ContactListActivity extends AppCompatActivity implements ChatAPI.Ch
             intent.putExtra("SELECTED_TOKEN", authToken);
             intent.putExtra("SELECTED_DISPLAY_NAME", selectedDisplayName);
             intent.putExtra("SELECTED_ID", selectedId);
+            intent.putExtra("USERNAME_EXTRA", username);
+            intent.putExtra("DISPLAY_NAME_EXTRA", user.getDisplayName());
+            intent.putExtra("TOKEN_EXTRA", authToken);
             startActivity(intent);
         });
 
         // Set click listeners for the buttons
         btnLogout.setOnClickListener(view -> {
-            contactDao.nukeTable();
+            //contactDao.nukeTable();
             // Handle logout button click
             Intent intent = new Intent(ContactListActivity.this, MainActivity.class);
             startActivity(intent);
