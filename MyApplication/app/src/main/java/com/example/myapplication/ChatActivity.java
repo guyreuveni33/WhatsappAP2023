@@ -15,6 +15,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.myapplication.adapters.MessageAdapter;
 import com.example.myapplication.api.ChatAPI;
+import com.example.myapplication.api.MessageAPI;
 import com.example.myapplication.contacts.AddContactActivity;
 import com.example.myapplication.contacts.ContactListActivity;
 import com.example.myapplication.entities.ChatByIdResponse;
@@ -32,7 +33,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class ChatActivity extends AppCompatActivity implements ChatAPI.ChatCallback {
+public class ChatActivity extends AppCompatActivity implements ChatAPI.ChatCallback,MessageAPI.ChatCallback{
     private MessageDB messageDB;
     private Message message;
     MessageDao messageDao;
@@ -44,15 +45,22 @@ public class ChatActivity extends AppCompatActivity implements ChatAPI.ChatCallb
     private ImageButton btnSend;
     private ImageButton btnGoBack;
     private MessageAdapter messageAdapter;
+    private String currentUserDisplayName;
+    private String currentusername ;
+    private MessageAPI messageAPI;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+        currentUserDisplayName = getIntent().getStringExtra("DISPLAY_NAME_EXTRA");
+        currentusername = getIntent().getStringExtra("USERNAME_EXTRA");
         selectedUsername = getIntent().getStringExtra("SELECTED_USERNAME");
         String userId = getIntent().getStringExtra("SELECTED_ID");
         String selectedDisplayName = getIntent().getStringExtra("SELECTED_DISPLAY_NAME");
         token = getIntent().getStringExtra("SELECTED_TOKEN");
+
+        messageAPI = new MessageAPI(token);
 
         TextView tvCurrentUser = findViewById(R.id.tvCurrentUser);
         tvCurrentUser.setText(selectedDisplayName);
@@ -83,12 +91,16 @@ public class ChatActivity extends AppCompatActivity implements ChatAPI.ChatCallb
                 // Insert the new message into the database
                 messageDao.insert(newMessage);
                 messageDao.index();
+
                 // Add the new message to the list and notify the adapter
                 messageList.add(newMessage);
                 messageAdapter.notifyDataSetChanged();
                 listViewMessages.smoothScrollToPosition(messageAdapter.getCount() - 1); // Scroll to the bottom
 
                 etMessageInput.getText().clear(); // Clear the input field
+
+                // Call the postMessage() method in the MessageAPI class to send the message to the server
+                messageAPI.postMessage(this, userId, messageContent);
             }
         });
 
@@ -96,8 +108,8 @@ public class ChatActivity extends AppCompatActivity implements ChatAPI.ChatCallb
             // Start ContactListActivity when "Go Back" button is clicked
             Intent intent = new Intent(ChatActivity.this, ContactListActivity.class);
             intent.putExtra("TOKEN_EXTRA", token);
-            intent.putExtra("DISPLAY_NAME_EXTRA", selectedDisplayName);
-            intent.putExtra("USERNAME_EXTRA", selectedUsername);
+            intent.putExtra("DISPLAY_NAME_EXTRA", currentUserDisplayName);
+            intent.putExtra("USERNAME_EXTRA", currentusername);
             startActivity(intent);
         });
         fetchChatFromServer(userId);
@@ -138,9 +150,9 @@ public class ChatActivity extends AppCompatActivity implements ChatAPI.ChatCallb
         MessageDao messageDao = messageDB.messageDao();
 
         // Clear the existing messages in the database
-        messageDao.nukeTable();
+        //messageDao.nukeTable();
 
-        // Insert the new messages into the database
+        // Insert the new messages into the database in reverse order
         messageDao.insert(messageList.toArray(new Message[0]));
     }
 
@@ -162,6 +174,16 @@ public class ChatActivity extends AppCompatActivity implements ChatAPI.ChatCallb
             mappedMessages.add(message);
         }
         return mappedMessages;
+    }
+
+    @Override
+    public void onSuccessPostMessage(ChatMessageResponse chatMessageResponse) {
+        // Handle the successful response here, e.g., update the UI with the new message
+    }
+
+    @Override
+    public void onFailurePostMessage(Throwable t) {
+        // Handle the failure here, e.g., display an error message
     }
 
 
