@@ -161,7 +161,7 @@ public class RegisterActivity extends AppCompatActivity {
             return false;
         }
 
-        Pattern displayNamePattern = Pattern.compile("^\\w+$");
+        Pattern displayNamePattern = Pattern.compile("^[a-zA-Z0-9_\\s-]+$");
         if (!displayNamePattern.matcher(displayNameInput).matches()) {
             displayName.setError("Invalid display name");
             return false;
