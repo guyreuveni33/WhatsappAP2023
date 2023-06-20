@@ -18,22 +18,26 @@ import com.example.myapplication.api.ChatAPI;
 import com.example.myapplication.contacts.AddContactActivity;
 import com.example.myapplication.contacts.ContactListActivity;
 import com.example.myapplication.entities.ChatByIdResponse;
+import com.example.myapplication.entities.ChatMessageResponse;
 import com.example.myapplication.entities.Contact;
 import com.example.myapplication.entities.ContactPostResponse;
 import com.example.myapplication.entities.ContactResponse;
+import com.example.myapplication.entities.CurrentUserChat;
 import com.example.myapplication.entities.Message;
 import com.example.myapplication.entities.UserResponse;
 import com.example.myapplication.messages.MessageDB;
 import com.example.myapplication.messages.MessageDao;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-public class ChatActivity extends AppCompatActivity implements ChatAPI.ChatCallback{
+public class ChatActivity extends AppCompatActivity implements ChatAPI.ChatCallback {
     private MessageDB messageDB;
     private Message message;
     MessageDao messageDao;
     private String token;
+    private String selectedUsername;
     private List<Message> messageList;
     private ListView listViewMessages;
     private EditText etMessageInput;
@@ -45,7 +49,8 @@ public class ChatActivity extends AppCompatActivity implements ChatAPI.ChatCallb
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
-        String selectedUsername = getIntent().getStringExtra("SELECTED_USERNAME");
+        selectedUsername = getIntent().getStringExtra("SELECTED_USERNAME");
+        String userId = getIntent().getStringExtra("SELECTED_ID");
         String selectedDisplayName = getIntent().getStringExtra("SELECTED_DISPLAY_NAME");
         token = getIntent().getStringExtra("SELECTED_TOKEN");
 
@@ -90,66 +95,93 @@ public class ChatActivity extends AppCompatActivity implements ChatAPI.ChatCallb
         btnGoBack.setOnClickListener(view -> {
             // Start ContactListActivity when "Go Back" button is clicked
             Intent intent = new Intent(ChatActivity.this, ContactListActivity.class);
+            intent.putExtra("TOKEN_EXTRA", token);
+            intent.putExtra("DISPLAY_NAME_EXTRA", selectedDisplayName);
+            intent.putExtra("USERNAME_EXTRA", selectedUsername);
             startActivity(intent);
         });
-        fetchChatFromServer(selectedUsername);
+        fetchChatFromServer(userId);
     }
 
 
-    private void fetchChatFromServer(String selectedUsername) {
+    private void fetchChatFromServer(String userId) {
         ChatAPI chatAPI = new ChatAPI(token);
-        chatAPI.getChat(this, selectedUsername);
+        chatAPI.getChat(this, userId);
     }
+
     @Override
     public void onGetChatSuccess(ChatByIdResponse chatByIdResponse) {
         // Extract the necessary data from chatByIdResponse and update your UI accordingly
-//        List<ContactResponse> users = chatByIdResponse.getUsers();
-//        List<Message> messages = chatByIdResponse.getMessages();
+        CurrentUserChat[] users = chatByIdResponse.getUsers();
+        ChatMessageResponse[] messages = chatByIdResponse.getMessages();
 //
 //        // Update your user interface with the retrieved data
-//        updateUI(users, messages);
+        updateUI(users, messages);
     }
 
-    private void updateUI(List<ContactResponse> users, List<Message> messages) {
-//        // Update your UI with the retrieved data
-//        // For example, you can update the user details in the ContactListActivity
-//        TextView tvCurrentUser = findViewById(R.id.tvCurrentUser);
-//        tvCurrentUser.setText(users.get(0).getDisplayName());
-//
-//        ImageView userAvatar = findViewById(R.id.userAvatar);
-//        String profilePicUrl = users.get(0).getProfilePic();
-//        if (profilePicUrl != null) {
-//            RequestOptions requestOptions = new RequestOptions()
-//                    .diskCacheStrategy(DiskCacheStrategy.ALL);
-//
-//            Glide.with(this)
-//                    .load(profilePicUrl)
-//                    .apply(requestOptions)
-//                    .into(userAvatar);
-//        } else {
-//            userAvatar.setImageResource(R.drawable.a31975);
-//        }
-//
-//        // Update the message list
-//        messageList.clear();
-//        messageList.addAll(messages);
-//        messageAdapter.notifyDataSetChanged();
-//        listViewMessages.smoothScrollToPosition(messageAdapter.getCount() - 1);
+    private void updateUI(CurrentUserChat[] users, ChatMessageResponse[] messages) {
+        // Update your UI with the retrieved data
+
+        // Convert ChatMessageResponse[] array to List<Message>
+        List<Message> messageList = mapChatMessageResponses(messages);
+
+        // Update the message list
+        this.messageList.clear();
+        this.messageList.addAll(messageList);
+        messageAdapter.notifyDataSetChanged();
+        listViewMessages.smoothScrollToPosition(messageAdapter.getCount() - 1);
+        addMessagesToDatabase(messageList);
     }
+
+    private void addMessagesToDatabase(List<Message> messageList) {
+        MessageDB messageDB = MessageDB.getDatabase(getApplicationContext());
+        MessageDao messageDao = messageDB.messageDao();
+
+        // Clear the existing messages in the database
+        messageDao.nukeTable();
+
+        // Insert the new messages into the database
+        messageDao.insert(messageList.toArray(new Message[0]));
+    }
+
+    private List<Message> mapChatMessageResponses(ChatMessageResponse[] messages) {
+        List<Message> mappedMessages = new ArrayList<>();
+        for (ChatMessageResponse messageResponse : messages) {
+            boolean isSent;
+            // Determine the value of isSent based on the selectedUsername
+            if (messageResponse.getSender().getUsername().equals(selectedUsername)) {
+                isSent = false;
+            }
+            else {
+                isSent = true;
+            }
+
+            // Assuming Message has a constructor that takes the necessary parameters
+            Message message = new Message(messageResponse.getContent(), isSent);
+            message.setTimestamp(messageResponse.getCreated());
+            mappedMessages.add(message);
+        }
+        return mappedMessages;
+    }
+
+
 
 
     @Override
     public void onSuccess(List<ContactResponse> chats) {
 
     }
+
     @Override
     public void onUserSuccess(UserResponse userResponse) {
 
     }
+
     @Override
     public void onPostChatSuccess(ContactPostResponse contactPostResponse) {
 
     }
+
     @Override
     public void onFailure(Throwable t) {
 

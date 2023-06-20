@@ -3,10 +3,10 @@ package com.example.myapplication.entities;
 public class ChatMessageResponse {
     private int id;
     private String created;
-    private CurrentUserChat[] sender;
+    private CurrentUserChat sender;
     private String content;
 
-    public ChatMessageResponse(int id, String created, CurrentUserChat[] sender, String content) {
+    public ChatMessageResponse(int id, String created, CurrentUserChat sender, String content) {
         this.id = id;
         this.created = created;
         this.sender = sender;
@@ -24,7 +24,7 @@ public class ChatMessageResponse {
         this.created = created;
     }
 
-    public void setSender(CurrentUserChat[] sender) {
+    public void setSender(CurrentUserChat sender) {
         this.sender = sender;
     }
 
@@ -36,7 +36,7 @@ public class ChatMessageResponse {
         return created;
     }
 
-    public CurrentUserChat[] getSender() {
+    public CurrentUserChat getSender() {
         return sender;
     }
 

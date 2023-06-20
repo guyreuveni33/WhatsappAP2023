@@ -57,7 +57,7 @@ public class MessageAdapter extends BaseAdapter {
             tvTimestamp = new TextView(parent.getContext());
         }
 
-        tvTimestamp.setText(message.getFormattedTimestamp());
+        tvTimestamp.setText(message.getTimestamp());
 
         return convertView;
 }}
