@@ -74,7 +74,7 @@ public class ChatActivity extends AppCompatActivity implements ChatAPI.ChatCallb
         btnGoBack = findViewById(R.id.btnGoBack);
 
         messageList = new ArrayList<>();
-        messageAdapter = new MessageAdapter(messageList);
+        messageAdapter = new MessageAdapter(getApplicationContext(), messageList);
         listViewMessages.setAdapter(messageAdapter);
 
         // Fetch existing messages from the database
@@ -87,10 +87,9 @@ public class ChatActivity extends AppCompatActivity implements ChatAPI.ChatCallb
             if (!messageContent.isEmpty()) {
                 // Create a new message
                 Message newMessage = new Message(messageContent, true);
-
+                messageAPI.postMessage(this, userId, messageContent);
                 // Insert the new message into the database
                 messageDao.insert(newMessage);
-                messageDao.index();
 
                 // Add the new message to the list and notify the adapter
                 messageList.add(newMessage);
@@ -100,7 +99,8 @@ public class ChatActivity extends AppCompatActivity implements ChatAPI.ChatCallb
                 etMessageInput.getText().clear(); // Clear the input field
 
                 // Call the postMessage() method in the MessageAPI class to send the message to the server
-                messageAPI.postMessage(this, userId, messageContent);
+
+                fetchChatFromServer(userId);
             }
         });
 
@@ -140,6 +140,7 @@ public class ChatActivity extends AppCompatActivity implements ChatAPI.ChatCallb
         // Update the message list
         this.messageList.clear();
         this.messageList.addAll(messageList);
+        System.out.println(this.messageList);
         messageAdapter.notifyDataSetChanged();
         listViewMessages.smoothScrollToPosition(messageAdapter.getCount() - 1);
         addMessagesToDatabase(messageList);
