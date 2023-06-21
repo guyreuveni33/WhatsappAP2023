@@ -1,5 +1,6 @@
 package com.example.myapplication.api;
 
+import com.example.myapplication.ServerAddressSingleton;
 import com.example.myapplication.entities.ChatMessageResponse;
 
 import java.util.HashMap;
@@ -16,6 +17,7 @@ public class MessageAPI {
     private Retrofit retrofit;
     private WebServiceAPI webServiceAPI;
     private String token;
+    private String server;
 
     public interface ChatCallback {
         void onSuccessPostMessage(ChatMessageResponse chatMessageResponse);
@@ -24,9 +26,10 @@ public class MessageAPI {
 
     public MessageAPI(String token) {
         this.token = token;
+        server = ServerAddressSingleton.getInstance().getServerAddress()+"/api/";
 
         retrofit = new Retrofit.Builder()
-                .baseUrl("http://10.0.2.2:5000/api/") // Replace with your API base URL
+                .baseUrl(server) // Replace with your API base URL
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 

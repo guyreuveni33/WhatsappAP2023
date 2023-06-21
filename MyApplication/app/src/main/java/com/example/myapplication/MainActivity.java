@@ -9,9 +9,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.myapplication.api.ChatAPI;
 import com.example.myapplication.api.LoginApi;
 import com.example.myapplication.contacts.ContactDB;
@@ -23,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     EditText username;
     EditText password;
     Button loginButton;
+    ImageButton btnSettings;
     TextView signupText; // TextView for "Click here"
     LoginApi loginApi;
     ChatAPI chatAPI;
@@ -33,12 +37,20 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        ServerAddressSingleton.getInstance().setServerAddress("http://10.0.2.2:5000");
         contactDao = ContactDB.getDatabase(getApplicationContext()).contactDao();
         username = findViewById(R.id.username);
         password = findViewById(R.id.password);
         loginButton = findViewById(R.id.loginButton);
         signupText = findViewById(R.id.signupText);
+        btnSettings = findViewById(R.id.btnSettings);
+        String loginFlag="LOGIN";
+        btnSettings.setOnClickListener(view -> {
+            // Handle settings button click
+            Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+            intent.putExtra("SETTING_EXTRA", loginFlag);
+            startActivity(intent);
+        });
 
         signupText.setOnClickListener(view -> {
             // Start Register activity when "Click here" is clicked
@@ -79,4 +91,5 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
 }
