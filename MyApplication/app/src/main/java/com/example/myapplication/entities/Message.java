@@ -3,6 +3,7 @@ package com.example.myapplication.entities;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -50,10 +51,17 @@ public class Message {
     }
 
     public void setTimestamp(String timestamp) {
-        this.timestamp = timestamp;
+        SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSSS", Locale.getDefault());
+        SimpleDateFormat outputFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
+        try {
+            Date date = inputFormat.parse(timestamp);
+            this.timestamp = outputFormat.format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
-
     private String generateTimestamp() {
-        return String.valueOf(System.currentTimeMillis());
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.getDefault());
+        return sdf.format(new Date());
     }
 }

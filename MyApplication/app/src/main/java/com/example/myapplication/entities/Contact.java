@@ -5,6 +5,7 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 @Entity
 public class Contact {
@@ -24,6 +25,7 @@ public class Contact {
         this.lastMessage = lastMessage;
         this.lastDate = lastDate;
         this.profilePic = profilePic;
+        this.lastDate = formatDate(lastDate);
     }
 
 
@@ -66,5 +68,17 @@ public class Contact {
 
     public void setLastDate(String lastDate) {
         this.lastDate = lastDate;
+    }
+
+    private String formatDate(String timestamp) {
+        try {
+            SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSSS", Locale.getDefault());
+            SimpleDateFormat outputFormat = new SimpleDateFormat("dd MMM", Locale.getDefault());
+            Date date = inputFormat.parse(timestamp);
+            return outputFormat.format(date);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

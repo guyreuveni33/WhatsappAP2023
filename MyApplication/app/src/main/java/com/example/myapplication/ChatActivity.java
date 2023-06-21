@@ -106,15 +106,12 @@ public class ChatActivity extends AppCompatActivity implements ChatAPI.ChatCallb
                 messageList.add(newMessage);
                 messageAdapter.notifyDataSetChanged();
                 listViewMessages.smoothScrollToPosition(messageAdapter.getCount() - 1); // Scroll to the bottom
-
                 etMessageInput.getText().clear(); // Clear the input field
-
                 // Call the postMessage() method in the MessageAPI class to send the message to the server
 
                 fetchChatFromServer(userId);
             }
         });
-
         btnGoBack.setOnClickListener(view -> {
             // Start ContactListActivity when "Go Back" button is clicked
             Intent intent = new Intent(ChatActivity.this, ContactListActivity.class);
@@ -138,8 +135,11 @@ public class ChatActivity extends AppCompatActivity implements ChatAPI.ChatCallb
         // Extract the necessary data from chatByIdResponse and update your UI accordingly
         CurrentUserChat[] users = chatByIdResponse.getUsers();
         ChatMessageResponse[] messages = chatByIdResponse.getMessages();
-//
-//        // Update your user interface with the retrieved data
+        for (ChatMessageResponse messageResponse : messages) {
+            System.out.println(messageResponse.getContent());
+            System.out.println("allllllllllllllllllllllllllllllllllllllaafadvadvavav");
+        }
+// Update your user interface with the retrieved data
         updateUI(users, messages);
     }
 
