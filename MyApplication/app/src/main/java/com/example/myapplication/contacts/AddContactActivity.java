@@ -29,6 +29,7 @@ public class AddContactActivity extends AppCompatActivity  {
     private String displayName;
     private String username;
     private String authToken;
+    private String profilePicUrl;
     private List<Contact> conversationList;
 
     @Override
@@ -37,6 +38,8 @@ public class AddContactActivity extends AppCompatActivity  {
         displayName = getIntent().getStringExtra("DISPLAY_NAME_EXTRA");
         authToken = getIntent().getStringExtra("TOKEN_EXTRA");
         username = getIntent().getStringExtra("USERNAME_EXTRA");
+        profilePicUrl = getIntent().getStringExtra("PROFILE_PIC_EXTRA");
+
         setContentView(R.layout.activity_add_contact);
         this.contactDB = ContactDB.getDatabase(getApplicationContext());
         contactDao = contactDB.contactDao();
@@ -46,6 +49,7 @@ public class AddContactActivity extends AppCompatActivity  {
             Intent intent = new Intent(AddContactActivity.this, ContactListActivity.class);
             intent.putExtra("TOKEN_EXTRA", authToken);
             intent.putExtra("DISPLAY_NAME_EXTRA", displayName);
+            intent.putExtra("PROFILE_PIC_EXTRA", profilePicUrl);
             startActivity(intent);
         });
         btnAddContact.setOnClickListener(view -> {
@@ -68,6 +72,7 @@ public class AddContactActivity extends AppCompatActivity  {
                         intent.putExtra("TOKEN_EXTRA", authToken);
                         intent.putExtra("DISPLAY_NAME_EXTRA", displayName);
                         intent.putExtra("USERNAME_EXTRA", username);
+                        intent.putExtra("PROFILE_PIC_EXTRA", profilePicUrl);
                         startActivity(intent);
                         System.out.println("Contact added successfully");
                         // Refresh the chat list or perform any other necessary actions
@@ -92,6 +97,7 @@ public class AddContactActivity extends AppCompatActivity  {
                         intent.putExtra("TOKEN_EXTRA", authToken);
                         intent.putExtra("DISPLAY_NAME_EXTRA", displayName);
                         intent.putExtra("USERNAME_EXTRA", username);
+                        intent.putExtra("PROFILE_PIC_EXTRA", profilePicUrl);
                         startActivity(intent);
                         System.out.println("Failed to add contact: " + t.getMessage());
                     }
@@ -100,19 +106,5 @@ public class AddContactActivity extends AppCompatActivity  {
                 // ... Rest of the code
             }
         });
-    }
-    private String generateRandomId() {
-        String allowedChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        int idLength = 10;
-        StringBuilder randomId = new StringBuilder();
-        Random random = new Random();
-
-        for (int i = 0; i < idLength; i++) {
-            int randomIndex = random.nextInt(allowedChars.length());
-            char randomChar = allowedChars.charAt(randomIndex);
-            randomId.append(randomChar);
-        }
-
-        return randomId.toString();
     }
 }

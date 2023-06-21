@@ -22,6 +22,8 @@ public class SettingsActivity extends AppCompatActivity {
     private ImageButton btnGoBack;
     private String displayName;
     private String authToken;
+    private String profilePicUrl;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +31,8 @@ public class SettingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_settings);
         displayName = getIntent().getStringExtra("DISPLAY_NAME_EXTRA");
         authToken = getIntent().getStringExtra("TOKEN_EXTRA");
+        profilePicUrl = getIntent().getStringExtra("PROFILE_PIC_EXTRA");
+        System.out.println("profile: "+ profilePicUrl);
         toggleButton = findViewById(R.id.toggleButton);
         serverAddressEditText = findViewById(R.id.serverAddressEditText);
         updateButton = findViewById(R.id.updateButton);
@@ -60,6 +64,7 @@ public class SettingsActivity extends AppCompatActivity {
             Intent intent = new Intent(SettingsActivity.this, ContactListActivity.class);
             intent.putExtra("TOKEN_EXTRA", authToken);
             intent.putExtra("DISPLAY_NAME_EXTRA", displayName);
+            intent.putExtra("PROFILE_PIC_EXTRA", profilePicUrl);
             startActivity(intent);
         });
     }

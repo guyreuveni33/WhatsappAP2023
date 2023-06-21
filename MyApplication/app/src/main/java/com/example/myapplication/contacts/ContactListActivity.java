@@ -30,6 +30,7 @@ import com.example.myapplication.entities.ContactResponse;
 import com.example.myapplication.entities.UserResponse;
 import com.example.myapplication.messages.MessageDB;
 import com.example.myapplication.messages.MessageDao;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +47,7 @@ public class ContactListActivity extends AppCompatActivity implements ChatAPI.Ch
     private List<Contact> conversationList;
     private UserResponse user;
     private MessageDao messageDao;
+    private String profilePicUrl;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,14 +63,6 @@ public class ContactListActivity extends AppCompatActivity implements ChatAPI.Ch
         btnLogout = findViewById(R.id.btnLogout);
         btnSettings = findViewById(R.id.btnSettings);
         btnAdd = findViewById(R.id.btnAdd);
-
-        // Set current user name
-        // TextView tvCurrentUser = findViewById(R.id.tvCurrentUser);
-        //tvCurrentUser.setText("John Doe");
-
-        // Set user avatar image
-        //ImageView userAvatar = findViewById(R.id.userAvatar);
-        //userAvatar.setImageResource(R.drawable.a31975);
 
         // Set up the conversation list
         ListView lvConversationList = findViewById(R.id.lvConversationList);
@@ -90,6 +84,7 @@ public class ContactListActivity extends AppCompatActivity implements ChatAPI.Ch
             String selectedUsername = selectedContact.getUsername();
             String selectedId = selectedContact.getId();
             String selectedDisplayName = selectedContact.getName();
+            String selectedProfilePic = selectedContact.getProfilePic();
             Intent intent = new Intent(ContactListActivity.this, ChatActivity.class);
             intent.putExtra("SELECTED_USERNAME", selectedUsername);
             intent.putExtra("SELECTED_TOKEN", authToken);
@@ -97,7 +92,9 @@ public class ContactListActivity extends AppCompatActivity implements ChatAPI.Ch
             intent.putExtra("SELECTED_ID", selectedId);
             intent.putExtra("USERNAME_EXTRA", username);
             intent.putExtra("DISPLAY_NAME_EXTRA", user.getDisplayName());
+            intent.putExtra("SELECTED_PROFILE_PIC_EXTRA", selectedProfilePic);
             intent.putExtra("TOKEN_EXTRA", authToken);
+            intent.putExtra("PROFILE_PIC_EXTRA", profilePicUrl);
             startActivity(intent);
         });
 
@@ -115,6 +112,7 @@ public class ContactListActivity extends AppCompatActivity implements ChatAPI.Ch
             intent.putExtra("TOKEN_EXTRA", authToken);
             intent.putExtra("DISPLAY_NAME_EXTRA", user.getDisplayName());
             intent.putExtra("USERNAME_EXTRA", username);
+            intent.putExtra("PROFILE_PIC_EXTRA", profilePicUrl);
             startActivity(intent);
         });
 
@@ -124,7 +122,7 @@ public class ContactListActivity extends AppCompatActivity implements ChatAPI.Ch
             intent.putExtra("TOKEN_EXTRA", authToken);
             intent.putExtra("DISPLAY_NAME_EXTRA", user.getDisplayName());
             intent.putExtra("USERNAME_EXTRA", username);
-
+            intent.putExtra("PROFILE_PIC_EXTRA", profilePicUrl);
             startActivity(intent);
         });
 
@@ -155,7 +153,7 @@ public class ContactListActivity extends AppCompatActivity implements ChatAPI.Ch
         ImageView userAvatar = findViewById(R.id.userAvatar);
 
         // Load and set the user's profile picture using the profilePic URL
-        String profilePicUrl = userResponse.getProfilePic();
+        profilePicUrl = userResponse.getProfilePic();
         if (profilePicUrl != null) {
             RequestOptions requestOptions = new RequestOptions()
                     .diskCacheStrategy(DiskCacheStrategy.ALL); // Caching options, if needed
@@ -186,6 +184,7 @@ public class ContactListActivity extends AppCompatActivity implements ChatAPI.Ch
     public void onSuccess(List<ContactResponse> contacts) {
         // Update the conversation list with the retrieved contacts
         List<Contact> contactList = mapContactResponses(contacts);
+        System.out.println("contact list:" + contactList.get(0).getProfilePic());
 
         // Update the local Room database with the contacts from the server
         updateContactsInDatabase(contactList);
@@ -220,10 +219,10 @@ public class ContactListActivity extends AppCompatActivity implements ChatAPI.Ch
         for (ContactResponse response : contactResponses) {
             String username = response.getUser().getUsername();
             String name = response.getUser().getDisplayName();
+            String profilePic = response.getUser().getProfilePic();
             String lastMessage = response.getLastMessage() != null ? response.getLastMessage().getContent() : null;
             String lastDate = response.getLastMessage() != null ? response.getLastMessage().getCreated() : null;
-
-            Contact contact = new Contact(response.getId(), username, name, lastMessage, lastDate);
+            Contact contact = new Contact(response.getId(), username, name, lastMessage, lastDate, profilePic);
             contactList.add(contact);
         }
         return contactList;
@@ -235,6 +234,7 @@ public class ContactListActivity extends AppCompatActivity implements ChatAPI.Ch
         // Check if there are updated values for authToken and displayName
         String updatedAuthToken = getIntent().getStringExtra("TOKEN_EXTRA");
         String updatedDisplayName = getIntent().getStringExtra("DISPLAY_NAME_EXTRA");
+        profilePicUrl = getIntent().getStringExtra("PROFILE_PIC_EXTRA");
         // Update the member variables if new values are available
         if (updatedAuthToken != null) {
             authToken = updatedAuthToken;
@@ -244,6 +244,14 @@ public class ContactListActivity extends AppCompatActivity implements ChatAPI.Ch
         }
         TextView tvCurrentUser = findViewById(R.id.tvCurrentUser);
         tvCurrentUser.setText(getIntent().getStringExtra("DISPLAY_NAME_EXTRA"));
+        ImageView tvUserAvatar = findViewById(R.id.userAvatar);
+        if (profilePicUrl != null) {
+            Glide.with(this)
+                    .load(profilePicUrl)
+                    .into(tvUserAvatar);
+        }
+        //tvUserAvatar.setImageURI(getIntent().getStringExtra("PROFILE_PIC_EXTRA"));
+        //Picasso.get().load(profilePicUrl).into(tvUserAvatar);
         conversationList.clear();
       //  List<Contact> list = contactDao.index();
        // int a = 5;
