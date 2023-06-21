@@ -32,22 +32,15 @@ public class SettingsActivity extends AppCompatActivity {
         displayName = getIntent().getStringExtra("DISPLAY_NAME_EXTRA");
         authToken = getIntent().getStringExtra("TOKEN_EXTRA");
         profilePicUrl = getIntent().getStringExtra("PROFILE_PIC_EXTRA");
-        System.out.println("profile: "+ profilePicUrl);
         toggleButton = findViewById(R.id.toggleButton);
         serverAddressEditText = findViewById(R.id.serverAddressEditText);
         updateButton = findViewById(R.id.updateButton);
         btnGoBack = findViewById(R.id.btnGoBack);
 
+        toggleButton.setChecked(isNightModeEnabled());
         toggleButton.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                toggleButton.setBackgroundResource(R.drawable.ic_toggleon);
-                updateButton.setEnabled(true);
-                setNightMode(true);
-            } else {
-                toggleButton.setBackgroundResource(R.drawable.ic_toggleoff);
-                updateButton.setEnabled(false);
-                setNightMode(false);
-            }
+            toggleNightMode(isChecked);
+            updateButton.setEnabled(isChecked);
         });
 
         updateButton.setOnClickListener(v -> {
@@ -69,12 +62,15 @@ public class SettingsActivity extends AppCompatActivity {
         });
     }
 
-    private void setNightMode(boolean nightModeEnabled) {
+    private void toggleNightMode(boolean nightModeEnabled) {
+        int newNightMode = nightModeEnabled ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO;
+        AppCompatDelegate.setDefaultNightMode(newNightMode);
+        recreate();
+    }
+
+
+    private boolean isNightModeEnabled() {
         int currentNightMode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
-        int newNightMode = nightModeEnabled ? Configuration.UI_MODE_NIGHT_YES : Configuration.UI_MODE_NIGHT_NO;
-        if (currentNightMode != newNightMode) {
-            AppCompatDelegate.setDefaultNightMode(newNightMode);
-            recreate();
-        }
+        return currentNightMode == Configuration.UI_MODE_NIGHT_YES;
     }
 }
