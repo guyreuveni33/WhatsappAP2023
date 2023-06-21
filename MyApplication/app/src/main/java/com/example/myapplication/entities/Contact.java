@@ -15,14 +15,19 @@ public class Contact {
     private String name;
     private String lastMessage;
     private String lastDate;
+    private String profilePic;
 
-    public Contact(String id, String username, String name, String lastMessage, String lastDate) {
+
+    public Contact(String id, String username, String name, String lastMessage, String lastDate, String profilePic) {
         this.id = id;
         this.username = username;
         this.name = name;
         this.lastMessage = lastMessage;
+        this.lastDate = lastDate;
+        this.profilePic = profilePic;
         this.lastDate = formatDate(lastDate);
     }
+
 
     public String getId() {
         return id;
@@ -49,6 +54,12 @@ public class Contact {
 
     public void setName(String name) {
         this.name = name;
+    }
+    public void setProfilePic(String profilePic) {
+        this.profilePic = profilePic;
+    }
+    public String getProfilePic() {
+        return this.profilePic;
     }
 
     public void setLastMessage(String lastMessage) {

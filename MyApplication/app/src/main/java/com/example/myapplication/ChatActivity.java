@@ -48,6 +48,9 @@ public class ChatActivity extends AppCompatActivity implements ChatAPI.ChatCallb
     private String currentUserDisplayName;
     private String currentusername ;
     private MessageAPI messageAPI;
+    private String profilePicUrl;
+    private String selectedContactProfilePic;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +59,8 @@ public class ChatActivity extends AppCompatActivity implements ChatAPI.ChatCallb
         currentUserDisplayName = getIntent().getStringExtra("DISPLAY_NAME_EXTRA");
         currentusername = getIntent().getStringExtra("USERNAME_EXTRA");
         selectedUsername = getIntent().getStringExtra("SELECTED_USERNAME");
+        profilePicUrl = getIntent().getStringExtra("PROFILE_PIC_EXTRA");
+        selectedContactProfilePic = getIntent().getStringExtra("SELECTED_PROFILE_PIC_EXTRA");
         String userId = getIntent().getStringExtra("SELECTED_ID");
         String selectedDisplayName = getIntent().getStringExtra("SELECTED_DISPLAY_NAME");
         token = getIntent().getStringExtra("SELECTED_TOKEN");
@@ -64,6 +69,12 @@ public class ChatActivity extends AppCompatActivity implements ChatAPI.ChatCallb
 
         TextView tvCurrentUser = findViewById(R.id.tvCurrentUser);
         tvCurrentUser.setText(selectedDisplayName);
+        ImageView tvUserAvatar = findViewById(R.id.userAvatar);
+        if (selectedContactProfilePic != null) {
+            Glide.with(this)
+                    .load(selectedContactProfilePic)
+                    .into(tvUserAvatar);
+        }
 
         messageDB = MessageDB.getDatabase(getApplicationContext());
         messageDao = messageDB.messageDao();
@@ -107,6 +118,7 @@ public class ChatActivity extends AppCompatActivity implements ChatAPI.ChatCallb
             intent.putExtra("TOKEN_EXTRA", token);
             intent.putExtra("DISPLAY_NAME_EXTRA", currentUserDisplayName);
             intent.putExtra("USERNAME_EXTRA", currentusername);
+            intent.putExtra("PROFILE_PIC_EXTRA", profilePicUrl);
             startActivity(intent);
         });
         fetchChatFromServer(userId);
