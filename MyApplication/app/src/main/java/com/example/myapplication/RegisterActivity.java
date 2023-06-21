@@ -86,6 +86,13 @@ public class RegisterActivity extends AppCompatActivity {
                         encodeBitmap(selectedImageBitmap)
                 );
 
+                String encodedImage = encodeBitmap(selectedImageBitmap);
+                if (encodedImage != null) {
+                    user.setProfilePic(encodedImage);
+                } else {
+                    user.setProfilePic(""); // Set an empty string if the encoded image is null
+                }
+
 
                 registerApi = new RegisterApi(new RegisterApi.RegisterCallback() {
                     @Override

@@ -105,10 +105,11 @@ public class ContactListActivity extends AppCompatActivity implements ChatAPI.Ch
             Intent intent = new Intent(ContactListActivity.this, MainActivity.class);
             startActivity(intent);
         });
-
+        String ContactListActivityFlag="CONTACTLISTACTIVITY";
         btnSettings.setOnClickListener(view -> {
             // Handle settings button click
             Intent intent = new Intent(ContactListActivity.this, SettingsActivity.class);
+            intent.putExtra("SETTING_EXTRA", ContactListActivityFlag);
             intent.putExtra("TOKEN_EXTRA", authToken);
             intent.putExtra("DISPLAY_NAME_EXTRA", user.getDisplayName());
             intent.putExtra("USERNAME_EXTRA", username);
