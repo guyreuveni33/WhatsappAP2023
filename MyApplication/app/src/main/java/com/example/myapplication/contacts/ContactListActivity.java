@@ -184,8 +184,6 @@ public class ContactListActivity extends AppCompatActivity implements ChatAPI.Ch
     public void onSuccess(List<ContactResponse> contacts) {
         // Update the conversation list with the retrieved contacts
         List<Contact> contactList = mapContactResponses(contacts);
-        System.out.println("contact list:" + contactList.get(0).getProfilePic());
-
         // Update the local Room database with the contacts from the server
         updateContactsInDatabase(contactList);
 
