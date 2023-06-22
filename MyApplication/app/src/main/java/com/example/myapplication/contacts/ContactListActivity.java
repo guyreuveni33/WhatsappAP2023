@@ -152,8 +152,12 @@ public class ContactListActivity extends AppCompatActivity implements ChatAPI.Ch
         fetchContactsAndUserDetailsFromServer();
     }
 
+    private void fetchMessagesFromServer(String userId) {
+        MessageAPI messageAPI1 = new MessageAPI(authToken);
+        messageAPI1.getMessages(this, userId);
+    }
     @Override
-    public void onSuccessGetMessage(List<MessagesResponse> messages) {
+    public void onSuccessGetMessage(List<MessagesResponse> messages,String chatId) {
         // Handle the successful response here, e.g., update the UI with the messages
     }
 

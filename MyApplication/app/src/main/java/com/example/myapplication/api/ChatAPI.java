@@ -52,14 +52,7 @@ public class ChatAPI {
             public void onResponse(Call<List<ContactResponse>> call, Response<List<ContactResponse>> response) {
                 if (response.isSuccessful()) {
                     List<ContactResponse> contacts = response.body();
-                    int counter=0;
-                    for (ContactResponse contact : contacts) {
-                        // Print the values of each contact
-                        System.out.println("Response"+counter+contact.getUser());
-                        System.out.println("Response"+counter+contact.getLastMessage().getCreated());
 
-                        counter++;
-                    }
                     callback.onSuccess(contacts);
                 } else {
                     callback.onFailure(new Exception("Failed to fetch contacts"));
