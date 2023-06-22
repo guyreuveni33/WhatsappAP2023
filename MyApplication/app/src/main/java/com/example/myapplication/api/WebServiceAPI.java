@@ -52,4 +52,7 @@ public interface WebServiceAPI {
     Call<List<MessagesResponse>> getMessages(
             @Header("Authorization") String token,
             @Path("id") String id);
+
+    @POST("api/firebase/onconnect")
+    Call<Void> firebaseOnConnect(@Header("Authorization") String token, @Body String firebaseToken);
 }
