@@ -12,6 +12,7 @@ import com.example.myapplication.entities.Message;
 
 @Database(entities = {Message.class}, version = 1)
 public abstract class MessageDB extends RoomDatabase {
+
     private static MessageDB instance;
 
     public abstract MessageDao messageDao();

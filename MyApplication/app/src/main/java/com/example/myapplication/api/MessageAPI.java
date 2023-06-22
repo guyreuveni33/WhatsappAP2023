@@ -1,9 +1,13 @@
 package com.example.myapplication.api;
 
+import static com.example.myapplication.Converter.fromContactUserDetails;
+
 import com.example.myapplication.ServerAddressSingleton;
 import com.example.myapplication.entities.ChatMessageResponse;
+import com.example.myapplication.entities.MessagesResponse;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import retrofit2.Call;
@@ -21,7 +25,9 @@ public class MessageAPI {
 
     public interface ChatCallback {
         void onSuccessPostMessage(ChatMessageResponse chatMessageResponse);
+        void onSuccessGetMessage(List<MessagesResponse> messages);
         void onFailurePostMessage(Throwable t);
+        void onFailureGetMessage(Throwable t);
     }
 
     public MessageAPI(String token) {
@@ -50,6 +56,9 @@ public class MessageAPI {
 
                     ChatMessageResponse chatMessageResponse = response.body();
                     callback.onSuccessPostMessage(chatMessageResponse);
+
+                    // Call getMessages after successful post
+                    getMessages(callback, id); // Assuming getMessages method updates UI with retrieved messages
                 } else {
                     // Handle failure
                     System.out.println("unsuccessful fetch");
@@ -65,5 +74,43 @@ public class MessageAPI {
             }
         });
     }
+
+    public void getMessages(ChatCallback callback, String id) {
+        Call<List<MessagesResponse>> call = webServiceAPI.getMessages("Bearer " + token, id);
+        call.enqueue(new Callback<List<MessagesResponse>>() {
+            @Override
+            public void onResponse(Call<List<MessagesResponse>> call, Response<List<MessagesResponse>> response) {
+                if (response.isSuccessful()) {
+                    // Handle success
+
+                    List<MessagesResponse> messages = response.body();
+
+                    callback.onSuccessGetMessage(messages);
+                } else {
+                    // Handle failure
+                    int statusCode = response.code();
+                    if (statusCode == 400) {
+                        // Bad request
+                        callback.onFailureGetMessage(new Exception("Bad request"));
+                    } else if (statusCode == 404) {
+                        // Not found
+                        callback.onFailureGetMessage(new Exception("Not found"));
+                    } else {
+                        // Other error
+                        callback.onFailureGetMessage(new Exception("Failed to get messages"));
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<MessagesResponse>> call, Throwable t) {
+                // Handle failure
+
+                callback.onFailureGetMessage(t);
+            }
+        });
+    }
+
+
 
 }

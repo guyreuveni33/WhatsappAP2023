@@ -23,4 +23,7 @@ public interface MessageDao {
     void update(Message... message);
     @Delete
     void delete(Message... message);
+    @Query("SELECT * FROM message")
+    List<Message> getAll();
+
 }

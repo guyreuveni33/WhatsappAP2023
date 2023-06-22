@@ -23,10 +23,13 @@ import com.example.myapplication.R;
 import com.example.myapplication.SettingsActivity;
 import com.example.myapplication.adapters.ContactAdapter;
 import com.example.myapplication.api.ChatAPI;
+import com.example.myapplication.api.MessageAPI;
 import com.example.myapplication.entities.ChatByIdResponse;
+import com.example.myapplication.entities.ChatMessageResponse;
 import com.example.myapplication.entities.Contact;
 import com.example.myapplication.entities.ContactPostResponse;
 import com.example.myapplication.entities.ContactResponse;
+import com.example.myapplication.entities.MessagesResponse;
 import com.example.myapplication.entities.UserResponse;
 import com.example.myapplication.messages.MessageDB;
 import com.example.myapplication.messages.MessageDao;
@@ -35,7 +38,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ContactListActivity extends AppCompatActivity implements ChatAPI.ChatCallback {
+public class ContactListActivity extends AppCompatActivity implements ChatAPI.ChatCallback, MessageAPI.ChatCallback {
 
     private String username;
     private ImageButton btnLogout;
@@ -46,18 +49,17 @@ public class ContactListActivity extends AppCompatActivity implements ChatAPI.Ch
     private String authToken;
     private List<Contact> conversationList;
     private UserResponse user;
-    private MessageDao messageDao;
     private String profilePicUrl;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_contact_list);
         user = new UserResponse("", "", "");
+        setContentView(R.layout.activity_contact_list);
         username = getIntent().getStringExtra("USERNAME_EXTRA");
 
         // Get an instance of the ContactDao for interacting with the database
         contactDao = ContactDB.getDatabase(getApplicationContext()).contactDao();
-        messageDao = MessageDB.getDatabase(getApplicationContext()).messageDao();
 
         // Initialize views
         btnLogout = findViewById(R.id.btnLogout);
@@ -79,7 +81,6 @@ public class ContactListActivity extends AppCompatActivity implements ChatAPI.Ch
         // Set item click listener for the ListView
         lvConversationList.setOnItemClickListener((parent, view, position, id) -> {
             // Handle item click event
-            messageDao.nukeTable();
             Contact selectedContact = adapter.getItem(position);
             String selectedUsername = selectedContact.getUsername();
             String selectedId = selectedContact.getId();
@@ -105,7 +106,7 @@ public class ContactListActivity extends AppCompatActivity implements ChatAPI.Ch
             Intent intent = new Intent(ContactListActivity.this, MainActivity.class);
             startActivity(intent);
         });
-        String ContactListActivityFlag="CONTACTLISTACTIVITY";
+        String ContactListActivityFlag = "CONTACTLISTACTIVITY";
         btnSettings.setOnClickListener(view -> {
             // Handle settings button click
             Intent intent = new Intent(ContactListActivity.this, SettingsActivity.class);
@@ -131,6 +132,23 @@ public class ContactListActivity extends AppCompatActivity implements ChatAPI.Ch
         fetchContactsFromServer();
         // Fetch contacts and user details from the server in the background
         fetchContactsAndUserDetailsFromServer();
+    }
+
+    @Override
+    public void onSuccessGetMessage(List<MessagesResponse> messages) {
+        // Handle the successful response here, e.g., update the UI with the messages
+    }
+
+    @Override
+    public void onSuccessPostMessage(ChatMessageResponse chatMessageResponse) {
+    }
+
+    @Override
+    public void onFailurePostMessage(Throwable t) {
+    }
+
+    @Override
+    public void onFailureGetMessage(Throwable t) {
     }
 
     private void fetchContactsAndUserDetailsFromServer() {
@@ -204,14 +222,17 @@ public class ContactListActivity extends AppCompatActivity implements ChatAPI.Ch
         // Handle failure case
         Toast.makeText(ContactListActivity.this, "Failed to fetch contacts", Toast.LENGTH_SHORT).show();
     }
+
     @Override
-    public void onPostChatSuccess(ContactPostResponse contactPostResponse){
+    public void onPostChatSuccess(ContactPostResponse contactPostResponse) {
 
     }
+
     @Override
-    public void onGetChatSuccess(ChatByIdResponse chatByIdResponse){
+    public void onGetChatSuccess(ChatByIdResponse chatByIdResponse) {
 
     }
+
     // Helper method to map ContactResponse objects to Contact objects
     private List<Contact> mapContactResponses(List<ContactResponse> contactResponses) {
         List<Contact> contactList = new ArrayList<>();
@@ -239,7 +260,7 @@ public class ContactListActivity extends AppCompatActivity implements ChatAPI.Ch
             authToken = updatedAuthToken;
         }
         if (updatedDisplayName != null) {
-            user.setDisplayName(updatedDisplayName);;
+            user.setDisplayName(updatedDisplayName);
         }
         TextView tvCurrentUser = findViewById(R.id.tvCurrentUser);
         tvCurrentUser.setText(getIntent().getStringExtra("DISPLAY_NAME_EXTRA"));
@@ -249,11 +270,7 @@ public class ContactListActivity extends AppCompatActivity implements ChatAPI.Ch
                     .load(profilePicUrl)
                     .into(tvUserAvatar);
         }
-        //tvUserAvatar.setImageURI(getIntent().getStringExtra("PROFILE_PIC_EXTRA"));
-        //Picasso.get().load(profilePicUrl).into(tvUserAvatar);
         conversationList.clear();
-      //  List<Contact> list = contactDao.index();
-       // int a = 5;
         conversationList.clear();
         conversationList.addAll(contactDao.index());
         adapter.notifyDataSetChanged();

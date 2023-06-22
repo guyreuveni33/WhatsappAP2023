@@ -16,24 +16,24 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.myapplication.adapters.MessageAdapter;
 import com.example.myapplication.api.ChatAPI;
 import com.example.myapplication.api.MessageAPI;
-import com.example.myapplication.contacts.AddContactActivity;
 import com.example.myapplication.contacts.ContactListActivity;
 import com.example.myapplication.entities.ChatByIdResponse;
 import com.example.myapplication.entities.ChatMessageResponse;
-import com.example.myapplication.entities.Contact;
 import com.example.myapplication.entities.ContactPostResponse;
 import com.example.myapplication.entities.ContactResponse;
 import com.example.myapplication.entities.CurrentUserChat;
 import com.example.myapplication.entities.Message;
+import com.example.myapplication.entities.MessagesResponse;
 import com.example.myapplication.entities.UserResponse;
 import com.example.myapplication.messages.MessageDB;
 import com.example.myapplication.messages.MessageDao;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
-public class ChatActivity extends AppCompatActivity implements ChatAPI.ChatCallback,MessageAPI.ChatCallback{
+public class ChatActivity extends AppCompatActivity implements ChatAPI.ChatCallback, MessageAPI.ChatCallback {
     private MessageDB messageDB;
     private Message message;
     MessageDao messageDao;
@@ -46,7 +46,7 @@ public class ChatActivity extends AppCompatActivity implements ChatAPI.ChatCallb
     private ImageButton btnGoBack;
     private MessageAdapter messageAdapter;
     private String currentUserDisplayName;
-    private String currentusername ;
+    private String currentusername;
     private MessageAPI messageAPI;
     private String profilePicUrl;
     private String selectedContactProfilePic;
@@ -55,6 +55,7 @@ public class ChatActivity extends AppCompatActivity implements ChatAPI.ChatCallb
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        messageList = new ArrayList<>();
         setContentView(R.layout.activity_chat);
         currentUserDisplayName = getIntent().getStringExtra("DISPLAY_NAME_EXTRA");
         currentusername = getIntent().getStringExtra("USERNAME_EXTRA");
@@ -64,8 +65,10 @@ public class ChatActivity extends AppCompatActivity implements ChatAPI.ChatCallb
         String userId = getIntent().getStringExtra("SELECTED_ID");
         String selectedDisplayName = getIntent().getStringExtra("SELECTED_DISPLAY_NAME");
         token = getIntent().getStringExtra("SELECTED_TOKEN");
-
+        messageDB = MessageDB.getDatabase(getApplicationContext());
+       // messageDao = messageDB.messageDao();
         messageAPI = new MessageAPI(token);
+       // messageList = messageDao.getAll();
 
         TextView tvCurrentUser = findViewById(R.id.tvCurrentUser);
         tvCurrentUser.setText(selectedDisplayName);
@@ -75,41 +78,38 @@ public class ChatActivity extends AppCompatActivity implements ChatAPI.ChatCallb
                     .load(selectedContactProfilePic)
                     .into(tvUserAvatar);
         }
-
-        messageDB = MessageDB.getDatabase(getApplicationContext());
-        messageDao = messageDB.messageDao();
-
+        fetchMessagesFromServer(userId);
         listViewMessages = findViewById(R.id.listMessages);
         etMessageInput = findViewById(R.id.etMessageInput);
         btnSend = findViewById(R.id.btnSend);
         btnGoBack = findViewById(R.id.btnGoBack);
 
-        messageList = new ArrayList<>();
-        messageAdapter = new MessageAdapter(getApplicationContext(), messageList);
-        listViewMessages.setAdapter(messageAdapter);
+        //fetchChatFromServer(userId);
 
         // Fetch existing messages from the database
-        messageList.addAll(messageDao.index());
+        messageAdapter = new MessageAdapter(getApplicationContext(), messageList);
+        listViewMessages.setAdapter(messageAdapter);
         messageAdapter.notifyDataSetChanged();
-        listViewMessages.smoothScrollToPosition(messageAdapter.getCount() - 1); // Scroll to the bottom
+        listViewMessages.setSelection(messageAdapter.getCount() - 1); // Scroll to the bottom
 
         btnSend.setOnClickListener(v -> {
             String messageContent = etMessageInput.getText().toString().trim();
             if (!messageContent.isEmpty()) {
                 // Create a new message
                 Message newMessage = new Message(messageContent, true);
-                messageAPI.postMessage(this, userId, messageContent);
-                // Insert the new message into the database
-                messageDao.insert(newMessage);
-
+                new Thread(() -> {
+                    messageAPI.postMessage(this, userId, messageContent);
+                }).start();                // Insert the new message into the database
                 // Add the new message to the list and notify the adapter
                 messageList.add(newMessage);
                 messageAdapter.notifyDataSetChanged();
-                listViewMessages.smoothScrollToPosition(messageAdapter.getCount() - 1); // Scroll to the bottom
+                listViewMessages.setSelection(messageAdapter.getCount() - 1); // Scroll to the bottom
                 etMessageInput.getText().clear(); // Clear the input field
                 // Call the postMessage() method in the MessageAPI class to send the message to the server
 
-                fetchChatFromServer(userId);
+                //fetchChatFromServer(userId);
+                fetchMessagesFromServer(userId);
+
             }
         });
         btnGoBack.setOnClickListener(view -> {
@@ -121,72 +121,56 @@ public class ChatActivity extends AppCompatActivity implements ChatAPI.ChatCallb
             intent.putExtra("PROFILE_PIC_EXTRA", profilePicUrl);
             startActivity(intent);
         });
-        fetchChatFromServer(userId);
+        //fetchChatFromServer(userId);
+        fetchMessagesFromServer(userId);
     }
 
+    private void fetchMessagesFromServer(String userId) {
+        MessageAPI messageAPI1 = new MessageAPI(token);
+        new Thread(() -> messageAPI1.getMessages(this, userId)).start();
+    }
 
     private void fetchChatFromServer(String userId) {
         ChatAPI chatAPI = new ChatAPI(token);
         chatAPI.getChat(this, userId);
     }
 
-    @Override
-    public void onGetChatSuccess(ChatByIdResponse chatByIdResponse) {
-        // Extract the necessary data from chatByIdResponse and update your UI accordingly
-        CurrentUserChat[] users = chatByIdResponse.getUsers();
-        ChatMessageResponse[] messages = chatByIdResponse.getMessages();
-        for (ChatMessageResponse messageResponse : messages) {
-            System.out.println(messageResponse.getContent());
-            System.out.println("allllllllllllllllllllllllllllllllllllllaafadvadvavav");
-        }
-// Update your user interface with the retrieved data
-        updateUI(users, messages);
+    public void onSuccessGetMessage(List<MessagesResponse> messages) {
+        List<Message> messageList = mapMessagesResponses(messages);
+
+        updateUI(messageList);
     }
 
-    private void updateUI(CurrentUserChat[] users, ChatMessageResponse[] messages) {
-        // Update your UI with the retrieved data
-
-        // Convert ChatMessageResponse[] array to List<Message>
-        List<Message> messageList = mapChatMessageResponses(messages);
-
-        // Update the message list
-        this.messageList.clear();
-        this.messageList.addAll(messageList);
-        System.out.println(this.messageList);
-        messageAdapter.notifyDataSetChanged();
-        listViewMessages.smoothScrollToPosition(messageAdapter.getCount() - 1);
-        addMessagesToDatabase(messageList);
-    }
-
-    private void addMessagesToDatabase(List<Message> messageList) {
-        MessageDB messageDB = MessageDB.getDatabase(getApplicationContext());
-        MessageDao messageDao = messageDB.messageDao();
-
-        // Clear the existing messages in the database
-        messageDao.nukeTable();
-
-        // Insert the new messages into the database in reverse order
-        messageDao.insert(messageList.toArray(new Message[0]));
-    }
-
-    private List<Message> mapChatMessageResponses(ChatMessageResponse[] messages) {
+    private List<Message> mapMessagesResponses(List<MessagesResponse> messages) {
         List<Message> mappedMessages = new ArrayList<>();
-        for (ChatMessageResponse messageResponse : messages) {
-            boolean isSent;
-            // Determine the value of isSent based on the selectedUsername
-            if (messageResponse.getSender().getUsername().equals(selectedUsername)) {
-                isSent = false;
-            }
-            else {
-                isSent = true;
-            }
-
-            // Assuming Message has a constructor that takes the necessary parameters
+        //messageDao.nukeTable();
+        for (MessagesResponse messageResponse : messages) {
+            boolean isSent = !messageResponse.getSender().getUsername().equals(selectedUsername);
             Message message = new Message(messageResponse.getContent(), isSent);
             message.setTimestamp(messageResponse.getCreated());
             mappedMessages.add(message);
+        //    messageDao.insert(message);
         }
+        Collections.reverse(mappedMessages);
         return mappedMessages;
+    }
+
+    private void updateUI(List<Message> messages) {
+        messageList.clear();
+        messageList.addAll(messages);
+        messageAdapter.notifyDataSetChanged();
+        listViewMessages.setSelection(messageAdapter.getCount() - 1);
+        //addMessagesToRoomDatabase(messages);
+    }
+
+    @Override
+    public void onGetChatSuccess(ChatByIdResponse chatByIdResponse) {
+    }
+
+
+    private void addMessagesToRoomDatabase(List<Message> messageList) {
+        messageDao.insert(message);
+
     }
 
     @Override
@@ -195,12 +179,13 @@ public class ChatActivity extends AppCompatActivity implements ChatAPI.ChatCallb
     }
 
     @Override
-    public void onFailurePostMessage(Throwable t) {
-        // Handle the failure here, e.g., display an error message
+    public void onFailureGetMessage(Throwable t) {
+
     }
 
-
-
+    @Override
+    public void onFailurePostMessage(Throwable t) {
+    }
 
     @Override
     public void onSuccess(List<ContactResponse> chats) {
@@ -214,12 +199,15 @@ public class ChatActivity extends AppCompatActivity implements ChatAPI.ChatCallb
 
     @Override
     public void onPostChatSuccess(ContactPostResponse contactPostResponse) {
-
     }
 
     @Override
     public void onFailure(Throwable t) {
 
+    }
+    private void initializeMessageDB() {
+        messageDB = MessageDB.getDatabase(getApplicationContext());
+        messageDao = messageDB.messageDao();
     }
 }
 
