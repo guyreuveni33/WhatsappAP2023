@@ -6,12 +6,13 @@ import com.example.myapplication.entities.CurrentUserChat;
 import com.example.myapplication.entities.LastMessage;
 import com.example.myapplication.entities.LastMessage;
 import com.example.myapplication.entities.CurrentUserChat;
+import com.example.myapplication.entities.Sender;
 import com.google.gson.Gson;
 
 //TODO CHANGE NAMES!!!!!!!!!!!!!!!!!!!!!!!!
 public class Converter {
     @TypeConverter
-    public static String fromContactUserDetails(CurrentUserChat userDetails) {
+    public static String fromContactUserDetails(Sender userDetails) {
         // Convert the ContactUserDetails object to a string representation (e.g., JSON)
         // and return it.
         Gson gson = new Gson();

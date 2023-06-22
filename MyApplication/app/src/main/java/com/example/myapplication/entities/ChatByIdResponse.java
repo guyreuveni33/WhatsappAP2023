@@ -1,11 +1,14 @@
+
 package com.example.myapplication.entities;
+
+import java.util.List;
 
 public class ChatByIdResponse {
     private int id;
-    private CurrentUserChat[] users;
-    private ChatMessageResponse[] messages;
+    private List<CurrentUserChat> users;
+    private List<ChatMessageResponse> messages;
 
-    public ChatByIdResponse(int id, CurrentUserChat[] users, ChatMessageResponse[] messages) {
+    public ChatByIdResponse(int id, List<CurrentUserChat> users, List<ChatMessageResponse> messages) {
         this.id = id;
         this.users = users;
         this.messages = messages;
@@ -15,11 +18,11 @@ public class ChatByIdResponse {
         this.id = id;
     }
 
-    public void setUsers(CurrentUserChat[] users) {
+    public void setUsers(List<CurrentUserChat> users) {
         this.users = users;
     }
 
-    public void setMessages(ChatMessageResponse[] messages) {
+    public void setMessages(List<ChatMessageResponse> messages) {
         this.messages = messages;
     }
 
@@ -27,11 +30,11 @@ public class ChatByIdResponse {
         return id;
     }
 
-    public CurrentUserChat[] getUsers() {
+    public List<CurrentUserChat> getUsers() {
         return users;
     }
 
-    public ChatMessageResponse[] getMessages() {
+    public List<ChatMessageResponse> getMessages() {
         return messages;
     }
 }

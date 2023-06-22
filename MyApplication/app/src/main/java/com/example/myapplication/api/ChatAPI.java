@@ -103,7 +103,6 @@ public class ChatAPI {
                     callback.onFailure(new Exception("Failed to fetch user details"));
                 }
             }
-
             @Override
             public void onFailure(Call<UserResponse> call, Throwable t) {
                 callback.onFailure(t);
@@ -113,9 +112,11 @@ public class ChatAPI {
 
     public void getChat(ChatCallback callback,String username) {
         Call<ChatByIdResponse> call = webServiceAPI.getChat("Bearer " + token, username); // Replace "username" with the actual username value
+                    System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaabaaaaaaaaaaaaaaaaaaaaaaaa");
         call.enqueue(new Callback<ChatByIdResponse>() {
             @Override
             public void onResponse(Call<ChatByIdResponse> call, Response<ChatByIdResponse> response) {
+                    System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
                 if (response.isSuccessful()) {
                     System.out.println("Successful fetch");
                     ChatByIdResponse chatByIdResponse = response.body();
@@ -128,6 +129,8 @@ public class ChatAPI {
             @Override
             public void onFailure(Call<ChatByIdResponse> call, Throwable t) {
                 callback.onFailure(t);
+                // Print the failure exception for debugging
+                System.out.println("Get Chat Failure: " + t.getMessage());
             }
         });
     }
