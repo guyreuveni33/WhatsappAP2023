@@ -11,6 +11,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
@@ -33,6 +36,7 @@ import com.example.myapplication.entities.MessagesResponse;
 import com.example.myapplication.entities.UserResponse;
 import com.example.myapplication.messages.MessageDB;
 import com.example.myapplication.messages.MessageDao;
+import com.example.myapplication.viewModel.ContactViewModel;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -50,6 +54,8 @@ public class ContactListActivity extends AppCompatActivity implements ChatAPI.Ch
     private List<Contact> conversationList;
     private UserResponse user;
     private String profilePicUrl;
+    private ContactViewModel contactViewModel;
+    private List<Contact> contactList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +63,6 @@ public class ContactListActivity extends AppCompatActivity implements ChatAPI.Ch
         user = new UserResponse("", "", "");
         setContentView(R.layout.activity_contact_list);
         username = getIntent().getStringExtra("USERNAME_EXTRA");
-
         // Get an instance of the ContactDao for interacting with the database
         contactDao = ContactDB.getDatabase(getApplicationContext()).contactDao();
 
@@ -77,7 +82,11 @@ public class ContactListActivity extends AppCompatActivity implements ChatAPI.Ch
 
         // Set the adapter on the ListView
         lvConversationList.setAdapter(adapter);
-
+        contactViewModel = new ViewModelProvider(this).get(ContactViewModel.class);
+        contactViewModel.getContact().observe(this, contact -> {
+            System.out.println("HELEKFEJFEJFOEOFNEOFNKEFNLKEFNLKENFLKEFNLK");
+            adapter.setContacts(contactList);
+        });
         // Set item click listener for the ListView
         lvConversationList.setOnItemClickListener((parent, view, position, id) -> {
             // Handle item click event
@@ -98,7 +107,6 @@ public class ContactListActivity extends AppCompatActivity implements ChatAPI.Ch
             intent.putExtra("PROFILE_PIC_EXTRA", profilePicUrl);
             startActivity(intent);
         });
-
         // Set click listeners for the buttons
         btnLogout.setOnClickListener(view -> {
             //contactDao.nukeTable();
@@ -202,7 +210,7 @@ public class ContactListActivity extends AppCompatActivity implements ChatAPI.Ch
     @Override
     public void onSuccess(List<ContactResponse> contacts) {
         // Update the conversation list with the retrieved contacts
-        List<Contact> contactList = mapContactResponses(contacts);
+        contactList = mapContactResponses(contacts);
         // Update the local Room database with the contacts from the server
         updateContactsInDatabase(contactList);
 
@@ -235,7 +243,7 @@ public class ContactListActivity extends AppCompatActivity implements ChatAPI.Ch
 
     // Helper method to map ContactResponse objects to Contact objects
     private List<Contact> mapContactResponses(List<ContactResponse> contactResponses) {
-        List<Contact> contactList = new ArrayList<>();
+        contactList = new ArrayList<>();
         for (ContactResponse response : contactResponses) {
             String username = response.getUser().getUsername();
             String name = response.getUser().getDisplayName();
