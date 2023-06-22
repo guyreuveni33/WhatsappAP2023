@@ -26,5 +26,8 @@ public abstract class MessageDB extends RoomDatabase {
         }
         return instance;
     }
-}
+    public static synchronized MessageDB getDatabase() {
+        return instance;
+    }
 
+}

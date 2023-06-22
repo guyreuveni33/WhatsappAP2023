@@ -118,7 +118,7 @@ public class ChatActivity extends AppCompatActivity implements ChatAPI.ChatCallb
                 // Call the postMessage() method in the MessageAPI class to send the message to the server
 
                 //fetchChatFromServer(userId);
-                fetchMessagesFromServer(userId);
+                //fetchMessagesFromServer(userId);
 
             }
         });
@@ -184,20 +184,6 @@ public class ChatActivity extends AppCompatActivity implements ChatAPI.ChatCallb
         //  updateUI(users, messages);
     }
 
-    private void updateUI(List<MessagesResponse> messages) {
-        // Update your UI with the retrieved data
-
-        // Convert ChatMessageResponse[] array to List<Message>
-        // List<Message> messageList = mapChatMessageResponses(messages);
-
-        // Update the message list
-        this.messageList.clear();
-        this.messageList.addAll(messageDao.index());
-        System.out.println(this.messageList);
-        messageAdapter.notifyDataSetChanged();
-        listViewMessages.setSelection(messageAdapter.getCount() - 1);
-        addMessagesToDatabase(messageList);
-    }
 
 
     private List<Message> mapChatMessageResponses(List<ChatMessageResponse> messages) {
@@ -223,7 +209,7 @@ public class ChatActivity extends AppCompatActivity implements ChatAPI.ChatCallb
         MessageDao messageDao = messageDB.messageDao();
 
         // Clear the existing messages in the database
-        messageDao.nukeTable();
+        //messageDao.nukeTable();
 
         // Insert the new messages into the database in reverse order
         messageDao.insert(messageList.toArray(new Message[0]));

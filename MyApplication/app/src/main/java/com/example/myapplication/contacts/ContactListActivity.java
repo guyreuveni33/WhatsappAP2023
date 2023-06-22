@@ -116,6 +116,17 @@ public class ContactListActivity extends AppCompatActivity implements ChatAPI.Ch
         });
         String ContactListActivityFlag = "CONTACTLISTACTIVITY";
         btnSettings.setOnClickListener(view -> {
+            List<Contact> contactList1 = contactDao.getAll();
+            int counter=0;
+            for (Contact contact : contactList1) {
+                // Print the values of each contact
+                System.out.println("DAO"+counter+contact.getName());
+                System.out.println("DAO"+counter+contact.getUsername());
+                System.out.println("DAO"+counter+contact.getLastDate());
+                System.out.println("DAO"+counter+contact.getId());
+                System.out.println("DAO"+counter+contact.getLastDate());
+                counter++;
+            }
             // Handle settings button click
             Intent intent = new Intent(ContactListActivity.this, SettingsActivity.class);
             intent.putExtra("SETTING_EXTRA", ContactListActivityFlag);
@@ -125,7 +136,6 @@ public class ContactListActivity extends AppCompatActivity implements ChatAPI.Ch
             intent.putExtra("PROFILE_PIC_EXTRA", profilePicUrl);
             startActivity(intent);
         });
-
         btnAdd.setOnClickListener(view -> {
             // Handle add button click
             Intent intent = new Intent(ContactListActivity.this, AddContactActivity.class);
@@ -137,7 +147,7 @@ public class ContactListActivity extends AppCompatActivity implements ChatAPI.Ch
         });
 
         // Fetch contacts from the server in the background
-        fetchContactsFromServer();
+       // fetchContactsFromServer();
         // Fetch contacts and user details from the server in the background
         fetchContactsAndUserDetailsFromServer();
     }
@@ -219,7 +229,7 @@ public class ContactListActivity extends AppCompatActivity implements ChatAPI.Ch
     }
 
     private void updateContactsInDatabase(List<Contact> contactList) {
-        // Clear the existing contacts in the database
+        // Clear the existing contacts in the
         contactDao.nukeTable();
         // Insert the new contacts into the database
         contactDao.insert(contactList.toArray(new Contact[0]));
@@ -228,7 +238,6 @@ public class ContactListActivity extends AppCompatActivity implements ChatAPI.Ch
     @Override
     public void onFailure(Throwable t) {
         // Handle failure case
-        Toast.makeText(ContactListActivity.this, "Failed to fetch contacts", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -248,7 +257,7 @@ public class ContactListActivity extends AppCompatActivity implements ChatAPI.Ch
             String username = response.getUser().getUsername();
             String name = response.getUser().getDisplayName();
             String profilePic = response.getUser().getProfilePic();
-            String lastMessage = response.getLastMessage() != null ? response.getLastMessage().getContent() : null;
+            String lastMessage = response.getLastMessage().getCreated() != null ? response.getLastMessage().getContent() : null;
             String lastDate = response.getLastMessage() != null ? response.getLastMessage().getCreated() : null;
             Contact contact = new Contact(response.getId(), username, name, lastMessage, lastDate, profilePic);
             contactList.add(contact);

@@ -25,8 +25,8 @@ public class Contact {
         this.lastMessage = lastMessage;
         this.lastDate = lastDate;
         this.profilePic = profilePic;
-        this.lastDate = formatDate(lastDate);
     }
+
 
 
     public String getId() {

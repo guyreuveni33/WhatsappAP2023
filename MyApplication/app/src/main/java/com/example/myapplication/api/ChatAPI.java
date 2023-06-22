@@ -3,6 +3,7 @@ package com.example.myapplication.api;
 
 import com.example.myapplication.ServerAddressSingleton;
 import com.example.myapplication.entities.ChatByIdResponse;
+import com.example.myapplication.entities.Contact;
 import com.example.myapplication.entities.ContactPostResponse;
 import com.example.myapplication.entities.ContactResponse;
 import com.example.myapplication.entities.UserResponse;
@@ -51,6 +52,14 @@ public class ChatAPI {
             public void onResponse(Call<List<ContactResponse>> call, Response<List<ContactResponse>> response) {
                 if (response.isSuccessful()) {
                     List<ContactResponse> contacts = response.body();
+                    int counter=0;
+                    for (ContactResponse contact : contacts) {
+                        // Print the values of each contact
+                        System.out.println("Response"+counter+contact.getUser());
+                        System.out.println("Response"+counter+contact.getLastMessage().getCreated());
+
+                        counter++;
+                    }
                     callback.onSuccess(contacts);
                 } else {
                     callback.onFailure(new Exception("Failed to fetch contacts"));
@@ -112,11 +121,11 @@ public class ChatAPI {
 
     public void getChat(ChatCallback callback,String username) {
         Call<ChatByIdResponse> call = webServiceAPI.getChat("Bearer " + token, username); // Replace "username" with the actual username value
-                    System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaabaaaaaaaaaaaaaaaaaaaaaaaa");
+        System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaabaaaaaaaaaaaaaaaaaaaaaaaa");
         call.enqueue(new Callback<ChatByIdResponse>() {
             @Override
             public void onResponse(Call<ChatByIdResponse> call, Response<ChatByIdResponse> response) {
-                    System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+                System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
                 if (response.isSuccessful()) {
                     System.out.println("Successful fetch");
                     ChatByIdResponse chatByIdResponse = response.body();
