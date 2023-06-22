@@ -25,7 +25,7 @@ public class MessageAPI {
 
     public interface ChatCallback {
         void onSuccessPostMessage(ChatMessageResponse chatMessageResponse);
-        void onSuccessGetMessage(List<MessagesResponse> messages);
+        void onSuccessGetMessage(List<MessagesResponse> messages,String chatid);
         void onFailurePostMessage(Throwable t);
         void onFailureGetMessage(Throwable t);
     }
@@ -85,7 +85,7 @@ public class MessageAPI {
 
                     List<MessagesResponse> messages = response.body();
 
-                    callback.onSuccessGetMessage(messages);
+                    callback.onSuccessGetMessage(messages, id);
                 } else {
                     // Handle failure
                     int statusCode = response.code();

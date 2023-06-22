@@ -14,6 +14,8 @@ public interface MessageDao {
     List<Message> index();
     @Query("SELECT * FROM message WHERE id = :id")
     Message get(int id);
+    @Query("SELECT * FROM message WHERE chatId = :chatId")
+    List<Message> getChatMessages(String chatId);
 
     @Query("DELETE FROM message")
     public void nukeTable();

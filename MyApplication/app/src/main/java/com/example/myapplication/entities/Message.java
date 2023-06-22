@@ -15,6 +15,7 @@ public class Message {
     private String content;
     private boolean isSent;
     private String timestamp;
+    private String chatId;
 
     public Message(String content, boolean isSent) {
         this.content = content;
@@ -22,8 +23,16 @@ public class Message {
         this.timestamp = generateTimestamp();
     }
 
+    public void setChatId(String id) {
+        this.chatId = id;
+    }
+
     public int getId() {
         return id;
+    }
+
+    public String getChatId() {
+        return chatId;
     }
 
     public void setId(int id) {
@@ -60,6 +69,7 @@ public class Message {
             e.printStackTrace();
         }
     }
+
     private String generateTimestamp() {
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.getDefault());
         return sdf.format(new Date());

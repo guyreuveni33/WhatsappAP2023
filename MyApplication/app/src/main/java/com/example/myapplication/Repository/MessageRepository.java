@@ -76,7 +76,7 @@ public class MessageRepository implements MessageAPI.ChatCallback{
     }
 
     @Override
-    public void onSuccessGetMessage(List<MessagesResponse> messages) {
+    public void onSuccessGetMessage(List<MessagesResponse> messages,String chatId) {
 
     }
 

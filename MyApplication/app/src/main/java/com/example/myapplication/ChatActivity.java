@@ -39,10 +39,11 @@ import java.util.List;
 public class ChatActivity extends AppCompatActivity implements ChatAPI.ChatCallback, MessageAPI.ChatCallback {
     private MessageDB messageDB;
     private Message message;
-    MessageDao messageDao;
+    private MessageDao messageDao;
     private String token;
     private String selectedUsername;
     private List<Message> messageList;
+    private List<Message> tempList;
     private ListView listViewMessages;
     private EditText etMessageInput;
     private ImageButton btnSend;
@@ -80,18 +81,32 @@ public class ChatActivity extends AppCompatActivity implements ChatAPI.ChatCallb
         }
         messageDB = MessageDB.getDatabase(getApplicationContext());
         messageDao = messageDB.messageDao();
-        System.out.println(messageDao.index());
         listViewMessages = findViewById(R.id.listMessages);
         etMessageInput = findViewById(R.id.etMessageInput);
         btnSend = findViewById(R.id.btnSend);
         btnGoBack = findViewById(R.id.btnGoBack);
-        fetchMessagesFromServer(userId);
-
-        //fetchChatFromServer(userId);
         messageList = new ArrayList<>();
+        tempList = new ArrayList<>();
+        fetchMessagesFromServer(userId);
+//        tempList = messageDao.index();
+//        for (Message messageResponse : tempList) {
+//            System.out.println("A NEW:::::::::::::::::::;" + messageResponse.getChatId());
+//        }
+//        //
+//        // for (Message t:tempList)
+//        //  t.setChatId();
+        //tempList.addAll(messageDao.getChatMessages(userId));
+//        System.out.println("A NEW:::::::::::::::::::;" + messageDao.getChatMessages(userId).get(0));
+//
+ //   updateUI2(tempList);
+//
+//        //fetchChatFromServer(userId);
 
         // Fetch existing messages from the database
         messageList.addAll(messageDao.index());
+        for (Message messageResponse : messageList) {
+            System.out.println("A NEW:::::::::::::::::::;" + messageResponse.getChatId());
+        }
         messageAdapter = new MessageAdapter(getApplicationContext(), messageList);
         listViewMessages.setAdapter(messageAdapter);
         messageAdapter.notifyDataSetChanged();
@@ -109,17 +124,12 @@ public class ChatActivity extends AppCompatActivity implements ChatAPI.ChatCallb
                 messageAPI.postMessage(this, userId, messageContent);
                 // Insert the new message into the database
                 messageDao.insert(newMessage);
-
                 // Add the new message to the list and notify the adapter
                 messageList.add(newMessage);
                 messageAdapter.notifyDataSetChanged();
                 listViewMessages.setSelection(messageAdapter.getCount() - 1); // Scroll to the bottom
                 etMessageInput.getText().clear(); // Clear the input field
                 // Call the postMessage() method in the MessageAPI class to send the message to the server
-
-                //fetchChatFromServer(userId);
-                //fetchMessagesFromServer(userId);
-
             }
         });
         btnGoBack.setOnClickListener(view -> {
@@ -145,19 +155,21 @@ public class ChatActivity extends AppCompatActivity implements ChatAPI.ChatCallb
         chatAPI.getChat(this, userId);
     }
 
-    public void onSuccessGetMessage(List<MessagesResponse> messages) {
-        List<Message> messageList = mapMessagesResponses(messages);
+    public void onSuccessGetMessage(List<MessagesResponse> messages, String chatId) {
+        List<Message> messageList = mapMessagesResponses(messages, chatId);
         updateUI2(messageList);
     }
 
-    private List<Message> mapMessagesResponses(List<MessagesResponse> messages) {
+    private List<Message> mapMessagesResponses(List<MessagesResponse> messages, String chatId) {
         List<Message> mappedMessages = new ArrayList<>();
         for (MessagesResponse messageResponse : messages) {
             boolean isSent = !messageResponse.getSender().getUsername().equals(selectedUsername);
             Message message = new Message(messageResponse.getContent(), isSent);
+            message.setChatId(chatId);
             message.setTimestamp(messageResponse.getCreated());
             mappedMessages.add(message);
         }
+
         Collections.reverse(mappedMessages);
         return mappedMessages;
     }
@@ -176,14 +188,7 @@ public class ChatActivity extends AppCompatActivity implements ChatAPI.ChatCallb
         // Extract the necessary data from chatByIdResponse and update your UI accordingly
         List<CurrentUserChat> users = chatByIdResponse.getUsers();
         List<ChatMessageResponse> messages = chatByIdResponse.getMessages();
-//        for (ChatMessageResponse messageResponse : messages) {
-//            System.out.println(messageResponse.getContent());
-//            System.out.println("allllllllllllllllllllllllllllllllllllllaafadvadvavav");
-//        }
-// Update your user interface with the retrieved data
-        //  updateUI(users, messages);
     }
-
 
 
     private List<Message> mapChatMessageResponses(List<ChatMessageResponse> messages) {
@@ -208,8 +213,9 @@ public class ChatActivity extends AppCompatActivity implements ChatAPI.ChatCallb
         MessageDB messageDB = MessageDB.getDatabase(getApplicationContext());
         MessageDao messageDao = messageDB.messageDao();
 
+
         // Clear the existing messages in the database
-        //messageDao.nukeTable();
+        messageDao.nukeTable();
 
         // Insert the new messages into the database in reverse order
         messageDao.insert(messageList.toArray(new Message[0]));
