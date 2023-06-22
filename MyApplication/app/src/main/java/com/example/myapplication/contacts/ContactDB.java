@@ -26,4 +26,7 @@ public abstract class ContactDB extends RoomDatabase {
         }
         return instance;
     }
+    public static synchronized ContactDB getDatabase() {
+        return instance;
+    }
 }

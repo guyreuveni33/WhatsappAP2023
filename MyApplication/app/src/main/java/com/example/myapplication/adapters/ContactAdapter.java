@@ -49,7 +49,9 @@ public class ContactAdapter extends ArrayAdapter<Contact> {
 
     public void setContacts(List<Contact> contactList) {
         clear();
-        addAll(contactList);
+        if (contactList != null) {
+            addAll(contactList);
+        }
         notifyDataSetChanged();
     }
 }

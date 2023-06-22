@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.example.myapplication.R;
+import com.example.myapplication.entities.Contact;
 import com.example.myapplication.entities.Message;
 
 import org.w3c.dom.Text;
@@ -64,5 +65,12 @@ public class MessageAdapter extends ArrayAdapter<Message> {
             tvMessage.setText(messageList.get(position).getContent());
 
         return convertView;
+    }
+    public void setMessage(List<Message> messages) {
+        clear();
+        if (messages != null) {
+            addAll(messages);
+        }
+        notifyDataSetChanged();
     }
 }
