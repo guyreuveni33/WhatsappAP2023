@@ -75,7 +75,9 @@ public class MainActivity extends AppCompatActivity {
                 // Get the username entered by the user
                 String enteredUsername = username.getText().toString();
                 messageDao.nukeTable();
-
+//                 for get all chats
+//                        for each chat take chat id
+//                            get all messages from chat
                 // Proceed to the next activity or perform any other action
                 Intent intent = new Intent(MainActivity.this, ContactListActivity.class);
                 intent.putExtra("TOKEN_EXTRA", authToken);

@@ -1,5 +1,6 @@
 package com.example.myapplication.entities;
 
+import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -10,14 +11,15 @@ import java.util.Locale;
 
 @Entity
 public class Message {
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey @NonNull
     private int id;
     private String content;
     private boolean isSent;
     private String timestamp;
     private String chatId;
 
-    public Message(String content, boolean isSent) {
+    public Message(int id, String content, boolean isSent) {
+        this.id = id;
         this.content = content;
         this.isSent = isSent;
         this.timestamp = generateTimestamp();

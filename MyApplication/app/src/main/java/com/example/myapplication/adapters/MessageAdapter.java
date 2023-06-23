@@ -43,21 +43,22 @@ public class MessageAdapter extends ArrayAdapter<Message> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         TextView tvMessage = null, tvTimestamp = null;
-            if (messageList.get(position).isSent()) {
-                convertView = inflater.inflate(R.layout.item_message_sent, parent,
-                        false);
-                tvMessage = convertView.findViewById(R.id.tvMessageSent);
-                tvTimestamp = convertView.findViewById(R.id.tvTimestampSent);
-            } else {
-                convertView = inflater.inflate(R.layout.item_message_received, parent,
-                        false);
-                tvMessage = convertView.findViewById(R.id.tvMessageReceived);
-                tvTimestamp = convertView.findViewById(R.id.tvTimestampReceived);
-            }
-
-
         if (messageList.get(position) == null)
             return null;
+
+        if (messageList.get(position).isSent()) {
+            convertView = inflater.inflate(R.layout.item_message_sent, parent,
+                    false);
+            tvMessage = convertView.findViewById(R.id.tvMessageSent);
+            tvTimestamp = convertView.findViewById(R.id.tvTimestampSent);
+        } else {
+            convertView = inflater.inflate(R.layout.item_message_received, parent,
+                    false);
+            tvMessage = convertView.findViewById(R.id.tvMessageReceived);
+            tvTimestamp = convertView.findViewById(R.id.tvTimestampReceived);
+        }
+
+
         if (messageList.get(position).getTimestamp() != null)
             tvTimestamp.setText(messageList.get(position).getTimestamp());
 
@@ -66,6 +67,7 @@ public class MessageAdapter extends ArrayAdapter<Message> {
 
         return convertView;
     }
+
     public void setMessage(List<Message> messages) {
         clear();
         if (messages != null) {
