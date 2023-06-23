@@ -97,7 +97,7 @@ public class ChatActivity extends AppCompatActivity implements ChatAPI.ChatCallb
             System.out.println("A NEW:::::::::::::::::::;" + messageResponse.getChatId());
         }
         System.out.println(messageDao.index());
-        updateUI2(tempList);
+        //updateUI2(tempList);
 
         //messageList.addAll(tempList);
         messageList.addAll(tempList);

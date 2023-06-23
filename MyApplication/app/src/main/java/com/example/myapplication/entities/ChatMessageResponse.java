@@ -1,22 +1,22 @@
 package com.example.myapplication.entities;
 
 public class ChatMessageResponse {
-    private int id;
+    private String id;
     private String created;
     private CurrentUserChat sender;
     private String content;
 
-    public ChatMessageResponse(int id, String created, CurrentUserChat sender, String content) {
+    public ChatMessageResponse(String id, String created, CurrentUserChat sender, String content) {
         this.id = id;
         this.created = created;
         this.sender = sender;
         this.content = content;
     }
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

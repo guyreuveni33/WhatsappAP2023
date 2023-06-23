@@ -24,6 +24,7 @@ public class SettingsActivity extends AppCompatActivity {
     private String authToken;
     private String profilePicUrl;
     private String serverAddress;
+    private String updateServerRefactor;
 
 
     @Override
@@ -32,9 +33,10 @@ public class SettingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_settings);
         String settingFlag = getIntent().getStringExtra("SETTING_EXTRA");
         if (settingFlag.equals("CONTACTLISTACTIVITY")) {
-        displayName = getIntent().getStringExtra("DISPLAY_NAME_EXTRA");
-        authToken = getIntent().getStringExtra("TOKEN_EXTRA");
-        profilePicUrl = getIntent().getStringExtra("PROFILE_PIC_EXTRA");}
+            displayName = getIntent().getStringExtra("DISPLAY_NAME_EXTRA");
+            authToken = getIntent().getStringExtra("TOKEN_EXTRA");
+            profilePicUrl = getIntent().getStringExtra("PROFILE_PIC_EXTRA");
+        }
         toggleButton = findViewById(R.id.toggleButton);
         serverAddressEditText = findViewById(R.id.serverAddressEditText);
         updateButton = findViewById(R.id.updateButton);
@@ -44,14 +46,14 @@ public class SettingsActivity extends AppCompatActivity {
             toggleNightMode(isChecked);
             updateButton.setEnabled(isChecked);
         });
+        updateServerRefactor="";
         updateButton.setOnClickListener(v -> {
             serverAddress = serverAddressEditText.getText().toString().trim();
             if (!serverAddress.isEmpty()) {
                 ServerAddressSingleton.getInstance().setServerAddress(serverAddress);
-
                 // Perform server update logic here
                 Toast.makeText(SettingsActivity.this, "Server address updated: " + serverAddress, Toast.LENGTH_SHORT).show();
-
+                updateServerRefactor = "done";
             } else {
                 Toast.makeText(SettingsActivity.this, "Please enter a server address", Toast.LENGTH_SHORT).show();
             }
@@ -62,12 +64,18 @@ public class SettingsActivity extends AppCompatActivity {
                 Intent intent = new Intent(SettingsActivity.this, MainActivity.class);
                 startActivity(intent);
             } else {
-                // Start Register activity when "Click here" is clicked
-                Intent intent = new Intent(SettingsActivity.this, ContactListActivity.class);
-                intent.putExtra("TOKEN_EXTRA", authToken);
-                intent.putExtra("DISPLAY_NAME_EXTRA", displayName);
-                intent.putExtra("PROFILE_PIC_EXTRA", profilePicUrl);
-                startActivity(intent);
+                if (updateServerRefactor.equals("done")) {
+                    // Start Register activity when "Click here" is clicked
+                    Intent intent = new Intent(SettingsActivity.this, MainActivity.class);
+                    startActivity(intent);
+                } else {
+                    // Start Register activity when "Click here" is clicked
+                    Intent intent = new Intent(SettingsActivity.this, ContactListActivity.class);
+                    intent.putExtra("TOKEN_EXTRA", authToken);
+                    intent.putExtra("DISPLAY_NAME_EXTRA", displayName);
+                    intent.putExtra("PROFILE_PIC_EXTRA", profilePicUrl);
+                    startActivity(intent);
+                }
             }
         });
     }

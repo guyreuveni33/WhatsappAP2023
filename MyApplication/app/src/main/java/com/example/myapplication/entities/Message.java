@@ -12,13 +12,13 @@ import java.util.Locale;
 @Entity
 public class Message {
     @PrimaryKey @NonNull
-    private int id;
+    private String id;
     private String content;
     private boolean isSent;
     private String timestamp;
     private String chatId;
 
-    public Message(int id, String content, boolean isSent) {
+    public Message(@NonNull String id, String content, boolean isSent) {
         this.id = id;
         this.content = content;
         this.isSent = isSent;
@@ -29,7 +29,7 @@ public class Message {
         this.chatId = id;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
@@ -37,7 +37,7 @@ public class Message {
         return chatId;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
