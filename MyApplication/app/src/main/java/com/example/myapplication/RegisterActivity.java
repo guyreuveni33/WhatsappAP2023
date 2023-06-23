@@ -3,12 +3,14 @@ package com.example.myapplication;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 
 
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,6 +22,8 @@ import android.widget.Toast;
 import com.example.myapplication.api.RegisterApi;
 import com.example.myapplication.entities.User;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.regex.Pattern;
 
 
@@ -34,6 +38,8 @@ public class RegisterActivity extends AppCompatActivity {
     private static final int PICK_IMAGE_REQUEST = 1;
     private Uri selectedImageUri;
     private ImageView profilePicture;
+    private Bitmap selectedImageBitmap;
+
 
 
     @Override
@@ -77,8 +83,16 @@ public class RegisterActivity extends AppCompatActivity {
                         username.getText().toString().trim(),
                         password.getText().toString().trim(),
                         displayName.getText().toString().trim(),
-                        profilePicture.toString()
+                        encodeBitmap(selectedImageBitmap)
                 );
+
+                String encodedImage = encodeBitmap(selectedImageBitmap);
+                if (encodedImage != null) {
+                    user.setProfilePic(encodedImage);
+                } else {
+                    user.setProfilePic(""); // Set an empty string if the encoded image is null
+                }
+
 
                 registerApi = new RegisterApi(new RegisterApi.RegisterCallback() {
                     @Override
@@ -100,6 +114,24 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
     }
+
+    private String encodeBitmap(Bitmap bitmap) {
+        if (bitmap == null) {
+            return null;
+        }
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] imageBytes = baos.toByteArray();
+
+        // Add the prefix to the Base64-encoded image data
+        String base64Image = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+        String dataUrl = "data:image/jpeg;base64," + base64Image;
+
+        return dataUrl;
+    }
+
+
 
     private boolean isUsernameValid() {
         String usernameInput = username.getText().toString().trim();
@@ -176,9 +208,16 @@ public class RegisterActivity extends AppCompatActivity {
 
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             selectedImageUri = data.getData();
-            profilePicture.setVisibility(View.VISIBLE);
-            profilePicture.setImageURI(selectedImageUri);
+            try {
+                // Convert the selected image to a Bitmap
+                selectedImageBitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImageUri);
+                profilePicture.setVisibility(View.VISIBLE);
+                profilePicture.setImageBitmap(selectedImageBitmap);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
+
 
 }

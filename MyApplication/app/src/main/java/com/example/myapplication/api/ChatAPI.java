@@ -1,7 +1,9 @@
 // ChatAPI.java
 package com.example.myapplication.api;
 
+import com.example.myapplication.ServerAddressSingleton;
 import com.example.myapplication.entities.ChatByIdResponse;
+import com.example.myapplication.entities.Contact;
 import com.example.myapplication.entities.ContactPostResponse;
 import com.example.myapplication.entities.ContactResponse;
 import com.example.myapplication.entities.UserResponse;
@@ -20,6 +22,7 @@ public class ChatAPI {
     private Retrofit retrofit;
     private WebServiceAPI webServiceAPI;
     private String token;
+    private String server;
 
     public interface ChatCallback {
         void onSuccess(List<ContactResponse> chats);
@@ -32,9 +35,10 @@ public class ChatAPI {
 
     public ChatAPI(String token) {
         this.token = token;
+        server = ServerAddressSingleton.getInstance().getServerAddress()+"/api/";
 
         retrofit = new Retrofit.Builder()
-                .baseUrl("http://10.0.2.2:5000/api/") // Replace with your API base URL
+                .baseUrl(server) // Replace with your API base URL
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
@@ -48,6 +52,7 @@ public class ChatAPI {
             public void onResponse(Call<List<ContactResponse>> call, Response<List<ContactResponse>> response) {
                 if (response.isSuccessful()) {
                     List<ContactResponse> contacts = response.body();
+
                     callback.onSuccess(contacts);
                 } else {
                     callback.onFailure(new Exception("Failed to fetch contacts"));
@@ -100,7 +105,6 @@ public class ChatAPI {
                     callback.onFailure(new Exception("Failed to fetch user details"));
                 }
             }
-
             @Override
             public void onFailure(Call<UserResponse> call, Throwable t) {
                 callback.onFailure(t);
@@ -110,9 +114,11 @@ public class ChatAPI {
 
     public void getChat(ChatCallback callback,String username) {
         Call<ChatByIdResponse> call = webServiceAPI.getChat("Bearer " + token, username); // Replace "username" with the actual username value
+        System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaabaaaaaaaaaaaaaaaaaaaaaaaa");
         call.enqueue(new Callback<ChatByIdResponse>() {
             @Override
             public void onResponse(Call<ChatByIdResponse> call, Response<ChatByIdResponse> response) {
+                System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
                 if (response.isSuccessful()) {
                     System.out.println("Successful fetch");
                     ChatByIdResponse chatByIdResponse = response.body();
@@ -125,6 +131,8 @@ public class ChatAPI {
             @Override
             public void onFailure(Call<ChatByIdResponse> call, Throwable t) {
                 callback.onFailure(t);
+                // Print the failure exception for debugging
+                System.out.println("Get Chat Failure: " + t.getMessage());
             }
         });
     }

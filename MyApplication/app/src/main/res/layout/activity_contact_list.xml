@@ -29,7 +29,6 @@
                     android:layout_height="60dp"
                     android:background="@color/white"
                     app:shapeAppearanceOverlay="@style/roundedImageViewRounded"
-                    android:src="@drawable/a2f47144"
                     android:scaleType="centerCrop"
                     app:strokeColor="#000000"
                     android:padding="2dp"
@@ -77,15 +76,17 @@
                 android:layout_below="@id/userInfoLayout" />
 
             <!-- User Conversation List -->
+
+            <!-- FloatingActionButton -->
             <ListView
                 android:id="@+id/lvConversationList"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_below="@id/userInfoLayout"
+                android:layout_marginTop="2dp"
                 android:layout_weight="1"
                 android:padding="16dp" />
 
-            <!-- FloatingActionButton -->
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/btnAdd"
                 android:layout_width="wrap_content"

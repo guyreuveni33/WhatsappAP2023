@@ -22,54 +22,74 @@ public class SettingsActivity extends AppCompatActivity {
     private ImageButton btnGoBack;
     private String displayName;
     private String authToken;
+    private String profilePicUrl;
+    private String serverAddress;
+    private String updateServerRefactor;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-        displayName = getIntent().getStringExtra("DISPLAY_NAME_EXTRA");
-        authToken = getIntent().getStringExtra("TOKEN_EXTRA");
+        String settingFlag = getIntent().getStringExtra("SETTING_EXTRA");
+        if (settingFlag.equals("CONTACTLISTACTIVITY")) {
+            displayName = getIntent().getStringExtra("DISPLAY_NAME_EXTRA");
+            authToken = getIntent().getStringExtra("TOKEN_EXTRA");
+            profilePicUrl = getIntent().getStringExtra("PROFILE_PIC_EXTRA");
+        }
         toggleButton = findViewById(R.id.toggleButton);
         serverAddressEditText = findViewById(R.id.serverAddressEditText);
         updateButton = findViewById(R.id.updateButton);
         btnGoBack = findViewById(R.id.btnGoBack);
-
+        toggleButton.setChecked(isNightModeEnabled());
         toggleButton.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                toggleButton.setBackgroundResource(R.drawable.ic_toggleon);
-                updateButton.setEnabled(true);
-                setNightMode(true);
-            } else {
-                toggleButton.setBackgroundResource(R.drawable.ic_toggleoff);
-                updateButton.setEnabled(false);
-                setNightMode(false);
-            }
+            toggleNightMode(isChecked);
+            updateButton.setEnabled(isChecked);
         });
-
+        updateServerRefactor="";
         updateButton.setOnClickListener(v -> {
-            String serverAddress = serverAddressEditText.getText().toString().trim();
+            serverAddress = serverAddressEditText.getText().toString().trim();
             if (!serverAddress.isEmpty()) {
+                ServerAddressSingleton.getInstance().setServerAddress(serverAddress);
                 // Perform server update logic here
                 Toast.makeText(SettingsActivity.this, "Server address updated: " + serverAddress, Toast.LENGTH_SHORT).show();
+                updateServerRefactor = "done";
             } else {
                 Toast.makeText(SettingsActivity.this, "Please enter a server address", Toast.LENGTH_SHORT).show();
             }
         });
         btnGoBack.setOnClickListener(view -> {
-            // Start Register activity when "Click here" is clicked
-            Intent intent = new Intent(SettingsActivity.this, ContactListActivity.class);
-            intent.putExtra("TOKEN_EXTRA", authToken);
-            intent.putExtra("DISPLAY_NAME_EXTRA", displayName);
-            startActivity(intent);
+            if (settingFlag.equals("LOGIN")) {
+                // Start Register activity when "Click here" is clicked
+                Intent intent = new Intent(SettingsActivity.this, MainActivity.class);
+                startActivity(intent);
+            } else {
+                if (updateServerRefactor.equals("done")) {
+                    // Start Register activity when "Click here" is clicked
+                    Intent intent = new Intent(SettingsActivity.this, MainActivity.class);
+                    startActivity(intent);
+                } else {
+                    // Start Register activity when "Click here" is clicked
+                    Intent intent = new Intent(SettingsActivity.this, ContactListActivity.class);
+                    intent.putExtra("TOKEN_EXTRA", authToken);
+                    intent.putExtra("DISPLAY_NAME_EXTRA", displayName);
+                    intent.putExtra("PROFILE_PIC_EXTRA", profilePicUrl);
+                    startActivity(intent);
+                }
+            }
         });
     }
 
-    private void setNightMode(boolean nightModeEnabled) {
+
+    private void toggleNightMode(boolean nightModeEnabled) {
+        int newNightMode = nightModeEnabled ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO;
+        AppCompatDelegate.setDefaultNightMode(newNightMode);
+        recreate();
+    }
+
+
+    private boolean isNightModeEnabled() {
         int currentNightMode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
-        int newNightMode = nightModeEnabled ? Configuration.UI_MODE_NIGHT_YES : Configuration.UI_MODE_NIGHT_NO;
-        if (currentNightMode != newNightMode) {
-            AppCompatDelegate.setDefaultNightMode(newNightMode);
-            recreate();
-        }
+        return currentNightMode == Configuration.UI_MODE_NIGHT_YES;
     }
 }

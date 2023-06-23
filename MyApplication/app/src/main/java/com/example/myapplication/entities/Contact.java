@@ -5,6 +5,7 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 @Entity
 public class Contact {
@@ -14,14 +15,19 @@ public class Contact {
     private String name;
     private String lastMessage;
     private String lastDate;
+    private String profilePic;
 
-    public Contact(String id, String username, String name, String lastMessage, String lastDate) {
+
+    public Contact(String id, String username, String name, String lastMessage, String lastDate, String profilePic) {
         this.id = id;
         this.username = username;
         this.name = name;
         this.lastMessage = lastMessage;
         this.lastDate = lastDate;
+        this.profilePic = profilePic;
     }
+
+
 
     public String getId() {
         return id;
@@ -49,6 +55,12 @@ public class Contact {
     public void setName(String name) {
         this.name = name;
     }
+    public void setProfilePic(String profilePic) {
+        this.profilePic = profilePic;
+    }
+    public String getProfilePic() {
+        return this.profilePic;
+    }
 
     public void setLastMessage(String lastMessage) {
         this.lastMessage = lastMessage;
@@ -56,5 +68,17 @@ public class Contact {
 
     public void setLastDate(String lastDate) {
         this.lastDate = lastDate;
+    }
+
+    private String formatDate(String timestamp) {
+        try {
+            SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSSS", Locale.getDefault());
+            SimpleDateFormat outputFormat = new SimpleDateFormat("dd MMM", Locale.getDefault());
+            Date date = inputFormat.parse(timestamp);
+            return outputFormat.format(date);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

@@ -1,5 +1,6 @@
 package com.example.myapplication.api;
 
+import com.example.myapplication.ServerAddressSingleton;
 import com.example.myapplication.entities.UserLogin;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -14,12 +15,15 @@ public class LoginApi {
     private Retrofit retrofit;
     private WebServiceAPI webServiceAPI;
     private LoginCallback loginCallback;
+    private String server;
 
     public LoginApi(LoginCallback callback) {
+        server = ServerAddressSingleton.getInstance().getServerAddress()+"/api/";
+
         this.loginCallback = callback;
         Gson gson = new GsonBuilder().setLenient().create();
         retrofit = new Retrofit.Builder()
-                .baseUrl("http://10.0.2.2:5000/api/")
+                .baseUrl(server)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
         webServiceAPI = retrofit.create(WebServiceAPI.class);

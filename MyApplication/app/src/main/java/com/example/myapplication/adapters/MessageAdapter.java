@@ -1,20 +1,27 @@
 package com.example.myapplication.adapters;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
+import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.example.myapplication.R;
+import com.example.myapplication.entities.Contact;
 import com.example.myapplication.entities.Message;
+
+import org.w3c.dom.Text;
 
 import java.util.List;
 
-public class MessageAdapter extends BaseAdapter {
+public class MessageAdapter extends ArrayAdapter<Message> {
     private List<Message> messageList;
+    LayoutInflater inflater;
 
-    public MessageAdapter(List<Message> messageList) {
+    public MessageAdapter(Context context, List<Message> messageList) {
+        super(context, 0, messageList);
+        this.inflater = LayoutInflater.from(context);
         this.messageList = messageList;
     }
 
@@ -24,7 +31,7 @@ public class MessageAdapter extends BaseAdapter {
     }
 
     @Override
-    public Object getItem(int position) {
+    public Message getItem(int position) {
         return messageList.get(position);
     }
 
@@ -35,29 +42,37 @@ public class MessageAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        if (convertView == null) {
-            convertView = LayoutInflater.from(parent.getContext()).inflate(
-                    messageList.get(position).isSent() ? R.layout.item_message_sent : R.layout.item_message_received,
-                    parent,
-                    false
-            );
+        TextView tvMessage = null, tvTimestamp = null;
+        if (messageList.get(position) == null)
+            return null;
+
+        if (messageList.get(position).isSent()) {
+            convertView = inflater.inflate(R.layout.item_message_sent, parent,
+                    false);
+            tvMessage = convertView.findViewById(R.id.tvMessageSent);
+            tvTimestamp = convertView.findViewById(R.id.tvTimestampSent);
+        } else {
+            convertView = inflater.inflate(R.layout.item_message_received, parent,
+                    false);
+            tvMessage = convertView.findViewById(R.id.tvMessageReceived);
+            tvTimestamp = convertView.findViewById(R.id.tvTimestampReceived);
         }
 
-        Message message = messageList.get(position);
 
-        TextView tvMessage = convertView.findViewById(message.isSent() ? R.id.tvMessageSent : R.id.tvMessageReceived);
-        if (tvMessage == null) {
-            tvMessage = new TextView(parent.getContext());
-        }
+        if (messageList.get(position).getTimestamp() != null)
+            tvTimestamp.setText(messageList.get(position).getTimestamp());
 
-        tvMessage.setText(message.getContent());
-
-        TextView tvTimestamp = convertView.findViewById(message.isSent() ? R.id.tvTimestampSent : R.id.tvTimestampReceived);
-        if (tvTimestamp == null) {
-            tvTimestamp = new TextView(parent.getContext());
-        }
-
-        tvTimestamp.setText(message.getTimestamp());
+        if (messageList.get(position).getContent() != null)
+            tvMessage.setText(messageList.get(position).getContent());
 
         return convertView;
-}}
+    }
+
+    public void setMessage(List<Message> messages) {
+        clear();
+        if (messages != null) {
+            addAll(messages);
+        }
+        notifyDataSetChanged();
+    }
+}
