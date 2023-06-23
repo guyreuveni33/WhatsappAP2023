@@ -2,23 +2,23 @@ package com.example.myapplication.entities;
 
 public class MessagesResponse {
 
-    private int id;
+    private String id;
     private String created;
     private Sender sender;
     private String content;
 
-    public MessagesResponse(int id, String created, Sender sender, String content) {
+    public MessagesResponse(String id, String created, Sender sender, String content) {
         this.id = id;
         this.created = created;
         this.sender = sender;
         this.content = content;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

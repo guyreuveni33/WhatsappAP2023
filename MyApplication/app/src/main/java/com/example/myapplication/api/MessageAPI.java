@@ -93,13 +93,14 @@ public class MessageAPI {
             public void onResponse(Call<List<MessagesResponse>> call, Response<List<MessagesResponse>> response) {
                 if (response.isSuccessful()) {
                     // Handle success
-
+                    System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
                     List<MessagesResponse> messages = response.body();
-
                     callback.onSuccessGetMessage(messages, id);
                 } else {
                     // Handle failure
                     int statusCode = response.code();
+                    System.out.println("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
+
                     if (statusCode == 400) {
                         // Bad request
                         callback.onFailureGetMessage(new Exception("Bad request"));
