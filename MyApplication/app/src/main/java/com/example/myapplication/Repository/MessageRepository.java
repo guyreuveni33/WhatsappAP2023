@@ -62,7 +62,7 @@ public class MessageRepository implements MessageAPI.ChatCallback{
     }
 
     public void addMessage(String message){ //message == content
-        api.postMessage(MessageRepository.this,id, message);
+        //api.postMessage(MessageRepository.this,id, message);
 
     }
     public void onReload(){

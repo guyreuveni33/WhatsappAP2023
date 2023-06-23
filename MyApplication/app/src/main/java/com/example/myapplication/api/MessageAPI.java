@@ -4,7 +4,9 @@ import static com.example.myapplication.Converter.fromContactUserDetails;
 
 import com.example.myapplication.ServerAddressSingleton;
 import com.example.myapplication.entities.ChatMessageResponse;
+import com.example.myapplication.entities.Message;
 import com.example.myapplication.entities.MessagesResponse;
+import com.example.myapplication.messages.MessageDB;
 
 import java.util.HashMap;
 import java.util.List;
@@ -42,7 +44,7 @@ public class MessageAPI {
         webServiceAPI = retrofit.create(WebServiceAPI.class);
     }
 
-    public void postMessage(ChatCallback callback, String id, String message) {
+    public void postMessage(ChatCallback callback, String id, String message, List<Message> mList) {
         Map<String, String> requestBody = new HashMap<>();
         requestBody.put("msg", message);
 
@@ -56,6 +58,15 @@ public class MessageAPI {
 
                     ChatMessageResponse chatMessageResponse = response.body();
                     callback.onSuccessPostMessage(chatMessageResponse);
+
+                    Message newMessage = new Message(chatMessageResponse.getId(), message, true);
+                    // Insert the new message into the database
+
+                    MessageDB.getDatabase().messageDao().insert(newMessage);
+                    // Add the new message to the list and notify the adapter
+                    mList.add(newMessage);
+
+
 
                     // Call getMessages after successful post
                     getMessages(callback, id); // Assuming getMessages method updates UI with retrieved messages

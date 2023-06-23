@@ -117,14 +117,14 @@ public class ContactListActivity extends AppCompatActivity implements ChatAPI.Ch
         String ContactListActivityFlag = "CONTACTLISTACTIVITY";
         btnSettings.setOnClickListener(view -> {
             List<Contact> contactList1 = contactDao.getAll();
-            int counter=0;
+            int counter = 0;
             for (Contact contact : contactList1) {
                 // Print the values of each contact
-                System.out.println("DAO"+counter+contact.getName());
-                System.out.println("DAO"+counter+contact.getUsername());
-                System.out.println("DAO"+counter+contact.getLastDate());
-                System.out.println("DAO"+counter+contact.getId());
-                System.out.println("DAO"+counter+contact.getLastDate());
+                System.out.println("DAO" + counter + contact.getName());
+                System.out.println("DAO" + counter + contact.getUsername());
+                System.out.println("DAO" + counter + contact.getLastDate());
+                System.out.println("DAO" + counter + contact.getId());
+                System.out.println("DAO" + counter + contact.getLastDate());
                 counter++;
             }
             // Handle settings button click
@@ -147,7 +147,7 @@ public class ContactListActivity extends AppCompatActivity implements ChatAPI.Ch
         });
 
         // Fetch contacts from the server in the background
-       // fetchContactsFromServer();
+        // fetchContactsFromServer();
         // Fetch contacts and user details from the server in the background
         fetchContactsAndUserDetailsFromServer();
     }
@@ -156,8 +156,9 @@ public class ContactListActivity extends AppCompatActivity implements ChatAPI.Ch
         MessageAPI messageAPI1 = new MessageAPI(authToken);
         messageAPI1.getMessages(this, userId);
     }
+
     @Override
-    public void onSuccessGetMessage(List<MessagesResponse> messages,String chatId) {
+    public void onSuccessGetMessage(List<MessagesResponse> messages, String chatId) {
         // Handle the successful response here, e.g., update the UI with the messages
     }
 
@@ -261,8 +262,11 @@ public class ContactListActivity extends AppCompatActivity implements ChatAPI.Ch
             String username = response.getUser().getUsername();
             String name = response.getUser().getDisplayName();
             String profilePic = response.getUser().getProfilePic();
-            String lastMessage = response.getLastMessage().getCreated() != null ? response.getLastMessage().getContent() : null;
-            String lastDate = response.getLastMessage() != null ? response.getLastMessage().getCreated() : null;
+            String lastMessage = null, lastDate = null;
+            if (response.getLastMessage() != null) {
+                lastMessage = response.getLastMessage().getCreated() != null ? response.getLastMessage().getContent() : null;
+                lastDate = response.getLastMessage() != null ? response.getLastMessage().getCreated() : null;
+            }
             Contact contact = new Contact(response.getId(), username, name, lastMessage, lastDate, profilePic);
             contactList.add(contact);
         }
