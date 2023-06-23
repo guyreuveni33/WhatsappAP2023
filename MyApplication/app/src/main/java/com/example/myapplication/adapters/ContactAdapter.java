@@ -43,7 +43,6 @@ public class ContactAdapter extends ArrayAdapter<Contact> {
         contactName.setText(contact.getName());
         lastMessage.setText(contact.getLastMessage());
 
-        // Format the date and set it to the currentTime TextView
         String formattedDate = formatDate(contact.getLastDate());
         currentTime.setText(formattedDate);
 
@@ -61,6 +60,7 @@ public class ContactAdapter extends ArrayAdapter<Contact> {
         }
         notifyDataSetChanged();
     }
+
     private String formatDate(String timestamp) {
         try {
             SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSSS", Locale.getDefault());

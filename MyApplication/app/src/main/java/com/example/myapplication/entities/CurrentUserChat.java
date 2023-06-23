@@ -1,8 +1,5 @@
 package com.example.myapplication.entities;
 
-import androidx.room.Entity;
-import androidx.room.PrimaryKey;
-
 public class CurrentUserChat {
 
     private String username;

@@ -7,7 +7,6 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-import com.example.myapplication.contacts.ContactDB;
 import com.example.myapplication.entities.Message;
 
 @Database(entities = {Message.class}, version = 1)
