@@ -62,7 +62,7 @@ public class MessageAPI {
                     Message newMessage = new Message(chatMessageResponse.getId(), message, true);
                     // Insert the new message into the database
 
-                    MessageDB.getDatabase().messageDao().insert(newMessage);
+                    //MessageDB.getDatabase().messageDao().insert(newMessage);
                     // Add the new message to the list and notify the adapter
                     mList.add(newMessage);
 
