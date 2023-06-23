@@ -188,7 +188,7 @@ const sendMessage = async (chatId, message, username) => {
             },
             content: message
         };
-            return formattedResponse;
+        return formattedResponse;
     } catch (error) {
         return -1;
     }
@@ -196,22 +196,24 @@ const sendMessage = async (chatId, message, username) => {
 
 const getMessages = async (chatId) => {
     try {
-    const chat = await Chat.findOne({_id: chatId});
-    const messagesArray = chat.messages; // Access the messages array
-    let a = 0;
-    const formattedResponse = [];
-    for (let message of messagesArray) {
-        const formattedMessage = {
-            id: message._id,
-            created: message.created,
-            sender: message.sender.username,
-            content: message.content
-        };
-        formattedResponse.push(formattedMessage);
-    }
+        const chat = await Chat.findOne({_id: chatId});
+        const messagesArray = chat.messages; // Access the messages array
+        let a = 0;
+        const formattedResponse = [];
+        for (let message of messagesArray) {
+
+            const formattedMessage = {
+                id: message._id,
+                created: message.created,
+                sender: {
+                    username:message.sender
+                },
+                content: message.content
+            };
+            formattedResponse.push(formattedMessage);
+        }
         return formattedResponse.reverse(); // Reverse the array order
-    }
-    catch (error){
+    } catch (error) {
         return -1;
     }
 };
