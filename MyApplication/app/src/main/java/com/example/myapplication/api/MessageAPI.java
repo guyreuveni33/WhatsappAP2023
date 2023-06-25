@@ -53,7 +53,6 @@ public class MessageAPI {
             @Override
             public void onResponse(Call<ChatMessageResponse> call, Response<ChatMessageResponse> response) {
                 if (response.isSuccessful()) {
-                    System.out.println("Successful fetch");
 
                     ChatMessageResponse chatMessageResponse = response.body();
                     callback.onSuccessPostMessage(chatMessageResponse);

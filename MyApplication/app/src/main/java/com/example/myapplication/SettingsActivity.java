@@ -1,8 +1,10 @@
 package com.example.myapplication;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -25,12 +27,17 @@ public class SettingsActivity extends AppCompatActivity {
     private String profilePicUrl;
     private String serverAddress;
     private String updateServerRefactor;
+    private SharedPreferences sharedPreferences;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
         String settingFlag = getIntent().getStringExtra("SETTING_EXTRA");
         if (settingFlag.equals("CONTACTLISTACTIVITY")) {
             displayName = getIntent().getStringExtra("DISPLAY_NAME_EXTRA");
@@ -39,6 +46,8 @@ public class SettingsActivity extends AppCompatActivity {
         }
         toggleButton = findViewById(R.id.toggleButton);
         serverAddressEditText = findViewById(R.id.serverAddressEditText);
+        String savedServerAddress = sharedPreferences.getString("SERVER_ADDRESS", "");
+        serverAddressEditText.setText(savedServerAddress);
         updateButton = findViewById(R.id.updateButton);
         btnGoBack = findViewById(R.id.btnGoBack);
         toggleButton.setChecked(isNightModeEnabled());
@@ -50,13 +59,23 @@ public class SettingsActivity extends AppCompatActivity {
         updateButton.setOnClickListener(v -> {
             serverAddress = serverAddressEditText.getText().toString().trim();
             if (!serverAddress.isEmpty()) {
-                ServerAddressSingleton.getInstance().setServerAddress(serverAddress);
-                Toast.makeText(SettingsActivity.this, "Server address updated: " + serverAddress, Toast.LENGTH_SHORT).show();
-                updateServerRefactor = "done";
+                String regex = "^(http|https)://(.*)";
+                if (serverAddress.matches(regex)) {
+                    ServerAddressSingleton.getInstance().setServerAddress(serverAddress);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString("SERVER_ADDRESS", serverAddress);
+                    editor.apply();
+
+                    Toast.makeText(SettingsActivity.this, "Server address updated: " + serverAddress, Toast.LENGTH_SHORT).show();
+                    updateServerRefactor = "done";
+                } else {
+                    Toast.makeText(SettingsActivity.this, "Invalid server address format", Toast.LENGTH_SHORT).show();
+                }
             } else {
                 Toast.makeText(SettingsActivity.this, "Please enter a server address", Toast.LENGTH_SHORT).show();
             }
         });
+
         btnGoBack.setOnClickListener(view -> {
             if (settingFlag.equals("LOGIN")) {
                 Intent intent = new Intent(SettingsActivity.this, MainActivity.class);

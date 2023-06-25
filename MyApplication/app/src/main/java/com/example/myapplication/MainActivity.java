@@ -3,9 +3,10 @@ package com.example.myapplication;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
-import android.util.Log;
+import android.preference.PreferenceManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -32,14 +33,18 @@ public class MainActivity extends AppCompatActivity {
     ContactDao contactDao;
     MessageDao messageDao;
     MessageDB messageDB;
+    private SharedPreferences sharedPreferences;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-          messageDB = MessageDB.getDatabase(getApplicationContext());
+        messageDB = MessageDB.getDatabase(getApplicationContext());
         messageDao = messageDB.messageDao();
 
         setContentView(R.layout.activity_main);
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
         ServerAddressSingleton.getInstance().setServerAddress("http://10.0.2.2:5000");
         contactDao = ContactDB.getDatabase(getApplicationContext()).contactDao();
         username = findViewById(R.id.username);
@@ -48,6 +53,17 @@ public class MainActivity extends AppCompatActivity {
         signupText = findViewById(R.id.signupText);
         btnSettings = findViewById(R.id.btnSettings);
         String loginFlag="LOGIN";
+
+        // Retrieve the saved server address from SharedPreferences
+        String savedServerAddress = sharedPreferences.getString("SERVER_ADDRESS", null);
+        if (savedServerAddress != null && !savedServerAddress.isEmpty()) {
+            ServerAddressSingleton.getInstance().setServerAddress(savedServerAddress);
+        } else {
+            // If no saved server address, use the default address
+            ServerAddressSingleton.getInstance().setServerAddress("http://10.0.2.2:5000");
+        }
+
+
         btnSettings.setOnClickListener(view -> {
             Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
             intent.putExtra("SETTING_EXTRA", loginFlag);

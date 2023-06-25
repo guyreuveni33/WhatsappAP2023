@@ -86,7 +86,6 @@ public class AddContactActivity extends AppCompatActivity {
                         intent.putExtra("USERNAME_EXTRA", username);
                         intent.putExtra("PROFILE_PIC_EXTRA", profilePicUrl);
                         startActivity(intent);
-                        System.out.println("Failed to add contact: " + t.getMessage());
                     }
                 }, contactName);
             }
