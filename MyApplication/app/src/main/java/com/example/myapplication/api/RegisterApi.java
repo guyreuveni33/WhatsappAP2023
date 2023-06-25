@@ -35,7 +35,6 @@ public class RegisterApi {
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
-                Log.d("RegisterApi", "response: " + response.body());
                 if (response.isSuccessful()) {
                     registerCallback.onSuccess();
                 } else {

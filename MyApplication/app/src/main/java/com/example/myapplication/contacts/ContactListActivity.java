@@ -1,7 +1,9 @@
 package com.example.myapplication.contacts;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -49,11 +51,16 @@ public class ContactListActivity extends AppCompatActivity implements ChatAPI.Ch
     private ContactViewModel contactViewModel;
     private List<Contact> contactList;
 
+    private SharedPreferences sharedPreferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         user = new UserResponse("", "", "");
         setContentView(R.layout.activity_contact_list);
+
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
         username = getIntent().getStringExtra("USERNAME_EXTRA");
         contactDao = ContactDB.getDatabase(getApplicationContext()).contactDao();
 
@@ -70,7 +77,6 @@ public class ContactListActivity extends AppCompatActivity implements ChatAPI.Ch
         lvConversationList.setAdapter(adapter);
         contactViewModel = new ViewModelProvider(this).get(ContactViewModel.class);
         contactViewModel.getContact().observe(this, contact -> {
-            System.out.println("HELEKFEJFEJFOEOFNEOFNKEFNLKEFNLKENFLKEFNLK");
             adapter.setContacts(contactList);
         });
         lvConversationList.setOnItemClickListener((parent, view, position, id) -> {
