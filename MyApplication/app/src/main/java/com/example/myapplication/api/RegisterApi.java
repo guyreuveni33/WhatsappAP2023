@@ -20,7 +20,7 @@ public class RegisterApi {
     private String server;
 
     public RegisterApi(RegisterCallback callback) {
-        server = ServerAddressSingleton.getInstance().getServerAddress()+"/api/";
+        server = ServerAddressSingleton.getInstance().getServerAddress() + "/api/";
         this.registerCallback = callback;
         Gson gson = new GsonBuilder().setLenient().create();
         retrofit = new Retrofit.Builder()
@@ -29,6 +29,7 @@ public class RegisterApi {
                 .build();
         webServiceAPI = retrofit.create(WebServiceAPI.class);
     }
+
     public void post(User user) {
         Call<Void> call = webServiceAPI.register(user);
         call.enqueue(new Callback<Void>() {

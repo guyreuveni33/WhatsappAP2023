@@ -4,7 +4,6 @@ public class ServerAddressSingleton {
     private String serverAddress;
 
     private ServerAddressSingleton() {
-        // Private constructor to prevent instantiation
     }
 
     public static synchronized ServerAddressSingleton getInstance() {

@@ -1,4 +1,3 @@
-
 package com.example.myapplication.entities;
 
 import java.util.List;

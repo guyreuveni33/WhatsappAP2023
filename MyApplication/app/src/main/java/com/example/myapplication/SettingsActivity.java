@@ -51,7 +51,6 @@ public class SettingsActivity extends AppCompatActivity {
             serverAddress = serverAddressEditText.getText().toString().trim();
             if (!serverAddress.isEmpty()) {
                 ServerAddressSingleton.getInstance().setServerAddress(serverAddress);
-                // Perform server update logic here
                 Toast.makeText(SettingsActivity.this, "Server address updated: " + serverAddress, Toast.LENGTH_SHORT).show();
                 updateServerRefactor = "done";
             } else {
@@ -60,16 +59,13 @@ public class SettingsActivity extends AppCompatActivity {
         });
         btnGoBack.setOnClickListener(view -> {
             if (settingFlag.equals("LOGIN")) {
-                // Start Register activity when "Click here" is clicked
                 Intent intent = new Intent(SettingsActivity.this, MainActivity.class);
                 startActivity(intent);
             } else {
                 if (updateServerRefactor.equals("done")) {
-                    // Start Register activity when "Click here" is clicked
                     Intent intent = new Intent(SettingsActivity.this, MainActivity.class);
                     startActivity(intent);
                 } else {
-                    // Start Register activity when "Click here" is clicked
                     Intent intent = new Intent(SettingsActivity.this, ContactListActivity.class);
                     intent.putExtra("TOKEN_EXTRA", authToken);
                     intent.putExtra("DISPLAY_NAME_EXTRA", displayName);

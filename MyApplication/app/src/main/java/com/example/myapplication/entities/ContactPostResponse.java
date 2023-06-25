@@ -22,8 +22,6 @@ public class ContactPostResponse {
         this.user = user;
     }
 
-
-
     @PrimaryKey @NonNull
     private String id;
     private CurrentUserChat user;

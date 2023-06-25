@@ -8,10 +8,8 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.example.myapplication.R;
-import com.example.myapplication.entities.Contact;
 import com.example.myapplication.entities.Message;
 
-import org.w3c.dom.Text;
 
 import java.util.List;
 

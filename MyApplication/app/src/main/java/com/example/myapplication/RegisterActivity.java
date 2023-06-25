@@ -45,40 +45,33 @@ public class RegisterActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register); // Update the layout file here
+        setContentView(R.layout.activity_register);
         username = findViewById(R.id.username);
         password = findViewById(R.id.password);
         reenterPassword = findViewById(R.id.ReEnterPassword);
         displayName = findViewById(R.id.displayName);
         registerButton = findViewById(R.id.registerButton);
-        loginText = findViewById(R.id.loginText); // Initialize TextView
+        loginText = findViewById(R.id.loginText);
         profilePicture = findViewById(R.id.profilePicture);
         Button uploadImageButton = findViewById(R.id.uploadImageButton);
 
         loginText.setOnClickListener(view -> {
-            // Start Register activity when "Click here" is clicked
             Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
             startActivity(intent);
         });
 
         uploadImageButton.setOnClickListener(view -> {
-            // Open gallery to select an image
             Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
             startActivityForResult(intent, PICK_IMAGE_REQUEST);
         });
 
-        // Hide the profile picture initially
         profilePicture.setVisibility(View.GONE);
 
         registerButton.setOnClickListener(view -> {
-            // Perform validations
             if (!isUsernameValid() || !isPasswordValid() || !isReenterPasswordValid() || !isDisplayNameValid()) {
-                // Show error message if any field is invalid
                 Toast.makeText(RegisterActivity.this, "One or more fields are invalid/incorrect", Toast.LENGTH_SHORT).show();
                 return;
             } else {
-                //Toast.makeText(RegisterActivity.this, "Successful register", Toast.LENGTH_SHORT).show();
-
                 User user = new User(
                         username.getText().toString().trim(),
                         password.getText().toString().trim(),
@@ -90,22 +83,19 @@ public class RegisterActivity extends AppCompatActivity {
                 if (encodedImage != null) {
                     user.setProfilePic(encodedImage);
                 } else {
-                    user.setProfilePic(""); // Set an empty string if the encoded image is null
+                    user.setProfilePic("");
                 }
 
 
                 registerApi = new RegisterApi(new RegisterApi.RegisterCallback() {
                     @Override
                     public void onSuccess() {
-                        // Registration successful
                         Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
-                        //intent.putExtra("profileImageUri", selectedImageUri);
                         startActivity(intent);
                     }
 
                     @Override
                     public void onFailure(Throwable t) {
-                        // Registration failed
                         Toast.makeText(RegisterActivity.this, "Registration failed: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -124,7 +114,6 @@ public class RegisterActivity extends AppCompatActivity {
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] imageBytes = baos.toByteArray();
 
-        // Add the prefix to the Base64-encoded image data
         String base64Image = Base64.encodeToString(imageBytes, Base64.DEFAULT);
         String dataUrl = "data:image/jpeg;base64," + base64Image;
 
@@ -209,7 +198,6 @@ public class RegisterActivity extends AppCompatActivity {
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             selectedImageUri = data.getData();
             try {
-                // Convert the selected image to a Bitmap
                 selectedImageBitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImageUri);
                 profilePicture.setVisibility(View.VISIBLE);
                 profilePicture.setImageBitmap(selectedImageBitmap);

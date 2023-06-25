@@ -7,7 +7,6 @@ import androidx.room.Query;
 import androidx.room.Update;
 
 import com.example.myapplication.entities.Contact;
-import com.example.myapplication.entities.Message;
 
 import java.util.List;
 
@@ -24,11 +23,13 @@ public interface ContactDao {
 
     @Insert
     void insert(Contact... contact);
+
     @Update
     void update(Contact... contact);
 
     @Delete
     void delete(Contact... contact);
+
     @Query("SELECT * FROM contact")
     List<Contact> getAll();
 }

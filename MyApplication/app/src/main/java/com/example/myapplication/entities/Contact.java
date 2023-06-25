@@ -17,7 +17,6 @@ public class Contact {
     private String lastDate;
     private String profilePic;
 
-
     public Contact(String id, String username, String name, String lastMessage, String lastDate, String profilePic) {
         this.id = id;
         this.username = username;
