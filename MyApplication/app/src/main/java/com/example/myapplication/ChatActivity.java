@@ -2,6 +2,7 @@ package com.example.myapplication;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -80,6 +81,14 @@ public class ChatActivity extends AppCompatActivity implements ChatAPI.ChatCallb
         listViewMessages = findViewById(R.id.listMessages);
         etMessageInput = findViewById(R.id.etMessageInput);
         btnSend = findViewById(R.id.btnSend);
+        etMessageInput = findViewById(R.id.etMessageInput);
+        etMessageInput.setOnEditorActionListener((textView, actionId, keyEvent) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_NULL) {
+                btnSend.performClick();
+                return true;
+            }
+            return false;
+        });
         btnGoBack = findViewById(R.id.btnGoBack);
         messageList = new ArrayList<>();
         tempList = new ArrayList<>();
