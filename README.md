@@ -12,8 +12,8 @@ To navigate back to the chat list from a specific conversation the user can pres
 in the login screen there is a settings button (represented with a settings icon), by clicking on it you will be navigated to the settings screen. in the settings screen there are 2 options:
   1. Night Mode - change the theme of the app from regular mode to night mode.
   2. Server URL - change the server url that the user is working on in order to connect to a different database.
-     the default server address is "http://10.0.2.2:5000/api/". if the user wants to change the address he will have to enter in the text input something in the          following format "http://10.0.2.2:5000", the "/api/" will be added to what the user enters automatically so the user has to make sure not to add "/api/" by          himself so he doesn't duplicate it. the first word needs to be "http" ot "https", followed by the relevant ip address (the default is 10.0.2.2).
-the settings can also be accessed and changed through the chat list screen after logging in.
+     the default server address is "http://10.0.2.2:5000/api/", so until the first change, that will be the URL. if the user wants to change the address he will have to enter in the text input something in the following format "http://" or "https://" followed by the rest of the address, the "/api/" will be concatenated to what the user enters automatically so the user has to make sure not to add "/api/" by himself to prevent duplication. Once the user changes the server URL it will be saved even after closing and re-entering the app.
+the settings can also be accessed and changed through the chat list screen after logging in. 
 
 To use the chat application, open a terminal and type the following commands:
 
